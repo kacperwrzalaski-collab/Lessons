@@ -17,6 +17,10 @@ body.dark {
   color: #e0e0e0;
 }
 
+/* ==========================
+   EKRANY
+========================== */
+
 .screen {
   display: none;
   padding: 20px;
@@ -35,6 +39,10 @@ body.dark {
   transform: translateY(0);
 }
 
+/* ==========================
+   KARTY
+========================== */
+
 .card {
   background: rgba(10, 10, 25, 0.9);
   padding: 20px;
@@ -52,6 +60,10 @@ body.dark {
 .center {
   text-align: center;
 }
+
+/* ==========================
+   LOGOWANIE
+========================== */
 
 .auth-card {
   max-width: 420px;
@@ -115,6 +127,10 @@ body.dark {
   color: #ff7777;
 }
 
+/* ==========================
+   MENU
+========================== */
+
 .main-menu-card {
   text-align: center;
   padding: 30px;
@@ -166,6 +182,10 @@ body.dark {
   box-shadow: 0 0 18px rgba(255, 82, 82, 0.9);
 }
 
+/* ==========================
+   PRZYCISKI
+========================== */
+
 button {
   padding: 10px 15px;
   border-radius: 10px;
@@ -180,6 +200,10 @@ button:hover {
   transform: translateY(-1px);
   box-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
 }
+
+/* ==========================
+   LISTY
+========================== */
 
 ul {
   list-style: none;
@@ -200,31 +224,16 @@ ul li:hover {
   box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
 }
 
+/* ==========================
+   TRYBY LEKCJI
+========================== */
+
 .mode-section {
   display: none;
 }
 
 .mode-section.active {
   display: block;
-}
-
-.lang-flags {
-  display: flex;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.lang-flags button {
-  font-size: 28px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.1s, text-shadow 0.2s;
-}
-
-.lang-flags button:hover {
-  transform: scale(1.2);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
 .practice-buttons-row,
@@ -240,6 +249,10 @@ ul li:hover {
   display: none;
 }
 
+/* ==========================
+   FISZKI
+========================== */
+
 #flashcard-word {
   font-size: 26px;
   margin-bottom: 10px;
@@ -250,6 +263,10 @@ ul li:hover {
   font-size: 18px;
   margin-bottom: 10px;
 }
+
+/* ==========================
+   XP BAR
+========================== */
 
 .xp-bar {
   margin-top: 15px;
@@ -278,6 +295,10 @@ ul li:hover {
   font-size: 14px;
 }
 
+/* ==========================
+   PROFIL
+========================== */
+
 .profile-box {
   display: flex;
   flex-direction: column;
@@ -291,4 +312,38 @@ ul li:hover {
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid rgba(0,255,255,0.6);
+}
+
+/* ==========================
+   RANKING
+========================== */
+
+.ranking-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(0,255,255,0.2);
+}
+
+.ranking-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(0,255,255,0.6);
+}
+
+.ranking-name {
+  flex: 1;
+  font-size: 18px;
+}
+
+.ranking-xp {
+  font-weight: bold;
+  font-size: 16px;
+  color: #00e5ff;
 }
