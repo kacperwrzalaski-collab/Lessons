@@ -1,58 +1,16 @@
-const LANG_KEY = "trainer_language";
-const THEME_KEY = "trainer_theme";
+// ===============================
+// Stałe klucze do localStorage
+// ===============================
 const USERS_KEY = "trainer_users";
 const CURRENT_USER_KEY = "trainer_current_user";
+const THEME_KEY = "trainer_theme";
+const LANG_KEY = "trainer_language";
 
-/* ==========================
-   SYSTEM TŁUMACZEŃ
-========================== */
-
-function getCurrentLang() {
-  return localStorage.getItem(LANG_KEY) || "pl";
-}
-
-function changeLanguage(lang) {
-  localStorage.setItem(LANG_KEY, lang);
-  applyLanguage(lang);
-}
-
-function applyLanguage(lang) {
-  const t = translations[lang] || translations.pl;
-  document.querySelectorAll("[data-i18n]").forEach(el => {
-    const key = el.getAttribute("data-i18n");
-    if (!t[key]) return;
-    if (key === "loggedInAs") {
-      const user = getCurrentUser();
-      el.textContent = t[key] + (user ? user.username : "");
-    } else {
-      el.textContent = t[key];
-    }
-  });
-}
-
-/* ==========================
-   MOTYW
-========================== */
-
-function applyTheme(theme) {
-  if (theme === "dark") document.body.classList.add("dark");
-  else document.body.classList.remove("dark");
-}
-
-function toggleTheme() {
-  const current = document.body.classList.contains("dark") ? "dark" : "light";
-  const next = current === "dark" ? "light" : "dark";
-  applyTheme(next);
-  localStorage.setItem(THEME_KEY, next);
-}
-
-/* ==========================
-   UŻYTKOWNICY
-========================== */
-
+// ===============================
+// Pobieranie i zapisywanie użytkowników
+// ===============================
 function loadUsers() {
-  const raw = localStorage.getItem(USERS_KEY);
-  return raw ? JSON.parse(raw) : [];
+  return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
 }
 
 function saveUsers(users) {
@@ -60,8 +18,7 @@ function saveUsers(users) {
 }
 
 function getCurrentUser() {
-  const raw = localStorage.getItem(CURRENT_USER_KEY);
-  return raw ? JSON.parse(raw) : null;
+  return JSON.parse(localStorage.getItem(CURRENT_USER_KEY) || "null");
 }
 
 function setCurrentUser(user) {
@@ -69,34 +26,20 @@ function setCurrentUser(user) {
   else localStorage.removeItem(CURRENT_USER_KEY);
 }
 
-/* ==========================
-   LOGOWANIE / REJESTRACJA
-========================== */
-
+// ===============================
+// Logowanie / Rejestracja
+// ===============================
 function showAuthMode(mode) {
-  const login = document.getElementById("auth-login");
-  const register = document.getElementById("auth-register");
-  const tabLogin = document.getElementById("tab-login");
-  const tabRegister = document.getElementById("tab-register");
-
-  if (mode === "login") {
-    login.classList.add("active");
-    register.classList.remove("active");
-    tabLogin.classList.add("active");
-    tabRegister.classList.remove("active");
-  } else {
-    login.classList.remove("active");
-    register.classList.add("active");
-    tabLogin.classList.remove("active");
-    tabRegister.classList.add("active");
-  }
+  document.getElementById("auth-login").classList.toggle("active", mode === "login");
+  document.getElementById("auth-register").classList.toggle("active", mode === "register");
+  document.getElementById("tab-login").classList.toggle("active", mode === "login");
+  document.getElementById("tab-register").classList.toggle("active", mode === "register");
 }
 
 function handleRegister() {
   const username = document.getElementById("register-username").value.trim();
   const password = document.getElementById("register-password").value.trim();
   const fb = document.getElementById("register-feedback");
-  fb.textContent = "";
 
   if (!username || !password) {
     fb.textContent = "Uzupełnij login i hasło.";
@@ -104,7 +47,7 @@ function handleRegister() {
   }
 
   const users = loadUsers();
-  if (users.find(u => u.username === username)) {
+  if (users.some(u => u.username === username)) {
     fb.textContent = "Użytkownik o takiej nazwie już istnieje.";
     return;
   }
@@ -129,7 +72,6 @@ function handleLogin() {
   const username = document.getElementById("login-username").value.trim();
   const password = document.getElementById("login-password").value.trim();
   const fb = document.getElementById("login-feedback");
-  fb.textContent = "";
 
   const users = loadUsers();
   const user = users.find(u => u.username === username && u.password === password);
@@ -140,10 +82,7 @@ function handleLogin() {
   }
 
   setCurrentUser(user);
-  updateLoggedInUserLabel();
-  updateXPUI();
-  updateStatsUI();
-  loadProfilePhoto();
+  updateUIAfterLogin();
   goToScreen("screen-menu");
 }
 
@@ -152,87 +91,36 @@ function logout() {
   goToScreen("screen-auth");
 }
 
-function updateLoggedInUserLabel() {
-  const user = getCurrentUser();
-  const el = document.getElementById("welcome-user");
-  el.textContent = "Zalogowany jako: " + (user ? user.username : "");
-}
-/* ==========================
-   PRZEŁĄCZANIE EKRANÓW
-========================== */
-
+// ===============================
+// Przełączanie ekranów
+// ===============================
 function goToScreen(id) {
   const user = getCurrentUser();
   if (!user && id !== "screen-auth") id = "screen-auth";
 
-  document.querySelectorAll(".screen").forEach(s => {
-    s.classList.remove("active", "screen-enter");
-  });
-
-  const target = document.getElementById(id);
-  target.classList.add("active");
-  void target.offsetWidth;
-  target.classList.add("screen-enter");
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 
   if (id === "screen-ranking") loadRanking();
 }
 
-/* ==========================
-   LEKCJE
-========================== */
-
-let currentLesson = null;
-let practiceIndex = 0;
-let quizIndex = 0;
-let flashcardIndex = 0;
-
-function loadLessons() {
-  const list = document.getElementById("lessons-list");
-  list.innerHTML = "";
-  lessons.forEach((lesson, index) => {
-    const li = document.createElement("li");
-    li.textContent = lesson.title;
-    li.onclick = () => openLesson(index);
-    list.appendChild(li);
-  });
+// ===============================
+// Aktualizacja UI po logowaniu
+// ===============================
+function updateUIAfterLogin() {
+  const user = getCurrentUser();
+  document.getElementById("welcome-user").textContent = "Zalogowany jako: " + user.username;
+  updateXPUI();
+  updateStatsUI();
+  loadProfilePhoto();
+  loadLessons();
 }
 
-function openLesson(index) {
-  currentLesson = lessons[index];
-  document.getElementById("lesson-title").textContent = currentLesson.title;
-  document.getElementById("lesson-description").textContent = currentLesson.description;
-  document.getElementById("modes-lesson-title").textContent = currentLesson.title;
-
-  loadLearnMode();
-  resetPractice();
-  resetQuiz();
-  resetFlashcards();
-
-  goToScreen("screen-lesson");
-}
-
-/* ==========================
-   TRYB NAUKI
-========================== */
-
-function loadLearnMode() {
-  const list = document.getElementById("wordList");
-  list.innerHTML = "";
-  currentLesson.words.forEach(w => {
-    const li = document.createElement("li");
-    li.textContent = `${w.de} — ${w.pl} — ${w.perf}`;
-    list.appendChild(li);
-  });
-}
-
-/* ==========================
-   XP + STATYSTYKI
-========================== */
-
+// ===============================
+// XP i statystyki
+// ===============================
 function addXP(amount) {
   const user = getCurrentUser();
-  if (!user) return;
-
   user.xp += amount;
 
   while (user.xp >= user.level * 100) {
@@ -247,22 +135,16 @@ function addXP(amount) {
 
 function saveUpdatedUser(user) {
   const users = loadUsers();
-  const idx = users.findIndex(u => u.username === user.username);
-
-  if (idx !== -1) {
-    users[idx] = user;
-    saveUsers(users);
-  }
-
+  const index = users.findIndex(u => u.username === user.username);
+  users[index] = user;
+  saveUsers(users);
   setCurrentUser(user);
 }
 
 function updateXPUI() {
   const user = getCurrentUser();
-  if (!user) return;
-
   const needed = user.level * 100;
-  const percent = Math.min(100, (user.xp / needed) * 100);
+  const percent = (user.xp / needed) * 100;
 
   document.getElementById("xp-fill").style.width = percent + "%";
   document.getElementById("xp-label").textContent = `${user.xp} / ${needed} XP`;
@@ -271,18 +153,63 @@ function updateXPUI() {
 
 function updateStatsUI() {
   const user = getCurrentUser();
-  if (!user) return;
-
   document.getElementById("stat-level").textContent = user.level;
   document.getElementById("stat-xp").textContent = user.xp;
   document.getElementById("stat-practice").textContent = `${user.practiceCorrect} / ${user.practiceTotal}`;
   document.getElementById("stat-quiz").textContent = `${user.quizCorrect} / ${user.quizTotal}`;
 }
+// ===============================
+// LEKCJE
+// ===============================
+let currentLesson = null;
+let practiceIndex = 0;
+let quizIndex = 0;
+let flashcardIndex = 0;
 
-/* ==========================
-   PRAKTYKA
-========================== */
+function loadLessons() {
+  const list = document.getElementById("lessons-list");
+  list.innerHTML = "";
 
+  lessons.forEach((lesson, index) => {
+    const li = document.createElement("li");
+    li.textContent = lesson.title;
+    li.onclick = () => openLesson(index);
+    list.appendChild(li);
+  });
+}
+
+function openLesson(index) {
+  currentLesson = lessons[index];
+
+  document.getElementById("lesson-title").textContent = currentLesson.title;
+  document.getElementById("lesson-description").textContent = currentLesson.description;
+  document.getElementById("modes-lesson-title").textContent = currentLesson.title;
+
+  loadLearnMode();
+  resetPractice();
+  resetQuiz();
+  resetFlashcards();
+
+  goToScreen("screen-lesson");
+}
+
+// ===============================
+// TRYB NAUKI
+// ===============================
+function loadLearnMode() {
+  const list = document.getElementById("wordList");
+  list.innerHTML = "";
+
+  currentLesson.words.forEach(w => {
+    const li = document.createElement("li");
+    li.textContent = `${w.de} — ${w.pl} — ${w.perf}`;
+    list.appendChild(li);
+  });
+}
+
+// ===============================
+// PRAKTYKA
+// ===============================
 function resetPractice() {
   practiceIndex = 0;
   document.getElementById("practice-feedback").textContent = "";
@@ -339,10 +266,9 @@ function nextPractice() {
   loadPracticeWord();
 }
 
-/* ==========================
-   QUIZ
-========================== */
-
+// ===============================
+// QUIZ
+// ===============================
 function resetQuiz() {
   quizIndex = 0;
   loadQuizQuestion();
@@ -397,10 +323,9 @@ function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
 
-/* ==========================
-   FISZKI
-========================== */
-
+// ===============================
+// FISZKI
+// ===============================
 function resetFlashcards() {
   flashcardIndex = 0;
   document.getElementById("flashcard-translation").classList.add("hidden");
@@ -425,10 +350,9 @@ function nextFlashcard() {
   loadFlashcard();
 }
 
-/* ==========================
-   LEKTOR
-========================== */
-
+// ===============================
+// LEKTOR
+// ===============================
 function speak(text, lang = "de-DE") {
   if (!("speechSynthesis" in window)) return;
   const utter = new SpeechSynthesisUtterance(text);
@@ -450,16 +374,15 @@ function speakCurrentFlashcard() {
   const w = currentLesson.words[flashcardIndex];
   speak(w.de);
 }
-/* ==========================
-   PROFIL (ZDJĘCIE)
-========================== */
-
+// ===============================
+// PROFIL (ZDJĘCIE)
+// ===============================
 function uploadProfilePhoto() {
   const file = document.getElementById("profile-upload").files[0];
   if (!file) return;
 
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = function (e) {
     const user = getCurrentUser();
     if (!user) return;
 
@@ -481,10 +404,9 @@ function loadProfilePhoto() {
   }
 }
 
-/* ==========================
-   RANKING
-========================== */
-
+// ===============================
+// RANKING
+// ===============================
 function loadRanking() {
   const users = loadUsers().sort((a, b) => {
     const scoreA = a.level * 100 + a.xp;
@@ -520,25 +442,24 @@ function loadRanking() {
   });
 }
 
-/* ==========================
-   START APLIKACJI
-========================== */
-
+// ===============================
+// START APLIKACJI
+// ===============================
 window.onload = () => {
+  // motyw
   const savedTheme = localStorage.getItem(THEME_KEY) || "light";
-  applyTheme(savedTheme);
+  if (savedTheme === "dark") document.body.classList.add("dark");
 
-  const savedLang = getCurrentLang();
-  applyLanguage(savedLang);
+  // język
+  const savedLang = localStorage.getItem(LANG_KEY) || "pl";
 
+  // lekcje
   loadLessons();
 
+  // użytkownik
   const user = getCurrentUser();
   if (user) {
-    updateLoggedInUserLabel();
-    updateXPUI();
-    updateStatsUI();
-    loadProfilePhoto();
+    updateUIAfterLogin();
     goToScreen("screen-menu");
   } else {
     goToScreen("screen-auth");
