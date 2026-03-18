@@ -1,0 +1,144 @@
+:root {
+  --bg-color: #f5f5f5;
+  --text-color: #111;
+  --card-bg: #ffffff;
+  --button-bg: #007bff;
+  --button-bg-hover: #0056b3;
+}
+
+body.dark {
+  --bg-color: #121212;
+  --text-color: #f5f5f5;
+  --card-bg: #1f1f1f;
+  --button-bg: #bb86fc;
+  --button-bg-hover: #9b63e6;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 16px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3 {
+  text-align: center;
+}
+
+#app {
+  position: relative;
+  min-height: 400px;
+}
+
+/* Ekrany */
+.screen {
+  opacity: 0;
+  transform: translateX(20px);
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.screen.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+  position: relative;
+}
+
+.card {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  margin-top: 20px;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card.center {
+  text-align: center;
+}
+
+button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 4px;
+  background: var(--button-bg);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background: var(--button-bg-hover);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+.hidden {
+  display: none;
+}
+
+ul {
+  line-height: 1.8;
+}
+
+.answer-btn {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  background: #444;
+  color: white;
+}
+
+/* Tryby */
+.modes-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.modes-buttons button {
+  flex: 1 1 30%;
+  min-width: 120px;
+}
+
+.mode-section {
+  display: none;
+  margin-top: 10px;
+  animation: fadeIn 0.3s ease;
+}
+
+.mode-section.active {
+  display: block;
+}
+
+/* Animacja */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Platforma do nauki niemieckiego</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- MENU GŁÓWNE -->
+    <section id="screen-menu" class="screen active">
+      <h1>MENU</h1>
+      <div class="card center">
+        <button onclick="goToScreen('screen-topics')">Tematy</button>
+        <button onclick="goToScreen('screen-settings')">Ustawienia</button>
+      </div>
+    </section>
+
+    <!-- TEMATY -->
+    <section id="screen-topics" class="screen">
+      <h1>TEMATY</h1>
+      <div class="card">
+        <h2>Dostępne lekcje</h2>
+        <ul id="lessons-list"></ul>
+        <button onclick="goToScreen('screen-menu')">Powrót do menu</button>
+      </div>
+    </section>
+
+    <!-- LEKCJA (MENU LEKCJI) -->
+    <section id="screen-lesson" class="screen">
+      <h1 id="lesson-title">LEKCJA</h1>
+      <div class="card center">
+        <p id="lesson-description"></p>
+        <h3>Wybierz tryb lekcji:</h3>
+        <button onclick="goToScreen('screen-modes'); showMode('mode-learn')">WANDA (Nauka)</button>
+        <button onclick="goToScreen('screen-modes'); showMode('mode-practice')">PRAKTYK (Praktyka)</button>
+        <button onclick="goToScreen('screen-modes'); showMode('mode-quiz')">QUIZ</button>
+        <br>
+        <button onclick="goToScreen('screen-topics')">Powrót do tematów</button>
+      </div>
+    </section>
+
+    <!-- TRYBY LEKCJI -->
+    <section id="screen-modes" class="screen">
+      <h1 id="modes-lesson-title">Tryby – Lekcja</h1>
+      <div class="card">
+        <div class="modes-buttons">
+          <button onclick="showMode('mode-learn')">Nauka (lista słówek)</button>
+          <button onclick="showMode('mode-practice')">Praktyka</button>
+          <button onclick="showMode('mode-quiz')">Quiz</button>
+        </div>
+
+        <!-- NAUKA -->
+        <div id="mode-learn" class="mode-section active">
+          <h2>Lista słówek</h2>
+          <ul id="wordList"></ul>
+        </div>
+
+        <!-- PRAKTYKA -->
+        <div id="mode-practice" class="mode-section">
+          <h2>Praktyka</h2>
+          <div id="practice-info"></div>
+
+          <label>Tłumaczenie (PL):</label>
+          <input type="text" id="practice-pl">
+
+          <label>Perfekt:</label>
+          <input type="text" id="practice-perf">
+
+          <button id="practice-check-btn" onclick="checkPractice()">Sprawdź</button>
+          <button id="practice-next-btn" class="hidden" onclick="nextPractice()">Kontynuuj</button>
+
+          <div id="practice-feedback"></div>
+        </div>
+
+        <!-- QUIZ -->
+        <div id="mode-quiz" class="mode-section">
+          <h2>Quiz</h2>
+          <div id="quiz-question"></div>
+          <div id="quiz-answers"></div>
+          <div id="quiz-feedback"></div>
+          <button onclick="nextQuiz()">Następne</button>
+        </div>
+
+        <button onclick="goToScreen('screen-lesson')">Powrót do lekcji</button>
+      </div>
+    </section>
+
+    <!-- USTAWIENIA -->
+    <section id="screen-settings" class="screen">
+      <h1>Ustawienia</h1>
+      <div class="card">
+        <h2>Motyw</h2>
+        <p>Aktualny motyw: <span id="theme-label"></span></p>
+        <button onclick="toggleTheme()">Przełącz motyw jasny/ciemny</button>
+        <button onclick="goToScreen('screen-menu')">Powrót do menu</button>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
