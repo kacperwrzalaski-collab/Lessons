@@ -294,7 +294,8 @@ function handleRegister() {
     practiceCorrect: 0,
     practiceTotal: 0,
     quizCorrect: 0,
-    quizTotal: 0
+    quizTotal: 0,
+    photo: null
   });
   saveUsers(users);
   fb.textContent = translations[getCurrentLang()].registerSuccess;
@@ -318,6 +319,7 @@ function handleLogin() {
   updateLoggedInUserLabel();
   updateXPUI();
   updateStatsUI();
+  loadProfilePhoto();
   goToScreen("screen-menu");
 }
 
@@ -345,6 +347,8 @@ function goToScreen(id) {
   target.classList.add("active");
   void target.offsetWidth;
   target.classList.add("screen-enter");
+
+  if (id === "screen-ranking") loadRanking();
 }
 
 let currentLesson = null;
@@ -449,15 +453,24 @@ function updateStatsUI() {
 
 function checkPractice() {
   const w = currentLesson.words[practiceIndex];
+
   const pl = document.getElementById("practice-pl").value.trim();
   const perf = document.getElementById("practice-perf").value.trim();
+
   let msg = "";
+
   const user = getCurrentUser();
   if (!user) return;
 
   user.practiceTotal++;
 
-  if (pl === w.pl && perf === w.perf) {
+  const cleanPerf = (w.perf || "").trim().toLowerCase();
+  const cleanUserPerf = perf.trim().toLowerCase();
+
+  const cleanPl = (w.pl || "").trim().toLowerCase();
+  const cleanUserPl = pl.trim().toLowerCase();
+
+  if (cleanPl === cleanUserPl && cleanPerf === cleanUserPerf) {
     msg = "✔️ Dobrze!";
     user.practiceCorrect++;
     addXP(10);
@@ -467,17 +480,23 @@ function checkPractice() {
   }
 
   saveUpdatedUser(user);
+
   document.getElementById("practice-feedback").textContent = msg;
+
   document.getElementById("practice-check-btn").classList.add("hidden");
   document.getElementById("practice-next-btn").classList.remove("hidden");
 }
 
 function nextPractice() {
   practiceIndex++;
-  if (practiceIndex >= currentLesson.words.length) practiceIndex = 0;
+  if (practiceIndex >= currentLesson.words.length) {
+    practiceIndex = 0;
+  }
+
   document.getElementById("practice-feedback").textContent = "";
   document.getElementById("practice-next-btn").classList.add("hidden");
   document.getElementById("practice-check-btn").classList.remove("hidden");
+
   loadPracticeWord();
 }
 
@@ -587,6 +606,47 @@ function showMode(id) {
   target.classList.add("active");
 }
 
+function uploadProfilePhoto() {
+  const file = document.getElementById("profile-upload").files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const user = getCurrentUser();
+    if (!user) return;
+    user.photo = e.target.result;
+    saveUpdatedUser(user);
+    document.getElementById("profile-photo").src = user.photo;
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadProfilePhoto() {
+  const user = getCurrentUser();
+  if (user && user.photo) {
+    document.getElementById("profile-photo").src = user.photo;
+  } else {
+    document.getElementById("profile-photo").src = "";
+  }
+}
+
+function loadRanking() {
+  const users = loadUsers().sort((a, b) => {
+    const scoreA = a.level * 100 + a.xp;
+    const scoreB = b.level * 100 + b.xp;
+    return scoreB - scoreA;
+  });
+
+  const list = document.getElementById("ranking-list");
+  list.innerHTML = "";
+
+  users.forEach(u => {
+    const li = document.createElement("li");
+    li.textContent = `${u.username} — Lv.${u.level} (${u.xp} XP)`;
+    list.appendChild(li);
+  });
+}
+
 window.onload = () => {
   const savedTheme = localStorage.getItem(THEME_KEY) || "light";
   applyTheme(savedTheme);
@@ -601,6 +661,7 @@ window.onload = () => {
     updateLoggedInUserLabel();
     updateXPUI();
     updateStatsUI();
+    loadProfilePhoto();
     goToScreen("screen-menu");
   } else {
     goToScreen("screen-auth");
