@@ -1,217 +1,609 @@
-/* --- DANE LEKCJI (modułowo) --- */
-const lessons = [
-  {
-    id: 1,
-    title: "Lekcja 1 – Czasowniki nieregularne",
-    description: "Trening czasowników nieregularnych w języku niemieckim.",
-    words: [
-      { de: "nennen", pl: "nazywać", perfekt: "hat genannt" },
-      { de: "pfeiffen", pl: "gwizdac", perfekt: "hat gepfiffen" },
-      { de: "raten", pl: "radzic", perfekt: "hat geraten" },
-      { de: "reiten", pl: "konno", perfekt: "hat geritten" },
-      { de: "riechen", pl: "pachniec", perfekt: "hat gerochen" },
-      { de: "rufen", pl: "wolac", perfekt: "hat gerufen" },
-      { de: "salzen", pl: "solic", perfekt: "hat gesalzen" },
-      { de: "saugen", pl: "ssąc", perfekt: "hat gesogen" },
-      { de: "shaffen", pl: "tworzyć", perfekt: "hat geschlafen" },
-      { de: "scheiden", pl: "rozwodzić", perfekt: "hat geschieden" },
-      { de: "scheinen", pl: "swiecic", perfekt: "hat gescheinen" },
-      { de: "scheren", pl: "kosić", perfekt: "hat geschoren" },
-      { de: "schieben", pl: "przesuwać", perfekt: "hat geschoben" },
-      { de: "schieben", pl: "strzelac", perfekt: "hat geschossen" },
-      { de: "schlafen", pl: "spac", perfekt: "hat geschlafen" },
-      { de: "schlagen", pl: "bic", perfekt: "hat geschlagen" },
-      { de: "schlieben", pl: "zamykac", perfekt: "hat geschlossen" },
-      { de: "schmelzen", pl: "topic", perfekt: "hat geschmolzen" },
-      { de: "schneiden", pl: "ciac", perfekt: "hat geschitten" },
-      { de: "schreiben", pl: "pisać", perfekt: "hat geschreiben" },
-      { de: "schreien", pl: "krzyczeć", perfekt: "hat geschrien" },
-      { de: "schweigen", pl: "milczeć", perfekt: "hat eschweigen" },
-      { de: "schwimmen", pl: "plywac", perfekt: "hat geschwommen" },
-      { de: "sehen", pl: "widzieć", perfekt: "hat gesehen" },
-      { de: "senden", pl: "wysylac", perfekt: "hat gesandt" },
-      { de: "singen", pl: "spiewac", perfekt: "hat gesungen" },
-      { de: "rennen", pl: "pedzic", perfekt: "ist gerannt" },
-      { de: "schreiten", pl: "kroczyc", perfekt: "ist geschritten" },
-      { de: "schwellen", pl: "puchnac", perfekt: "ist geschwollen" },
-      { de: "sein", pl: "być", perfekt: "ist gewesen" }
-    ]
+const LANG_KEY = "trainer_language";
+const THEME_KEY = "trainer_theme";
+const USERS_KEY = "trainer_users";
+const CURRENT_USER_KEY = "trainer_current_user";
+
+const translations = {
+  pl: {
+    welcomeTitle: "Witaj w EDU‑PAGE",
+    welcomeSubtitle: "Zaloguj się lub załóż konto, żeby kontynuować naukę.",
+    login: "Logowanie",
+    register: "Rejestracja",
+    menu: "EDU‑PAGE",
+    topics: "Tematy",
+    settings: "Ustawienia",
+    stats: "Statystyki",
+    availableLessons: "Dostępne lekcje",
+    back: "Powrót",
+    chooseMode: "Wybierz tryb lekcji:",
+    learn: "Nauka",
+    practice: "Praktyka",
+    quiz: "Quiz",
+    flashcards: "Fiszki",
+    listWords: "Lista słówek",
+    practiceTitle: "Praktyka",
+    quizTitle: "Quiz",
+    translationPL: "Tłumaczenie (PL):",
+    perfekt: "Perfekt:",
+    check: "Sprawdź",
+    next: "Kontynuuj",
+    theme: "Motyw",
+    toggleTheme: "Przełącz motyw jasny/ciemny",
+    language: "Język",
+    loggedInAs: "Zalogowany jako: ",
+    logout: "Wyloguj",
+    loginError: "Błędny login lub hasło.",
+    registerErrorExists: "Użytkownik o takiej nazwie już istnieje.",
+    registerSuccess: "Konto utworzone. Możesz się zalogować.",
+    level: "Poziom:",
+    xp: "XP:",
+    practiceStats: "Praktyka (dobrze / razem):",
+    quizStats: "Quiz (dobrze / razem):",
+    speak: "Odtwórz",
+    showHide: "Pokaż / ukryj tłumaczenie"
+  },
+  de: {
+    welcomeTitle: "Willkommen bei EDU‑PAGE",
+    welcomeSubtitle: "Melde dich an oder registriere dich, um weiterzulernen.",
+    login: "Anmeldung",
+    register: "Registrierung",
+    menu: "EDU‑PAGE",
+    topics: "Themen",
+    settings: "Einstellungen",
+    stats: "Statistiken",
+    availableLessons: "Verfügbare Lektionen",
+    back: "Zurück",
+    chooseMode: "Modus wählen:",
+    learn: "Lernen",
+    practice: "Üben",
+    quiz: "Quiz",
+    flashcards: "Karteikarten",
+    listWords: "Wortliste",
+    practiceTitle: "Übung",
+    quizTitle: "Quiz",
+    translationPL: "Übersetzung (PL):",
+    perfekt: "Perfekt:",
+    check: "Prüfen",
+    next: "Weiter",
+    theme: "Thema",
+    toggleTheme: "Helles/dunkles Thema wechseln",
+    language: "Sprache",
+    loggedInAs: "Angemeldet als: ",
+    logout: "Abmelden",
+    loginError: "Falscher Benutzername oder Passwort.",
+    registerErrorExists: "Benutzername existiert bereits.",
+    registerSuccess: "Konto erstellt. Du kannst dich anmelden.",
+    level: "Level:",
+    xp: "XP:",
+    practiceStats: "Übung (richtig / gesamt):",
+    quizStats: "Quiz (richtig / gesamt):",
+    speak: "Abspielen",
+    showHide: "Übersetzung zeigen / verstecken"
+  },
+  en: {
+    welcomeTitle: "Welcome to EDU‑PAGE",
+    welcomeSubtitle: "Log in or create an account to continue learning.",
+    login: "Login",
+    register: "Register",
+    menu: "EDU‑PAGE",
+    topics: "Topics",
+    settings: "Settings",
+    stats: "Stats",
+    availableLessons: "Available lessons",
+    back: "Back",
+    chooseMode: "Choose lesson mode:",
+    learn: "Learn",
+    practice: "Practice",
+    quiz: "Quiz",
+    flashcards: "Flashcards",
+    listWords: "Word list",
+    practiceTitle: "Practice",
+    quizTitle: "Quiz",
+    translationPL: "Translation (PL):",
+    perfekt: "Perfect tense:",
+    check: "Check",
+    next: "Next",
+    theme: "Theme",
+    toggleTheme: "Toggle light/dark theme",
+    language: "Language",
+    loggedInAs: "Logged in as: ",
+    logout: "Logout",
+    loginError: "Wrong username or password.",
+    registerErrorExists: "User with this name already exists.",
+    registerSuccess: "Account created. You can log in.",
+    level: "Level:",
+    xp: "XP:",
+    practiceStats: "Practice (correct / total):",
+    quizStats: "Quiz (correct / total):",
+    speak: "Play",
+    showHide: "Show / hide translation"
+  },
+  es: {
+    welcomeTitle: "Bienvenido a EDU‑PAGE",
+    welcomeSubtitle: "Inicia sesión o crea una cuenta para seguir aprendiendo.",
+    login: "Iniciar sesión",
+    register: "Registrarse",
+    menu: "EDU‑PAGE",
+    topics: "Temas",
+    settings: "Ajustes",
+    stats: "Estadísticas",
+    availableLessons: "Lecciones disponibles",
+    back: "Volver",
+    chooseMode: "Elige el modo de lección:",
+    learn: "Aprender",
+    practice: "Práctica",
+    quiz: "Quiz",
+    flashcards: "Fichas",
+    listWords: "Lista de palabras",
+    practiceTitle: "Práctica",
+    quizTitle: "Quiz",
+    translationPL: "Traducción (PL):",
+    perfekt: "Perfecto:",
+    check: "Comprobar",
+    next: "Continuar",
+    theme: "Tema",
+    toggleTheme: "Cambiar tema claro/oscuro",
+    language: "Idioma",
+    loggedInAs: "Conectado como: ",
+    logout: "Cerrar sesión",
+    loginError: "Usuario o contraseña incorrectos.",
+    registerErrorExists: "Ya existe un usuario con ese nombre.",
+    registerSuccess: "Cuenta creada. Ya puedes iniciar sesión.",
+    level: "Nivel:",
+    xp: "XP:",
+    practiceStats: "Práctica (bien / total):",
+    quizStats: "Quiz (bien / total):",
+    speak: "Reproducir",
+    showHide: "Mostrar / ocultar traducción"
+  },
+  fr: {
+    welcomeTitle: "Bienvenue sur EDU‑PAGE",
+    welcomeSubtitle: "Connecte-toi ou crée un compte pour continuer à apprendre.",
+    login: "Connexion",
+    register: "Inscription",
+    menu: "EDU‑PAGE",
+    topics: "Thèmes",
+    settings: "Paramètres",
+    stats: "Statistiques",
+    availableLessons: "Leçons disponibles",
+    back: "Retour",
+    chooseMode: "Choisis le mode de leçon :",
+    learn: "Apprendre",
+    practice: "Pratique",
+    quiz: "Quiz",
+    flashcards: "Fiches",
+    listWords: "Liste de mots",
+    practiceTitle: "Pratique",
+    quizTitle: "Quiz",
+    translationPL: "Traduction (PL) :",
+    perfekt: "Parfait :",
+    check: "Vérifier",
+    next: "Continuer",
+    theme: "Thème",
+    toggleTheme: "Basculer thème clair/sombre",
+    language: "Langue",
+    loggedInAs: "Connecté en tant que : ",
+    logout: "Déconnexion",
+    loginError: "Mauvais identifiant ou mot de passe.",
+    registerErrorExists: "Un utilisateur avec ce nom existe déjà.",
+    registerSuccess: "Compte créé. Tu peux te connecter.",
+    level: "Niveau :",
+    xp: "XP :",
+    practiceStats: "Pratique (bon / total) :",
+    quizStats: "Quiz (bon / total) :",
+    speak: "Lire",
+    showHide: "Afficher / cacher la traduction"
   }
-];
+};
 
-let currentLesson = lessons[0];
-
-/* --- NAWIGACJA MIĘDZY EKRANAMI --- */
-function goToScreen(id) {
-  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+function getCurrentLang() {
+  return localStorage.getItem(LANG_KEY) || "pl";
 }
 
-/* --- LISTA LEKCJI (TEMATY) --- */
-const lessonsListEl = document.getElementById("lessons-list");
-lessonsListEl.innerHTML = lessons.map(lesson => `
-  <li>
-    <strong>${lesson.title}</strong><br>
-    <button onclick="openLesson(${lesson.id})">Otwórz lekcję</button>
-  </li>
-`).join("");
+function changeLanguage(lang) {
+  localStorage.setItem(LANG_KEY, lang);
+  applyLanguage(lang);
+}
 
-function openLesson(id) {
-  const lesson = lessons.find(l => l.id === id);
-  if (!lesson) return;
-  currentLesson = lesson;
+function applyLanguage(lang) {
+  const t = translations[lang] || translations.pl;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (!t[key]) return;
+    if (key === "loggedInAs") {
+      const user = getCurrentUser();
+      el.textContent = t[key] + (user ? user.username : "");
+    } else {
+      el.textContent = t[key];
+    }
+  });
+}
 
-  document.getElementById("lesson-title").textContent = lesson.title;
-  document.getElementById("lesson-description").textContent = lesson.description;
-  document.getElementById("modes-lesson-title").textContent = `Tryby – ${lesson.title}`;
+function applyTheme(theme) {
+  if (theme === "dark") document.body.classList.add("dark");
+  else document.body.classList.remove("dark");
+}
 
-  loadLearnList();
+function toggleTheme() {
+  const current = document.body.classList.contains("dark") ? "dark" : "light";
+  const next = current === "dark" ? "light" : "dark";
+  applyTheme(next);
+  localStorage.setItem(THEME_KEY, next);
+}
+
+function loadUsers() {
+  const raw = localStorage.getItem(USERS_KEY);
+  return raw ? JSON.parse(raw) : [];
+}
+
+function saveUsers(users) {
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
+
+function getCurrentUser() {
+  const raw = localStorage.getItem(CURRENT_USER_KEY);
+  return raw ? JSON.parse(raw) : null;
+}
+
+function setCurrentUser(user) {
+  if (user) localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+  else localStorage.removeItem(CURRENT_USER_KEY);
+}
+
+function showAuthMode(mode) {
+  const login = document.getElementById("auth-login");
+  const register = document.getElementById("auth-register");
+  const tabLogin = document.getElementById("tab-login");
+  const tabRegister = document.getElementById("tab-register");
+
+  if (mode === "login") {
+    login.classList.add("active");
+    register.classList.remove("active");
+    tabLogin.classList.add("active");
+    tabRegister.classList.remove("active");
+  } else {
+    login.classList.remove("active");
+    register.classList.add("active");
+    tabLogin.classList.remove("active");
+    tabRegister.classList.add("active");
+  }
+}
+
+function handleRegister() {
+  const username = document.getElementById("register-username").value.trim();
+  const password = document.getElementById("register-password").value.trim();
+  const fb = document.getElementById("register-feedback");
+  fb.textContent = "";
+
+  if (!username || !password) {
+    fb.textContent = "Uzupełnij login i hasło.";
+    return;
+  }
+
+  const users = loadUsers();
+  if (users.find(u => u.username === username)) {
+    fb.textContent = translations[getCurrentLang()].registerErrorExists;
+    return;
+  }
+
+  users.push({
+    username,
+    password,
+    xp: 0,
+    level: 1,
+    practiceCorrect: 0,
+    practiceTotal: 0,
+    quizCorrect: 0,
+    quizTotal: 0
+  });
+  saveUsers(users);
+  fb.textContent = translations[getCurrentLang()].registerSuccess;
+}
+
+function handleLogin() {
+  const username = document.getElementById("login-username").value.trim();
+  const password = document.getElementById("login-password").value.trim();
+  const fb = document.getElementById("login-feedback");
+  fb.textContent = "";
+
+  const users = loadUsers();
+  const user = users.find(u => u.username === username && u.password === password);
+
+  if (!user) {
+    fb.textContent = translations[getCurrentLang()].loginError;
+    return;
+  }
+
+  setCurrentUser(user);
+  updateLoggedInUserLabel();
+  updateXPUI();
+  updateStatsUI();
+  goToScreen("screen-menu");
+}
+
+function logout() {
+  setCurrentUser(null);
+  goToScreen("screen-auth");
+}
+
+function updateLoggedInUserLabel() {
+  const user = getCurrentUser();
+  const lang = getCurrentLang();
+  const t = translations[lang] || translations.pl;
+  const el = document.getElementById("welcome-user");
+  el.textContent = t.loggedInAs + (user ? user.username : "");
+}
+
+function goToScreen(id) {
+  const user = getCurrentUser();
+  if (!user && id !== "screen-auth") id = "screen-auth";
+
+  document.querySelectorAll(".screen").forEach(s => {
+    s.classList.remove("active", "screen-enter");
+  });
+  const target = document.getElementById(id);
+  target.classList.add("active");
+  void target.offsetWidth;
+  target.classList.add("screen-enter");
+}
+
+let currentLesson = null;
+let practiceIndex = 0;
+let quizIndex = 0;
+let flashcardIndex = 0;
+
+function loadLessons() {
+  const list = document.getElementById("lessons-list");
+  list.innerHTML = "";
+  lessons.forEach((lesson, index) => {
+    const li = document.createElement("li");
+    li.textContent = lesson.title;
+    li.onclick = () => openLesson(index);
+    list.appendChild(li);
+  });
+}
+
+function openLesson(index) {
+  currentLesson = lessons[index];
+  document.getElementById("lesson-title").textContent = currentLesson.title;
+  document.getElementById("lesson-description").textContent = currentLesson.description;
+  document.getElementById("modes-lesson-title").textContent = currentLesson.title;
+
+  loadLearnMode();
   resetPractice();
   resetQuiz();
+  resetFlashcards();
 
   goToScreen("screen-lesson");
 }
 
-/* --- TRYBY: PRZEŁĄCZANIE --- */
-function showMode(id) {
-  document.querySelectorAll(".mode-section").forEach(m => m.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+function loadLearnMode() {
+  const list = document.getElementById("wordList");
+  list.innerHTML = "";
+  currentLesson.words.forEach(w => {
+    const li = document.createElement("li");
+    li.textContent = `${w.de} — ${w.pl} — ${w.perf}`;
+    list.appendChild(li);
+  });
 }
-
-/* --- NAUKA (lista słówek) --- */
-function loadLearnList() {
-  const ul = document.getElementById("wordList");
-  ul.innerHTML = currentLesson.words
-    .map(w => `<li>${w.de} – ${w.pl} – ${w.perfekt}</li>`)
-    .join("");
-}
-
-/* --- PRAKTYKA --- */
-let pIndex = 0;
 
 function resetPractice() {
-  pIndex = 0;
-  loadPractice();
+  practiceIndex = 0;
+  document.getElementById("practice-feedback").textContent = "";
+  document.getElementById("practice-next-btn").classList.add("hidden");
+  document.getElementById("practice-check-btn").classList.remove("hidden");
+  loadPracticeWord();
 }
 
-function loadPractice() {
-  const w = currentLesson.words[pIndex];
-  document.getElementById("practice-info").textContent =
-    `Słówko ${pIndex + 1}/${currentLesson.words.length}: ${w.de}`;
-
+function loadPracticeWord() {
+  const w = currentLesson.words[practiceIndex];
+  document.getElementById("practice-info").textContent = w.de;
   document.getElementById("practice-pl").value = "";
   document.getElementById("practice-perf").value = "";
-  document.getElementById("practice-feedback").textContent = "";
+}
 
-  document.getElementById("practice-check-btn").classList.remove("hidden");
-  document.getElementById("practice-next-btn").classList.add("hidden");
+function addXP(amount) {
+  const user = getCurrentUser();
+  if (!user) return;
+  user.xp += amount;
+  while (user.xp >= user.level * 100) {
+    user.xp -= user.level * 100;
+    user.level++;
+  }
+  saveUpdatedUser(user);
+  updateXPUI();
+  updateStatsUI();
+}
+
+function saveUpdatedUser(user) {
+  const users = loadUsers();
+  const idx = users.findIndex(u => u.username === user.username);
+  if (idx !== -1) {
+    users[idx] = user;
+    saveUsers(users);
+  }
+  setCurrentUser(user);
+}
+
+function updateXPUI() {
+  const user = getCurrentUser();
+  if (!user) return;
+  const needed = user.level * 100;
+  const fill = document.getElementById("xp-fill");
+  const label = document.getElementById("xp-label");
+  const lvl = document.getElementById("level-label");
+  const percent = Math.min(100, (user.xp / needed) * 100);
+  fill.style.width = percent + "%";
+  label.textContent = `${user.xp} / ${needed} XP`;
+  lvl.textContent = `Lv. ${user.level}`;
+}
+
+function updateStatsUI() {
+  const user = getCurrentUser();
+  if (!user) return;
+  document.getElementById("stat-level").textContent = user.level;
+  document.getElementById("stat-xp").textContent = user.xp;
+  document.getElementById("stat-practice").textContent = `${user.practiceCorrect} / ${user.practiceTotal}`;
+  document.getElementById("stat-quiz").textContent = `${user.quizCorrect} / ${user.quizTotal}`;
 }
 
 function checkPractice() {
-  const w = currentLesson.words[pIndex];
-  const pl = document.getElementById("practice-pl").value.trim().toLowerCase();
-  const perf = document.getElementById("practice-perf").value.trim().toLowerCase();
+  const w = currentLesson.words[practiceIndex];
+  const pl = document.getElementById("practice-pl").value.trim();
+  const perf = document.getElementById("practice-perf").value.trim();
+  let msg = "";
+  const user = getCurrentUser();
+  if (!user) return;
 
-  const fb = document.getElementById("practice-feedback");
+  user.practiceTotal++;
 
-  if (pl === w.pl.toLowerCase() && perf === w.perfekt.toLowerCase()) {
-    fb.textContent = "Dobrze!";
-    fb.style.color = "green";
+  if (pl === w.pl && perf === w.perf) {
+    msg = "✔️ Dobrze!";
+    user.practiceCorrect++;
+    addXP(10);
   } else {
-    fb.textContent = `Źle. Poprawnie: ${w.pl}, ${w.perfekt}`;
-    fb.style.color = "red";
+    msg = `❌ Źle! Poprawnie: ${w.pl}, ${w.perf}`;
+    addXP(2);
   }
 
+  saveUpdatedUser(user);
+  document.getElementById("practice-feedback").textContent = msg;
   document.getElementById("practice-check-btn").classList.add("hidden");
   document.getElementById("practice-next-btn").classList.remove("hidden");
 }
 
 function nextPractice() {
-  pIndex++;
-  if (pIndex >= currentLesson.words.length) pIndex = 0;
-  loadPractice();
+  practiceIndex++;
+  if (practiceIndex >= currentLesson.words.length) practiceIndex = 0;
+  document.getElementById("practice-feedback").textContent = "";
+  document.getElementById("practice-next-btn").classList.add("hidden");
+  document.getElementById("practice-check-btn").classList.remove("hidden");
+  loadPracticeWord();
 }
-
-/* --- QUIZ --- */
-let qIndex = 0;
 
 function resetQuiz() {
-  qIndex = 0;
-  loadQuiz();
+  quizIndex = 0;
+  loadQuizQuestion();
 }
 
-function loadQuiz() {
-  const w = currentLesson.words[qIndex];
-  document.getElementById("quiz-question").textContent =
-    `Co oznacza: ${w.de}?`;
+function loadQuizQuestion() {
+  const w = currentLesson.words[quizIndex];
+  document.getElementById("quiz-question").textContent = w.de;
+  const answers = document.getElementById("quiz-answers");
+  answers.innerHTML = "";
 
-  const answers = shuffle([
+  const options = shuffle([
     w.pl,
-    ...pickRandomAnswers(w.pl)
+    ...currentLesson.words.filter(x => x !== w).map(x => x.pl).slice(0, 3)
   ]);
 
-  document.getElementById("quiz-answers").innerHTML =
-    answers.map(a => `<button class="answer-btn" onclick="checkQuiz('${a}')">${a}</button>`).join("");
+  options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => checkQuiz(opt, w.pl);
+    answers.appendChild(btn);
+  });
 
   document.getElementById("quiz-feedback").textContent = "";
 }
 
-function pickRandomAnswers(correct) {
-  const arr = currentLesson.words.map(w => w.pl).filter(p => p !== correct);
-  return shuffle(arr).slice(0, 3);
+function checkQuiz(answer, correct) {
+  const fb = document.getElementById("quiz-feedback");
+  const user = getCurrentUser();
+  if (!user) return;
+
+  user.quizTotal++;
+
+  if (answer === correct) {
+    fb.textContent = "✔️ Dobrze!";
+    user.quizCorrect++;
+    addXP(8);
+  } else {
+    fb.textContent = `❌ Źle! Poprawnie: ${correct}`;
+    addXP(1);
+  }
+
+  saveUpdatedUser(user);
+}
+
+function nextQuiz() {
+  quizIndex++;
+  if (quizIndex >= currentLesson.words.length) quizIndex = 0;
+  loadQuizQuestion();
 }
 
 function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
 
-function checkQuiz(answer) {
-  const w = currentLesson.words[qIndex];
-  const fb = document.getElementById("quiz-feedback");
-
-  if (answer === w.pl) {
-    fb.textContent = "Dobrze!";
-    fb.style.color = "green";
-  } else {
-    fb.textContent = `Źle. Poprawna odpowiedź: ${w.pl}`;
-    fb.style.color = "red";
-  }
+function resetFlashcards() {
+  flashcardIndex = 0;
+  document.getElementById("flashcard-translation").classList.add("hidden");
+  loadFlashcard();
 }
 
-function nextQuiz() {
-  qIndex++;
-  if (qIndex >= currentLesson.words.length) qIndex = 0;
-  loadQuiz();
+function loadFlashcard() {
+  const w = currentLesson.words[flashcardIndex];
+  document.getElementById("flashcard-word").textContent = w.de;
+  document.getElementById("flashcard-translation").textContent = `${w.pl} — ${w.perf}`;
 }
 
-/* --- USTAWIENIA: MOTYW JASNY/CIEMNY --- */
-const THEME_KEY = "german_trainer_theme";
-
-function applyTheme(theme) {
-  if (theme === "dark") {
-    document.body.classList.add("dark");
-  } else {
-    document.body.classList.remove("dark");
-  }
-  document.getElementById("theme-label").textContent =
-    theme === "dark" ? "ciemny" : "jasny";
+function toggleFlashcard() {
+  document.getElementById("flashcard-translation").classList.toggle("hidden");
 }
 
-function toggleTheme() {
-  const isDark = document.body.classList.contains("dark");
-  const newTheme = isDark ? "light" : "dark";
-  localStorage.setItem(THEME_KEY, newTheme);
-  applyTheme(newTheme);
+function nextFlashcard() {
+  flashcardIndex++;
+  if (flashcardIndex >= currentLesson.words.length) flashcardIndex = 0;
+  document.getElementById("flashcard-translation").classList.add("hidden");
+  loadFlashcard();
 }
 
-/* --- INICJALIZACJA --- */
-(function init() {
+function speak(text, lang = "de-DE") {
+  if (!("speechSynthesis" in window)) return;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = lang;
+  window.speechSynthesis.speak(utter);
+}
+
+function speakCurrentPractice() {
+  const w = currentLesson.words[practiceIndex];
+  speak(w.de, "de-DE");
+}
+
+function speakCurrentQuiz() {
+  const w = currentLesson.words[quizIndex];
+  speak(w.de, "de-DE");
+}
+
+function speakCurrentFlashcard() {
+  const w = currentLesson.words[flashcardIndex];
+  speak(w.de, "de-DE");
+}
+
+function showMode(id) {
+  document.querySelectorAll(".mode-section").forEach(m => m.classList.remove("active"));
+  const target = document.getElementById(id);
+  target.classList.add("active");
+}
+
+window.onload = () => {
   const savedTheme = localStorage.getItem(THEME_KEY) || "light";
   applyTheme(savedTheme);
 
-  goToScreen("screen-menu");
-  showMode("mode-learn");
-  loadLearnList();
-  resetPractice();
-  resetQuiz();
-})();
+  const savedLang = getCurrentLang();
+  applyLanguage(savedLang);
+
+  loadLessons();
+
+  const user = getCurrentUser();
+  if (user) {
+    updateLoggedInUserLabel();
+    updateXPUI();
+    updateStatsUI();
+    goToScreen("screen-menu");
+  } else {
+    goToScreen("screen-auth");
+  }
+};
+
