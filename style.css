@@ -18,6 +18,54 @@ body.dark {
 }
 
 /* ==========================
+   PANEL PROFILU (STEAM)
+========================== */
+
+#profile-bar {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 10px;
+  border: 1px solid rgba(0,255,255,0.5);
+  cursor: pointer;
+  z-index: 1000;
+  transition: 0.2s;
+}
+
+#profile-bar:hover {
+  background: rgba(0,0,0,0.85);
+  transform: scale(1.03);
+}
+
+#profile-bar img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(0,255,255,0.7);
+}
+
+.profile-bar-texts {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+}
+
+#profile-bar-name {
+  font-weight: bold;
+}
+
+#profile-bar-status {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* ==========================
    EKRANY
 ========================== */
 
@@ -32,9 +80,6 @@ body.dark {
 
 .screen.active {
   display: block;
-}
-
-.screen.screen-enter {
   opacity: 1;
   transform: translateY(0);
 }
@@ -346,4 +391,53 @@ ul li:hover {
   font-weight: bold;
   font-size: 16px;
   color: #00e5ff;
+}
+
+/* ==========================
+   OSIĄGNIĘCIA
+========================== */
+
+#achievements-list li {
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(0,255,255,0.3);
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+/* ==========================
+   ZNAJOMI
+========================== */
+
+#friends-list li {
+  padding: 10px;
+  background: rgba(0,255,255,0.05);
+  border: 1px solid rgba(0,255,255,0.3);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+/* ==========================
+   GRUPY
+========================== */
+
+#groups-list li {
+  padding: 10px;
+  background: rgba(124,77,255,0.1);
+  border: 1px solid rgba(124,77,255,0.4);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+/* ==========================
+   CZAT GRUPOWY
+========================== */
+
+#group-chat-messages div {
+  padding: 8px;
+  margin-bottom: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(0,255,255,0.2);
 }
