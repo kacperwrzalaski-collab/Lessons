@@ -6,6 +6,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- PANEL PROFILU JAK STEAM -->
+  <div id="profile-bar" onclick="openProfileFromBar()">
+    <img id="profile-bar-avatar" src="" alt="avatar">
+    <div class="profile-bar-texts">
+      <span id="profile-bar-name">Nie zalogowano</span>
+      <span id="profile-bar-status">Kliknij, aby edytować profil</span>
+    </div>
+  </div>
+
   <div id="app">
 
     <!-- LOGOWANIE / REJESTRACJA -->
@@ -53,6 +63,8 @@
           <button onclick="goToScreen('screen-topics')">Tematy</button>
           <button onclick="goToScreen('screen-stats')">Statystyki</button>
           <button onclick="goToScreen('screen-ranking')">Ranking</button>
+          <button onclick="goToScreen('screen-achievements')">Osiągnięcia</button>
+          <button onclick="goToScreen('screen-friends')">Znajomi i grupy</button>
           <button onclick="goToScreen('screen-settings')">Ustawienia</button>
         </div>
 
@@ -80,6 +92,45 @@
       <div class="card glass">
         <ol id="ranking-list"></ol>
         <button onclick="goToScreen('screen-menu')">Powrót</button>
+      </div>
+    </section>
+
+    <!-- OSIĄGNIĘCIA -->
+    <section id="screen-achievements" class="screen">
+      <h1>Osiągnięcia</h1>
+      <div class="card glass">
+        <ul id="achievements-list"></ul>
+        <button onclick="goToScreen('screen-menu')">Powrót</button>
+      </div>
+    </section>
+
+    <!-- ZNAJOMI I GRUPY -->
+    <section id="screen-friends" class="screen">
+      <h1>Znajomi i grupy</h1>
+      <div class="card glass">
+
+        <h2>Znajomi</h2>
+        <input type="text" id="friend-name" placeholder="Nazwa znajomego">
+        <button onclick="addFriend()">Dodaj znajomego</button>
+        <ul id="friends-list"></ul>
+
+        <h2>Grupy</h2>
+        <input type="text" id="group-name" placeholder="Nazwa grupy">
+        <button onclick="createGroup()">Utwórz grupę</button>
+        <ul id="groups-list"></ul>
+
+        <button onclick="goToScreen('screen-menu')">Powrót</button>
+      </div>
+    </section>
+
+    <!-- CZAT GRUPOWY -->
+    <section id="screen-group-chat" class="screen">
+      <h1 id="group-chat-title">Czat grupy</h1>
+      <div class="card glass">
+        <div id="group-chat-messages" style="max-height:300px; overflow-y:auto; margin-bottom:10px;"></div>
+        <input type="text" id="group-chat-input" placeholder="Napisz wiadomość">
+        <button onclick="sendGroupMessage()">Wyślij</button>
+        <button onclick="goToScreen('screen-friends')">Powrót</button>
       </div>
     </section>
 
@@ -123,13 +174,11 @@
           <button onclick="showMode('mode-flashcards')">Fiszki</button>
         </div>
 
-        <!-- NAUKA -->
         <div id="mode-learn" class="mode-section active">
           <h2>Lista słówek</h2>
           <ul id="wordList"></ul>
         </div>
 
-        <!-- PRAKTYKA -->
         <div id="mode-practice" class="mode-section">
           <h2>Praktyka</h2>
           <div id="practice-info"></div>
@@ -149,7 +198,6 @@
           <div id="practice-feedback"></div>
         </div>
 
-        <!-- QUIZ -->
         <div id="mode-quiz" class="mode-section">
           <h2>Quiz</h2>
           <div id="quiz-question"></div>
@@ -161,7 +209,6 @@
           <button onclick="nextQuiz()">Następne</button>
         </div>
 
-        <!-- FISZKI -->
         <div id="mode-flashcards" class="mode-section">
           <h2>Fiszki</h2>
           <div id="flashcard-word"></div>
