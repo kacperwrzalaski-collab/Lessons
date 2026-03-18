@@ -11,35 +11,35 @@
     <!-- LOGOWANIE / REJESTRACJA -->
     <section id="screen-auth" class="screen active">
       <div class="card center auth-card glass">
-        <h1 data-i18n="welcomeTitle">Witaj w EDU‑PAGE</h1>
-        <p data-i18n="welcomeSubtitle">Zaloguj się lub załóż konto, żeby kontynuować naukę.</p>
+        <h1>Witaj w EDU‑PAGE</h1>
+        <p>Zaloguj się lub załóż konto, żeby kontynuować naukę.</p>
 
         <div class="auth-tabs">
-          <button id="tab-login" class="active" onclick="showAuthMode('login')" data-i18n="login">Logowanie</button>
-          <button id="tab-register" onclick="showAuthMode('register')" data-i18n="register">Rejestracja</button>
+          <button id="tab-login" class="active" onclick="showAuthMode('login')">Logowanie</button>
+          <button id="tab-register" onclick="showAuthMode('register')">Rejestracja</button>
         </div>
 
         <div id="auth-login" class="auth-mode active">
           <input type="text" id="login-username" placeholder="Login">
           <input type="password" id="login-password" placeholder="Hasło">
-          <button onclick="handleLogin()" data-i18n="login">Zaloguj</button>
+          <button onclick="handleLogin()">Zaloguj</button>
           <div id="login-feedback" class="feedback"></div>
         </div>
 
         <div id="auth-register" class="auth-mode">
           <input type="text" id="register-username" placeholder="Login">
           <input type="password" id="register-password" placeholder="Hasło">
-          <button onclick="handleRegister()" data-i18n="register">Załóż konto</button>
+          <button onclick="handleRegister()">Załóż konto</button>
           <div id="register-feedback" class="feedback"></div>
         </div>
       </div>
     </section>
 
-    <!-- MENU GŁÓWNE -->
+    <!-- MENU -->
     <section id="screen-menu" class="screen">
       <div class="card center main-menu-card glass">
-        <h1 data-i18n="menu">EDU‑PAGE</h1>
-        <p id="welcome-user" data-i18n="loggedInAs">Zalogowany jako: </p>
+        <h1>EDU‑PAGE</h1>
+        <p id="welcome-user">Zalogowany jako: </p>
 
         <div class="xp-bar">
           <span id="level-label">Lv. 1</span>
@@ -50,27 +50,27 @@
         </div>
 
         <div class="menu-buttons">
-          <button onclick="goToScreen('screen-topics')" data-i18n="topics">Tematy</button>
-          <button onclick="goToScreen('screen-stats')" data-i18n="stats">Statystyki</button>
+          <button onclick="goToScreen('screen-topics')">Tematy</button>
+          <button onclick="goToScreen('screen-stats')">Statystyki</button>
           <button onclick="goToScreen('screen-ranking')">Ranking</button>
-          <button onclick="goToScreen('screen-settings')" data-i18n="settings">Ustawienia</button>
+          <button onclick="goToScreen('screen-settings')">Ustawienia</button>
         </div>
 
         <div class="menu-extra">
-          <button onclick="logout()" data-i18n="logout">Wyloguj</button>
+          <button onclick="logout()">Wyloguj</button>
         </div>
       </div>
     </section>
 
-    <!-- STATYSTYKI UŻYTKOWNIKA -->
+    <!-- STATYSTYKI -->
     <section id="screen-stats" class="screen">
-      <h1 data-i18n="stats">Statystyki</h1>
+      <h1>Statystyki</h1>
       <div class="card glass">
-        <p><span data-i18n="level">Poziom:</span> <span id="stat-level">1</span></p>
-        <p><span data-i18n="xp">XP:</span> <span id="stat-xp">0</span></p>
-        <p><span data-i18n="practiceStats">Praktyka (dobrze / razem):</span> <span id="stat-practice">0 / 0</span></p>
-        <p><span data-i18n="quizStats">Quiz (dobrze / razem):</span> <span id="stat-quiz">0 / 0</span></p>
-        <button onclick="goToScreen('screen-menu')" data-i18n="back">Powrót</button>
+        <p>Poziom: <span id="stat-level">1</span></p>
+        <p>XP: <span id="stat-xp">0</span></p>
+        <p>Praktyka (dobrze / razem): <span id="stat-practice">0 / 0</span></p>
+        <p>Quiz (dobrze / razem): <span id="stat-quiz">0 / 0</span></p>
+        <button onclick="goToScreen('screen-menu')">Powrót</button>
       </div>
     </section>
 
@@ -79,18 +79,18 @@
       <h1>Ranking XP</h1>
       <div class="card glass">
         <ol id="ranking-list"></ol>
-        <button onclick="goToScreen('screen-menu')" data-i18n="back">Powrót</button>
+        <button onclick="goToScreen('screen-menu')">Powrót</button>
       </div>
     </section>
 
-    <!-- TEMATY / LEKCJE -->
+    <!-- TEMATY -->
     <section id="screen-topics" class="screen">
-      <h1 data-i18n="topics">TEMATY</h1>
+      <h1>TEMATY</h1>
       <div class="card glass">
         <h2>NIEMIECKI – TŁUMACZENIE SŁÓWEK I ODMIANA</h2>
-        <h3 data-i18n="availableLessons">Dostępne lekcje</h3>
+        <h3>Dostępne lekcje</h3>
         <ul id="lessons-list"></ul>
-        <button onclick="goToScreen('screen-menu')" data-i18n="back">Powrót</button>
+        <button onclick="goToScreen('screen-menu')">Powrót</button>
       </div>
     </section>
 
@@ -99,51 +99,51 @@
       <h1 id="lesson-title">LEKCJA</h1>
       <div class="card center glass">
         <p id="lesson-description"></p>
-        <h3 data-i18n="chooseMode">Wybierz tryb lekcji:</h3>
+        <h3>Wybierz tryb lekcji:</h3>
 
-        <button onclick="goToScreen('screen-modes'); showMode('mode-learn')" data-i18n="learn">Nauka</button>
-        <button onclick="goToScreen('screen-modes'); showMode('mode-practice')" data-i18n="practice">Praktyka</button>
-        <button onclick="goToScreen('screen-modes'); showMode('mode-quiz')" data-i18n="quiz">Quiz</button>
-        <button onclick="goToScreen('screen-modes'); showMode('mode-flashcards')" data-i18n="flashcards">Fiszki</button>
+        <button onclick="goToScreen('screen-modes'); showMode('mode-learn')">Nauka</button>
+        <button onclick="goToScreen('screen-modes'); showMode('mode-practice')">Praktyka</button>
+        <button onclick="goToScreen('screen-modes'); showMode('mode-quiz')">Quiz</button>
+        <button onclick="goToScreen('screen-modes'); showMode('mode-flashcards')">Fiszki</button>
 
         <br>
-        <button onclick="goToScreen('screen-topics')" data-i18n="back">Powrót</button>
+        <button onclick="goToScreen('screen-topics')">Powrót</button>
       </div>
     </section>
 
-    <!-- TRYBY LEKCJI -->
+    <!-- TRYBY -->
     <section id="screen-modes" class="screen">
       <h1 id="modes-lesson-title">Tryby – Lekcja</h1>
       <div class="card glass">
 
         <div class="modes-buttons">
-          <button onclick="showMode('mode-learn')" data-i18n="learn">Nauka</button>
-          <button onclick="showMode('mode-practice')" data-i18n="practice">Praktyka</button>
-          <button onclick="showMode('mode-quiz')" data-i18n="quiz">Quiz</button>
-          <button onclick="showMode('mode-flashcards')" data-i18n="flashcards">Fiszki</button>
+          <button onclick="showMode('mode-learn')">Nauka</button>
+          <button onclick="showMode('mode-practice')">Praktyka</button>
+          <button onclick="showMode('mode-quiz')">Quiz</button>
+          <button onclick="showMode('mode-flashcards')">Fiszki</button>
         </div>
 
         <!-- NAUKA -->
         <div id="mode-learn" class="mode-section active">
-          <h2 data-i18n="listWords">Lista słówek</h2>
+          <h2>Lista słówek</h2>
           <ul id="wordList"></ul>
         </div>
 
         <!-- PRAKTYKA -->
         <div id="mode-practice" class="mode-section">
-          <h2 data-i18n="practiceTitle">Praktyka</h2>
+          <h2>Praktyka</h2>
           <div id="practice-info"></div>
 
-          <label data-i18n="translationPL">Tłumaczenie (PL):</label>
+          <label>Tłumaczenie (PL):</label>
           <input type="text" id="practice-pl">
 
-          <label data-i18n="perfekt">Perfekt:</label>
+          <label>Perfekt:</label>
           <input type="text" id="practice-perf">
 
           <div class="practice-buttons-row">
-            <button id="practice-check-btn" onclick="checkPractice()" data-i18n="check">Sprawdź</button>
-            <button id="practice-next-btn" class="hidden" onclick="nextPractice()" data-i18n="next">Kontynuuj</button>
-            <button onclick="speakCurrentPractice()" data-i18n="speak">🔊</button>
+            <button id="practice-check-btn" onclick="checkPractice()">Sprawdź</button>
+            <button id="practice-next-btn" class="hidden" onclick="nextPractice()">Kontynuuj</button>
+            <button onclick="speakCurrentPractice()">🔊</button>
           </div>
 
           <div id="practice-feedback"></div>
@@ -151,35 +151,35 @@
 
         <!-- QUIZ -->
         <div id="mode-quiz" class="mode-section">
-          <h2 data-i18n="quizTitle">Quiz</h2>
+          <h2>Quiz</h2>
           <div id="quiz-question"></div>
           <div class="quiz-speak-row">
-            <button onclick="speakCurrentQuiz()" data-i18n="speak">🔊</button>
+            <button onclick="speakCurrentQuiz()">🔊</button>
           </div>
           <div id="quiz-answers"></div>
           <div id="quiz-feedback"></div>
-          <button onclick="nextQuiz()" data-i18n="next">Następne</button>
+          <button onclick="nextQuiz()">Następne</button>
         </div>
 
         <!-- FISZKI -->
         <div id="mode-flashcards" class="mode-section">
-          <h2 data-i18n="flashcards">Fiszki</h2>
+          <h2>Fiszki</h2>
           <div id="flashcard-word"></div>
           <div id="flashcard-translation" class="hidden"></div>
           <div class="flashcard-buttons">
-            <button onclick="toggleFlashcard()" data-i18n="showHide">Pokaż / ukryj tłumaczenie</button>
-            <button onclick="nextFlashcard()" data-i18n="next">Następne</button>
-            <button onclick="speakCurrentFlashcard()" data-i18n="speak">🔊</button>
+            <button onclick="toggleFlashcard()">Pokaż / ukryj tłumaczenie</button>
+            <button onclick="nextFlashcard()">Następne</button>
+            <button onclick="speakCurrentFlashcard()">🔊</button>
           </div>
         </div>
 
-        <button onclick="goToScreen('screen-lesson')" data-i18n="back">Powrót</button>
+        <button onclick="goToScreen('screen-lesson')">Powrót</button>
       </div>
     </section>
 
-    <!-- USTAWIENIA + PROFIL -->
+    <!-- USTAWIENIA -->
     <section id="screen-settings" class="screen">
-      <h1 data-i18n="settings">Ustawienia</h1>
+      <h1>Ustawienia</h1>
       <div class="card glass">
 
         <h2>Profil</h2>
@@ -188,19 +188,19 @@
           <input type="file" id="profile-upload" accept="image/*" onchange="uploadProfilePhoto()">
         </div>
 
-        <h2 data-i18n="theme">Motyw</h2>
-        <button onclick="toggleTheme()" data-i18n="toggleTheme">Przełącz motyw jasny/ciemny</button>
+        <h2>Motyw</h2>
+        <button onclick="toggleTheme()">Przełącz motyw jasny/ciemny</button>
 
-        <h2 data-i18n="language">Język</h2>
+        <h2>Język</h2>
         <div class="lang-flags">
-          <button onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
-          <button onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
-          <button onclick="changeLanguage('en')" title="English">🇬🇧</button>
-          <button onclick="changeLanguage('es')" title="Español">🇪🇸</button>
-          <button onclick="changeLanguage('fr')" title="Français">🇫🇷</button>
+          <button onclick="changeLanguage('pl')">🇵🇱</button>
+          <button onclick="changeLanguage('de')">🇩🇪</button>
+          <button onclick="changeLanguage('en')">🇬🇧</button>
+          <button onclick="changeLanguage('es')">🇪🇸</button>
+          <button onclick="changeLanguage('fr')">🇫🇷</button>
         </div>
 
-        <button onclick="goToScreen('screen-menu')" data-i18n="back">Powrót</button>
+        <button onclick="goToScreen('screen-menu')">Powrót</button>
       </div>
     </section>
 
