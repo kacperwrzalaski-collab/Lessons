@@ -1,125 +1,147 @@
+// ==========================================
+//  QUESTY — MISJE DZIENNE
+// ==========================================
+
+// Lista dostępnych questów
 const QUEST_POOL = [
-    { text: "Zrób 5 fiszek", goal: 5, reward: 20, type: "flashcards" },
-    { text: "Zrób 3 quizy", goal: 3, reward: 25, type: "quiz" },
-    { text: "Naucz się 10 słówek", goal: 10, reward: 30, type: "learn" },
-    { text: "Zrób 5 poprawnych odpowiedzi w pisaniu", goal: 5, reward: 35, type: "write" }
+    { id: "learn10", text: "Naucz się 10 słówek", rewardXP: 20, rewardCoins: 5 },
+    { id: "flashcards10", text: "Przerób 10 fiszek", rewardXP: 15, rewardCoins: 5 },
+    { id: "quiz5", text: "Odpowiedz poprawnie na 5 pytań w quizie", rewardXP: 25, rewardCoins: 10 },
+    { id: "write5", text: "Poprawnie wpisz 5 tłumaczeń", rewardXP: 20, rewardCoins: 5 },
+    { id: "session5min", text: "Ucz się przez 5 minut", rewardXP: 10, rewardCoins: 3 }
 ];
 
-function generateQuest() {
-    const q = QUEST_POOL[Math.floor(Math.random() * QUEST_POOL.length)];
-    return {
-        id: "q" + Math.random().toString(36).substr(2, 9),
-        text: q.text,
-        goal: q.goal,
-        reward: q.reward,
-        type: q.type,
-        progress: 0
-    };
-}
+// Aktualny stan questów
+let activeQuests = [];
+let questProgress = {};
 
-function initQuests() {
-    const user = getCurrentUser();
-    if (!user) return;
+// ==========================================
+//  GENEROWANIE QUESTÓW DZIENNYCH
+// ==========================================
 
-    if (!user.quests) {
-        user.quests = [
-            generateQuest(),
-            generateQuest(),
-            generateQuest(),
-            generateQuest()
-        ];
-        saveUpdatedUser(user);
+function generateDailyQuests() {
+    const username = localStorage.getItem("currentUser");
+    const user = loadUser(username);
+
+    const today = new Date().toDateString();
+
+    // Jeśli questy są już wygenerowane na dziś — wczytaj
+    if (user.lastQuestDay === today) {
+        activeQuests = user.activeQuests || [];
+        questProgress = user.questProgress || {};
+        renderQuests();
+        return;
     }
+
+    // W przeciwnym razie — generujemy nowe
+    activeQuests = [];
+    questProgress = {};
+
+    // Losujemy 3 różne questy
+    const shuffled = [...QUEST_POOL].sort(() => Math.random() - 0.5);
+    activeQuests = shuffled.slice(0, 3);
+
+    // Reset progresu
+    activeQuests.forEach(q => {
+        questProgress[q.id] = 0;
+    });
+
+    // Zapis do użytkownika
+    user.lastQuestDay = today;
+    user.activeQuests = activeQuests;
+    user.questProgress = questProgress;
+    saveUser(user);
 
     renderQuests();
 }
+
+// ==========================================
+//  WYŚWIETLANIE QUESTÓW
+// ==========================================
 
 function renderQuests() {
-    const user = getCurrentUser();
-    if (!user) return;
+    const list = document.getElementById("quests-list");
+    list.innerHTML = "";
 
-    const container = document.getElementById("quests-list");
-    container.innerHTML = "";
+    activeQuests.forEach(q => {
+        const progress = questProgress[q.id] || 0;
+        const done = progress >= getQuestGoal(q.id);
 
-    user.quests.forEach(q => {
         const div = document.createElement("div");
-        div.className = "quest glass";
+        div.className = "quest-item";
 
         div.innerHTML = `
-            <p>${q.text}</p>
-            <p>Postęp: ${q.progress}/${q.goal}</p>
-            <p>Nagroda: ${q.reward} XP Coins</p>
+            <strong>${q.text}</strong><br>
+            Postęp: ${progress}/${getQuestGoal(q.id)}<br>
+            Nagroda: ⭐ ${q.rewardXP} XP, 💰 ${q.rewardCoins} Coins<br>
+            ${done ? "<span style='color:#00ff88'>✔ Ukończono!</span>" : ""}
         `;
 
-        if (q.progress >= q.goal) {
-            const btn = document.createElement("button");
-            btn.textContent = "Odbierz nagrodę";
-            btn.onclick = () => completeQuest(q.id);
-            div.appendChild(btn);
-        }
-
-        container.appendChild(div);
+        list.appendChild(div);
     });
 }
+
+// ==========================================
+//  CELE QUESTÓW
+// ==========================================
+
+function getQuestGoal(id) {
+    switch (id) {
+        case "learn10": return 10;
+        case "flashcards10": return 10;
+        case "quiz5": return 5;
+        case "write5": return 5;
+        case "session5min": return 1;
+        default: return 1;
+    }
+}
+
+// ==========================================
+//  AKTUALIZACJA PROGRESU QUESTÓW
+// ==========================================
 
 function updateQuestProgress(type) {
-    const user = getCurrentUser();
-    if (!user || !user.quests) return;
+    const username = localStorage.getItem("currentUser");
+    const user = loadUser(username);
 
-    let changed = false;
+    if (!questProgress[type]) questProgress[type] = 0;
 
-    user.quests.forEach(q => {
-        if (q.type === type && q.progress < q.goal) {
-            q.progress++;
-            changed = true;
-        }
-    });
+    questProgress[type]++;
 
-    if (changed) {
-        saveUpdatedUser(user);
-        renderQuests();
+    // Sprawdzamy, czy quest ukończony
+    if (questProgress[type] >= getQuestGoal(type)) {
+        rewardQuest(type);
     }
+
+    // Zapis
+    user.questProgress = questProgress;
+    saveUser(user);
+
+    renderQuests();
 }
 
-function completeQuest(id) {
-    const user = getCurrentUser();
-    if (!user || !user.quests) return;
+// ==========================================
+//  NAGRODY ZA QUEST
+// ==========================================
 
-    const quest = user.quests.find(q => q.id === id);
+function rewardQuest(id) {
+    const username = localStorage.getItem("currentUser");
+    const user = loadUser(username);
+
+    const quest = activeQuests.find(q => q.id === id);
     if (!quest) return;
 
-    user.coins += quest.reward;
+    user.xp += quest.rewardXP;
+    user.coins += quest.rewardCoins;
 
-    const index = user.quests.findIndex(q => q.id === id);
-    user.quests[index] = generateQuest();
-
-    saveUpdatedUser(user);
-    renderQuests();
+    saveUser(user);
     loadProfile();
 }
 
-function giveXPBox() {
-    const user = getCurrentUser();
-    if (!user) return;
+// ==========================================
+//  AUTO-START
+// ==========================================
 
-    const xpGain = Math.floor(Math.random() * 100) + 50;
-    user.xp += xpGain;
-
-    let msg = `Otworzyłeś XP BOX! Zdobyłeś ${xpGain} XP`;
-
-    if (Math.random() < 0.10) {
-        const coinsGain = Math.floor(Math.random() * 20) + 10;
-        user.coins += coinsGain;
-        msg += ` oraz ${coinsGain} XP Coins`;
-    }
-
-    alert(msg + "!");
-
-    if (user.xp >= user.level * 100) {
-        user.xp = 0;
-        user.level++;
-    }
-
-    saveUpdatedUser(user);
-    loadProfile();
-}
+setTimeout(() => {
+    generateDailyQuests();
+}, 300);
