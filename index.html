@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nauka Niemieckiego</title>
+    <title>Nauka słówek PL → EN</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <!-- ========================= -->
-    <!--        EKRAN STARTOWY     -->
+    <!--        LOGOWANIE          -->
     <!-- ========================= -->
     <div id="screen-auth" class="screen active">
 
@@ -52,7 +52,7 @@
             <h1>Witaj!</h1>
             <p id="welcome-user"></p>
 
-            <button onclick="goToScreen('screen-topics')">Tematy</button>
+            <button onclick="goToScreen('screen-topics')">Lekcje</button>
             <button onclick="goToScreen('screen-achievements')">Osiągnięcia</button>
             <button onclick="goToScreen('screen-ranking')">Ranking</button>
             <button onclick="goToScreen('screen-friends')">Znajomi</button>
@@ -68,7 +68,7 @@
 
         <div class="card glass">
 
-            <h2>NIEMIECKI – TŁUMACZENIE SŁÓWEK I ODMIANA</h2>
+            <h2>Unit 3 – Słówka PL → EN</h2>
             <h3>Dostępne lekcje</h3>
 
             <ul id="lessons-list"></ul>
@@ -104,23 +104,12 @@
             <h2 id="modes-lesson-title"></h2>
 
             <button onclick="showMode('mode-learn')">Nauka</button>
-            <button onclick="showMode('mode-practice')">Praktyka</button>
             <button onclick="showMode('mode-quiz')">Quiz</button>
             <button onclick="showMode('mode-flashcards')">Fiszki</button>
 
             <!-- NAUKA -->
             <div id="mode-learn" class="mode-section active">
                 <ul id="wordList"></ul>
-            </div>
-
-            <!-- PRAKTYKA -->
-            <div id="mode-practice" class="mode-section">
-                <p id="practice-info"></p>
-                <input id="practice-pl" placeholder="Tłumaczenie">
-                <input id="practice-perf" placeholder="Odmiana">
-                <button id="practice-check-btn" onclick="checkPractice()">Sprawdź</button>
-                <button id="practice-next-btn" class="hidden" onclick="nextPractice()">Następne</button>
-                <p id="practice-feedback"></p>
             </div>
 
             <!-- QUIZ -->
