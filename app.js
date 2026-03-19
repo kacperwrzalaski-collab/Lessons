@@ -463,18 +463,19 @@ document.getElementById("logout-btn").addEventListener("click", () => {
 });
 
 /* ============================================================
-   START
+   OBSŁUGA ZMIANY JĘZYKA I TEMATU
 ============================================================ */
 
-function init() {
-    fillLanguageSelect();
+document.getElementById("learn-language-select").addEventListener("change", () => {
     fillTopicSelect();
-
+    learnIndex = 0;
+    flashIndex = 0;
     loadLearnWord();
     loadFlashcard();
     loadQuiz();
     loadWriteWord();
-    updateUI();
-}
+});
 
-window.addEventListener("load", init);
+document.getElementById("learn-topic-select").addEventListener("change", () => {
+    learnIndex = 0;
+    flashIndex = 0;
