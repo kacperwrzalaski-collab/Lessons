@@ -1,153 +1,218 @@
-const USERS_KEY = "lernzone_users";
-const CURRENT_USER_KEY = "lernzone_current_user";
+// ==========================================
+//  SYSTEM UŻYTKOWNIKÓW — AUTH + PROFIL
+// ==========================================
 
-function loadUsers() {
-    return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
+// Pobieranie użytkownika z localStorage
+function loadUser(username) {
+    const data = localStorage.getItem("user_" + username);
+    return data ? JSON.parse(data) : null;
 }
 
-function saveUsers(users) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+// Zapisywanie użytkownika
+function saveUser(user) {
+    localStorage.setItem("user_" + user.username, JSON.stringify(user));
 }
 
-function getCurrentUser() {
-    return JSON.parse(localStorage.getItem(CURRENT_USER_KEY) || "null");
-}
-
-function setCurrentUser(user) {
-    if (user) localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
-    else localStorage.removeItem(CURRENT_USER_KEY);
-}
-
+// Aktualizacja użytkownika (np. po zmianie ekwipunku)
 function saveUpdatedUser(user) {
-    const users = loadUsers();
-    const index = users.findIndex(u => u.username === user.username);
-    if (index !== -1) {
-        users[index] = user;
-        saveUsers(users);
-        setCurrentUser(user);
-    }
+    saveUser(user);
+    loadProfile();
 }
 
-function initAuth() {
-    const loginTab = document.getElementById("tab-login");
-    const registerTab = document.getElementById("tab-register");
-    const loginBox = document.getElementById("auth-login");
-    const registerBox = document.getElementById("auth-register");
+// Tworzenie nowego użytkownika
+function createUser(username, password) {
+    return {
+        username,
+        password,
+        xp: 0,
+        level: 1,
+        coins: 0,
+        prestige: 0,
 
-    loginTab.onclick = () => switchAuth("login");
-    registerTab.onclick = () => switchAuth("register");
+        // kosmetyki
+        equippedFrame: null,
+        equippedBackground: null,
+        equippedButtonTheme: null,
+        avatar: null,
 
-    function switchAuth(mode) {
-        loginTab.classList.toggle("active", mode === "login");
-        registerTab.classList.toggle("active", mode === "register");
-        loginBox.classList.toggle("active", mode === "login");
-        registerBox.classList.toggle("active", mode === "register");
-    }
+        // odznaki
+        badges: [],
+        equippedBadge: null,
 
-    document.getElementById("btn-register").onclick = () => {
-        const username = document.getElementById("register-username").value.trim();
-        const password = document.getElementById("register-password").value.trim();
-        const fb = document.getElementById("register-feedback");
-
-        if (!username || !password) {
-            fb.textContent = "Uzupełnij dane.";
-            return;
+        // ekwipunek
+        inventory: {
+            frames: [],
+            backgrounds: [],
+            buttons: []
         }
-
-        const users = loadUsers();
-        if (users.some(u => u.username === username)) {
-            fb.textContent = "Taki użytkownik już istnieje.";
-            return;
-        }
-
-        users.push({
-            username,
-            password,
-            xp: 0,
-            level: 1,
-            avatar: "",
-            quizScore: 0,
-            coins: 0,
-            inventory: [],
-            equipped: {
-                background: null,
-                buttonColor: null,
-                avatarFrame: null
-            },
-            quests: null
-        });
-
-        saveUsers(users);
-        fb.textContent = "Konto utworzone!";
-    };
-
-    document.getElementById("btn-login").onclick = () => {
-        const username = document.getElementById("login-username").value.trim();
-        const password = document.getElementById("login-password").value.trim();
-        const fb = document.getElementById("login-feedback");
-
-        const users = loadUsers();
-        const user = users.find(u => u.username === username && u.password === password);
-
-        if (!user) {
-            fb.textContent = "Błędne dane.";
-            return;
-        }
-
-        setCurrentUser(user);
-        loadProfile();
-
-        document.getElementById("screen-auth").style.display = "none";
-        document.getElementById("app-container").classList.remove("hidden");
     };
 }
+
+// Logowanie
+document.getElementById("auth-login").onclick = () => {
+    const username = document.getElementById("auth-username").value.trim();
+    const password = document.getElementById("auth-password").value.trim();
+    const feedback = document.getElementById("auth-feedback");
+
+    const user = loadUser(username);
+
+    if (!user) {
+        feedback.textContent = "❌ Użytkownik nie istnieje";
+        return;
+    }
+
+    if (user.password !== password) {
+        feedback.textContent = "❌ Błędne hasło";
+        return;
+    }
+
+    feedback.textContent = "";
+    localStorage.setItem("currentUser", username);
+    initApp();
+};
+
+// Rejestracja
+document.getElementById("auth-register").onclick = () => {
+    const username = document.getElementById("auth-username").value.trim();
+    const password = document.getElementById("auth-password").value.trim();
+    const feedback = document.getElementById("auth-feedback");
+
+    if (loadUser(username)) {
+        feedback.textContent = "❌ Taki użytkownik już istnieje";
+        return;
+    }
+
+    if (username.length < 3) {
+        feedback.textContent = "❌ Nazwa musi mieć min. 3 znaki";
+        return;
+    }
+
+    if (password.length < 3) {
+        feedback.textContent = "❌ Hasło musi mieć min. 3 znaki";
+        return;
+    }
+
+    const user = createUser(username, password);
+    saveUser(user);
+
+    feedback.textContent = "✔ Zarejestrowano! Możesz się zalogować.";
+};
+
+// Wylogowanie
+document.getElementById("logout-btn").onclick = () => {
+    localStorage.removeItem("currentUser");
+    location.reload();
+};
+
+// ==========================================
+//  INICJALIZACJA APLIKACJI
+// ==========================================
+
+function initApp() {
+    const username = localStorage.getItem("currentUser");
+    if (!username) return;
+
+    const user = loadUser(username);
+    if (!user) return;
+
+    document.getElementById("screen-auth").classList.add("hidden");
+    document.getElementById("app-container").classList.remove("hidden");
+
+    loadProfile();
+    loadTopicsToSelects();
+}
+
+// ==========================================
+//  PROFIL — ŁADOWANIE DANYCH
+// ==========================================
 
 function loadProfile() {
-    const user = getCurrentUser();
-    if (!user) return;
+    const username = localStorage.getItem("currentUser");
+    if (!username) return;
 
-    document.getElementById("profile-name").textContent = user.username;
-    document.getElementById("profile-level").textContent = "Poziom " + user.level;
-    document.getElementById("profile-avatar").src = user.avatar || "https://i.imgur.com/0y8Ftya.png";
+    const user = loadUser(username);
 
-    document.getElementById("coins-display").textContent = user.coins;
-    const shopCoins = document.getElementById("coins-display-shop");
-    if (shopCoins) shopCoins.textContent = user.coins;
+    document.getElementById("profile-name").innerHTML = user.username;
+    document.getElementById("profile-level").innerHTML = "Poziom: " + user.level;
+    document.getElementById("profile-coins").innerHTML = "💰 " + user.coins;
 
-    updateXP();
-    applyCosmetics();
+    // XP bar
+    const xpPercent = (user.xp % 100) + "%";
+    document.getElementById("profile-xp-fill").style.width = xpPercent;
+
+    // Avatar
+    const avatar = document.getElementById("profile-avatar");
+    avatar.style.backgroundImage = user.avatar ? `url(${user.avatar})` : "none";
+
+    // Ramka
+    avatar.className = "avatar";
+    if (user.equippedFrame) {
+        avatar.classList.add(user.equippedFrame);
+    }
+
+    // Tło prestiżowe
+    document.body.className = "";
+    if (user.equippedBackground) {
+        document.body.classList.add(user.equippedBackground);
+    }
+
+    // Kolor przycisków
+    document.body.classList.remove("btn-theme-blue", "btn-theme-green", "btn-theme-red");
+    if (user.equippedButtonTheme) {
+        document.body.classList.add(user.equippedButtonTheme);
+    }
 }
 
-function updateXP() {
-    const user = getCurrentUser();
-    if (!user) return;
-    const needed = user.level * 100;
-    const percent = Math.min(100, (user.xp / needed) * 100);
-    document.getElementById("xp-fill").style.width = percent + "%";
+// ==========================================
+//  XP + LEVEL + PRESTIŻ
+// ==========================================
+
+function addXP(amount) {
+    const username = localStorage.getItem("currentUser");
+    const user = loadUser(username);
+
+    user.xp += amount;
+
+    // Level up
+    if (user.xp >= user.level * 100) {
+        user.level++;
+        user.coins += 10;
+    }
+
+    saveUser(user);
+    loadProfile();
 }
 
-function initSettings() {
-    document.getElementById("avatar-upload").onchange = e => {
-        const file = e.target.files[0];
-        if (!file) return;
+// ==========================================
+//  ŁADOWANIE TEMATÓW DO SELECTÓW
+// ==========================================
 
-        const reader = new FileReader();
-        reader.onload = ev => {
-            const user = getCurrentUser();
-            user.avatar = ev.target.result;
-            saveUpdatedUser(user);
-            loadProfile();
-        };
-        reader.readAsDataURL(file);
-    };
+function loadTopicsToSelects() {
+    const selects = [
+        "learn-topic-select",
+        "flashcards-topic-select",
+        "quiz-topic-select",
+        "write-topic-select"
+    ];
 
-    document.getElementById("theme-toggle").onclick = () => {
-        document.body.classList.toggle("light");
-    };
+    selects.forEach(id => {
+        const select = document.getElementById(id);
+        select.innerHTML = "";
 
-    document.getElementById("display-mode").onchange = e => {
-        const mode = e.target.value;
-        if (mode === "mobile") document.body.classList.add("mobile");
-        else document.body.classList.remove("mobile");
-    };
+        Object.keys(topics).forEach(topic => {
+            const opt = document.createElement("option");
+            opt.value = topic;
+            opt.textContent = topic;
+            select.appendChild(opt);
+        });
+    });
 }
+
+// ==========================================
+//  AUTO-LOGIN
+// ==========================================
+
+window.onload = () => {
+    const username = localStorage.getItem("currentUser");
+    if (username) initApp();
+};
