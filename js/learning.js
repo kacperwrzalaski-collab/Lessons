@@ -2,9 +2,7 @@
    LEARNING.JS — NAUKA, FISZKI, QUIZ, PISANIE, QUESTY, SKLEP
 ============================================================ */
 
-/* ============================================================
-   STRUKTURA TEMATÓW
-============================================================ */
+/* TEMATY */
 
 const topics = {
     angielski: {
@@ -34,7 +32,6 @@ const topics = {
             { word: "supervise", pl: "nadzorować" },
             { word: "video conferencing app", pl: "oprogramowanie do wideokonferencji" },
 
-            // SPEAKING
             { word: "after-school activities", pl: "zajęcia pozaszkolne" },
             { word: "charity work", pl: "wolontariat" },
             { word: "cookery course", pl: "kurs gotowania" },
@@ -48,7 +45,6 @@ const topics = {
             { word: "robotics course", pl: "kurs robotyki" },
             { word: "sing in a choir", pl: "śpiewać w chórze" },
 
-            // READING
             { word: "activity course", pl: "kurs/zajęcia w jakiejś dziedzinie aktywności" },
             { word: "beat", pl: "pokonać" },
             { word: "disappointed", pl: "rozczarowany" },
@@ -68,12 +64,10 @@ const topics = {
             { word: "take up classes/a course", pl: "zapisać się na zajęcia/kurs" },
             { word: "turn (17)", pl: "ukończyć (17) lat" },
 
-            // VOCABULARY 2
             { word: "academic results", pl: "wyniki w nauce" },
             { word: "continue education", pl: "kontynuować naukę" },
             { word: "copy homework", pl: "spisać od kogoś pracę domową" },
 
-            // LISTENING
             { word: "do a conversation exchange", pl: "rozmawiać z kimś na zmianę w swoim i jego języku" },
             { word: "draw mind maps", pl: "rysować mapy myśli" },
             { word: "have flexible study hours", pl: "elastyczne godziny nauki" },
@@ -90,19 +84,16 @@ const topics = {
             { word: "use sticky notes", pl: "używać karteczek samoprzylepnych" },
             { word: "watch video tutorials", pl: "oglądać filmiki instruktażowe" },
 
-            // GRAMMAR 2
             { word: "last", pl: "trwać" },
             { word: "level", pl: "poziom" },
             { word: "speed-reading course", pl: "kurs szybkiego czytania" },
 
-            // USE OF ENGLISH
             { word: "race", pl: "wyścig" },
             { word: "regret", pl: "żałować" },
             { word: "run a marathon", pl: "przebiec maraton" },
             { word: "half-marathon", pl: "półmaraton" },
             { word: "triplets", pl: "trojaczki" },
 
-            // WRITING
             { word: "enquire about sth", pl: "zapytać o coś" },
             { word: "make a payment", pl: "dokonać wpłaty" },
             { word: "obtain", pl: "uzyskać" },
@@ -117,9 +108,7 @@ const topics = {
     }
 };
 
-/* ============================================================
-   POMOCNICZE
-============================================================ */
+/* POMOCNICZE */
 
 function getTopicWords() {
     const lang = document.getElementById("learn-language-select").value;
@@ -153,9 +142,7 @@ function fillTopicSelect() {
     });
 }
 
-/* ============================================================
-   NAUKA
-============================================================ */
+/* NAUKA */
 
 let learnIndex = 0;
 
@@ -178,9 +165,7 @@ document.getElementById("learn-next").addEventListener("click", () => {
     ui.updateUI();
 });
 
-/* ============================================================
-   FISZKI
-============================================================ */
+/* FISZKI */
 
 let flashIndex = 0;
 
@@ -209,9 +194,7 @@ document.getElementById("flashcard-next").addEventListener("click", () => {
     loadFlashcard();
 });
 
-/* ============================================================
-   QUIZ
-============================================================ */
+/* QUIZ */
 
 function loadQuiz() {
     const words = getTopicWords();
@@ -258,9 +241,7 @@ function shuffle(arr) {
     return arr.sort(() => Math.random() - 0.5);
 }
 
-/* ============================================================
-   TRYB PISANIA
-============================================================ */
+/* PISANIE */
 
 let writeWord = null;
 
@@ -278,6 +259,8 @@ document.getElementById("write-check").addEventListener("click", () => {
     const ans = document.getElementById("write-answer").value.trim();
     const fb = document.getElementById("write-feedback");
 
+    if (!writeWord) return;
+
     if (ans === writeWord.pl) {
         fb.textContent = "Dobrze!";
         core.addXP(12);
@@ -288,9 +271,7 @@ document.getElementById("write-check").addEventListener("click", () => {
     }
 });
 
-/* ============================================================
-   QUESTY
-============================================================ */
+/* QUESTY */
 
 const quests = [
     { id: 1, text: "Zrób 5 fiszek", progress: 0, goal: 5, reward: 20 },
@@ -316,9 +297,7 @@ function updateQuests() {
     });
 }
 
-/* ============================================================
-   SKLEP
-============================================================ */
+/* SKLEP */
 
 const shopItems = [
     { id: "frame-red", type: "frame", name: "Czerwona ramka", price: 50, value: "red" },
@@ -355,9 +334,7 @@ function loadShop() {
     });
 }
 
-/* ============================================================
-   EKWIPUNEK
-============================================================ */
+/* EKWIPUNEK */
 
 function loadInventory() {
     const inv = core.player.inventory;
@@ -380,9 +357,7 @@ function fillInventory(id, arr) {
     });
 }
 
-/* ============================================================
-   INICJALIZACJA
-============================================================ */
+/* INICJALIZACJA */
 
 function initLearning() {
     fillLanguageSelect();
@@ -398,10 +373,6 @@ function initLearning() {
 }
 
 window.addEventListener("load", initLearning);
-
-/* ============================================================
-   EKSPORT
-============================================================ */
 
 window.learning = {
     loadLearnWord,
