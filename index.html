@@ -3,250 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <title>Language RPG</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- ============================
-         EKRAN LOGOWANIA
-    ============================= -->
-    <section id="screen-auth" class="screen">
-        <div class="auth-box glass">
-            <h1>Language RPG</h1>
-            <input id="auth-username" placeholder="Nazwa użytkownika">
-            <input id="auth-password" type="password" placeholder="Hasło">
+<!-- EKRAN LOGOWANIA -->
+<div id="screen-auth">
+    <div class="auth-box glass">
+        <h2>Logowanie</h2>
+        <input id="auth-username" type="text" placeholder="Login">
+        <input id="auth-password" type="password" placeholder="Hasło">
+        <div style="margin-top:10px; display:flex; gap:8px; justify-content:center;">
             <button id="auth-login">Zaloguj</button>
-            <button id="auth-register">Zarejestruj</button>
-            <p id="auth-feedback"></p>
+            <button id="auth-register">Rejestracja</button>
         </div>
-    </section>
+        <div id="auth-feedback" style="margin-top:10px; font-size:14px; min-height:18px;"></div>
+    </div>
+</div>
 
-    <!-- ============================
-         GŁÓWNY LAYOUT
-    ============================= -->
-    <div id="app-container" class="hidden app-layout">
+<!-- GŁÓWNA APLIKACJA -->
+<div id="app-container" class="app-layout hidden">
 
-        <!-- ============================
-             SIDEBAR / TOPBAR
-        ============================= -->
-        <aside class="sidebar glass">
-
-            <div class="profile-box">
-                <div id="profile-avatar" class="avatar"></div>
-
-                <div class="profile-info">
-                    <div id="profile-name"></div>
-                    <div id="profile-level"></div>
-
-                    <div id="profile-xp-bar">
-                        <div id="profile-xp-fill"></div>
-                    </div>
-
-                    <div id="profile-coins"></div>
+    <!-- SIDEBAR -->
+    <aside class="sidebar glass">
+        <div class="profile-box">
+            <div id="profile-avatar" class="avatar"></div>
+            <div class="profile-info">
+                <div id="profile-name">Brak</div>
+                <div id="profile-level">Poziom 1</div>
+                <div id="profile-coins">0 🪙</div>
+                <div id="profile-xp-bar">
+                    <div id="profile-xp-fill"></div>
                 </div>
             </div>
+        </div>
 
-            <!-- MENU KAFELKOWE (C2) -->
-            <nav class="nav-buttons">
+        <div class="nav-buttons">
+            <div class="nav-tile" data-screen="screen-learn">
+                <div class="icon">📘</div>
+                <span>Nauka</span>
+            </div>
+            <div class="nav-tile" data-screen="screen-flashcards">
+                <div class="icon">🃏</div>
+                <span>Fiszki</span>
+            </div>
+            <div class="nav-tile" data-screen="screen-quiz">
+                <div class="icon">❓</div>
+                <span>Quiz</span>
+            </div>
+            <div class="nav-tile" data-screen="screen-write">
+                <div class="icon">✍️</div>
+                <span>Pisanie</span>
+            </div>
+            <div class="nav-tile" data-screen="screen-quests">
+                <div class="icon">🎯</div>
+                <span>Questy</span>
+            </div>
+            <div class="nav-tile" data-screen="screen-shop">
+                <div class="icon">🛒</div>
+                <span>Sklep</span>
+            </div>
+            <div class="nav-tile" data-screen="screen-inventory">
+                <div class="icon">🎒</div>
+                <span>Ekwipunek</span>
+            </div>
+        </div>
 
-                <button data-screen="screen-learn" class="nav-tile">
-                    <div class="icon">📚</div>
-                    <span>Nauka</span>
-                </button>
+        <div style="margin-top:auto; display:flex; flex-direction:column; gap:8px;">
+            <button id="admin-open">Panel admina</button>
+            <button id="logout-btn" class="danger">Wyloguj</button>
+        </div>
+    </aside>
 
-                <button data-screen="screen-flashcards" class="nav-tile">
-                    <div class="icon">🃏</div>
-                    <span>Fiszki</span>
-                </button>
+    <!-- MAIN -->
+    <main class="main-content glass">
 
-                <button data-screen="screen-quiz" class="nav-tile">
-                    <div class="icon">❓</div>
-                    <span>Quiz</span>
-                </button>
+        <!-- NAUKA -->
+        <section id="screen-learn" class="screen">
+            <h2>Nauka</h2>
 
-                <button data-screen="screen-write" class="nav-tile">
-                    <div class="icon">✍️</div>
-                    <span>Pisanie</span>
-                </button>
+            <label>Wybierz język:</label>
+            <select id="learn-language-select"></select>
 
-                <button data-screen="screen-quests" class="nav-tile">
-                    <div class="icon">🎯</div>
-                    <span>Questy</span>
-                </button>
+            <label>Wybierz temat:</label>
+            <select id="learn-topic-select"></select>
 
-                <button data-screen="screen-shop" class="nav-tile">
-                    <div class="icon">🛒</div>
-                    <span>Sklep</span>
-                </button>
+            <div id="learn-word-box" style="margin-top:16px; font-size:20px;"></div>
+            <button id="learn-next" style="margin-top:10px;">Następne słówko</button>
+        </section>
 
-                <button data-screen="screen-inventory" class="nav-tile">
-                    <div class="icon">🎒</div>
-                    <span>Ekwipunek</span>
-                </button>
-
-                <button data-screen="screen-settings" class="nav-tile">
-                    <div class="icon">⚙️</div>
-                    <span>Ustawienia</span>
-                </button>
-
-            </nav>
-
-            <button id="logout-btn" class="logout-btn danger">Wyloguj</button>
-        </aside>
-
-        <!-- ============================
-             MAIN CONTENT
-        ============================= -->
-        <main class="main-content glass">
-
-            <!-- NAUKA -->
-            <section id="screen-learn" class="screen hidden">
-                <h2>Nauka</h2>
-                <select id="learn-topic-select"></select>
-                <div id="learn-word-box"></div>
-                <button id="learn-next">Następne słówko</button>
-            </section>
-
-            <!-- FISZKI -->
-            <section id="screen-flashcards" class="screen hidden">
-                <h2>Fiszki</h2>
-                <select id="flashcards-topic-select"></select>
-
-                <div id="flashcard-box">
-                    <div id="flashcard-word"></div>
-                    <div id="flashcard-answer" class="hidden"></div>
-                </div>
-
-                <button id="flashcard-show">Pokaż tłumaczenie</button>
+        <!-- FISZKI -->
+        <section id="screen-flashcards" class="screen hidden">
+            <h2>Fiszki</h2>
+            <div id="flashcard-word" style="font-size:22px; margin-top:10px;"></div>
+            <div id="flashcard-answer" style="font-size:18px; margin-top:8px;"></div>
+            <div style="margin-top:10px; display:flex; gap:8px;">
+                <button id="flashcard-show">Pokaż odpowiedź</button>
                 <button id="flashcard-next">Następna fiszka</button>
-            </section>
+            </div>
+        </section>
 
-            <!-- QUIZ -->
-            <section id="screen-quiz" class="screen hidden">
-                <h2>Quiz</h2>
-                <select id="quiz-topic-select"></select>
-                <div id="quiz-question"></div>
-                <div id="quiz-options"></div>
-                <p id="quiz-feedback"></p>
-            </section>
+        <!-- QUIZ -->
+        <section id="screen-quiz" class="screen hidden">
+            <h2>Quiz</h2>
+            <div id="quiz-question" style="margin-top:10px; font-size:18px;"></div>
+            <div id="quiz-options" style="margin-top:10px; display:flex; flex-direction:column; gap:8px;"></div>
+            <div id="quiz-feedback" style="margin-top:10px; min-height:18px;"></div>
+        </section>
 
-            <!-- PISANIE -->
-            <section id="screen-write" class="screen hidden">
-                <h2>Tryb pisania</h2>
-                <select id="write-topic-select"></select>
+        <!-- PISANIE -->
+        <section id="screen-write" class="screen hidden">
+            <h2>Pisanie</h2>
+            <div id="write-question" style="margin-top:10px; font-size:18px;"></div>
+            <input id="write-answer" type="text" placeholder="Twoja odpowiedź" style="margin-top:10px; padding:8px; width:100%; border-radius:8px; border:none;">
+            <button id="write-check" style="margin-top:10px;">Sprawdź</button>
+            <div id="write-feedback" style="margin-top:10px; min-height:18px;"></div>
+        </section>
 
-                <div id="write-word-box">
-                    <div id="write-question"></div>
-                    <input id="write-answer" placeholder="Wpisz tłumaczenie...">
-                    <button id="write-check">Sprawdź</button>
-                </div>
+        <!-- QUESTY -->
+        <section id="screen-quests" class="screen hidden">
+            <h2>Questy</h2>
+            <div id="quests-list" style="margin-top:10px;"></div>
+        </section>
 
-                <p id="write-feedback"></p>
-            </section>
+        <!-- SKLEP -->
+        <section id="screen-shop" class="screen hidden">
+            <h2>Sklep</h2>
+            <div id="shop-items" style="margin-top:10px;"></div>
+        </section>
 
-            <!-- QUESTY -->
-            <section id="screen-quests" class="screen hidden">
-                <h2>Questy</h2>
-                <div id="quests-list"></div>
-            </section>
+        <!-- EKWIPUNEK -->
+        <section id="screen-inventory" class="screen hidden">
+            <h2>Ekwipunek</h2>
+            <h3>Odznaki</h3>
+            <div id="inventory-badges"></div>
+            <h3>Ramki</h3>
+            <div id="inventory-frames"></div>
+            <h3>Tła</h3>
+            <div id="inventory-backgrounds"></div>
+            <h3>Przyciski</h3>
+            <div id="inventory-buttons"></div>
+        </section>
 
-            <!-- SKLEP -->
-            <section id="screen-shop" class="screen hidden">
-                <h2>Sklep</h2>
-                <div id="shop-items"></div>
-            </section>
+    </main>
+</div>
 
-            <!-- EKWIPUNEK -->
-            <section id="screen-inventory" class="screen hidden">
-                <h2>Ekwipunek</h2>
+<!-- POPUP OVERLAY -->
+<div id="popup-overlay" class="popup-overlay hidden"></div>
 
-                <h3>Odznaki</h3>
-                <div id="inventory-badges"></div>
+<!-- POPUP PROFIL -->
+<div id="profile-window" class="popup-window glass hidden">
+    <h3>Profil</h3>
+    <input id="profile-new-name" type="text" placeholder="Nowy nick">
+    <select id="profile-frame-select">
+        <option value="">Ramka (brak)</option>
+        <option value="red">Czerwona</option>
+        <option value="gold">Złota</option>
+    </select>
+    <select id="profile-bg-select">
+        <option value="">Tło (domyślne)</option>
+        <option value="#12121a">Ciemne</option>
+        <option value="#001f3f">Niebieskie</option>
+    </select>
+    <select id="profile-btn-select">
+        <option value="">Przyciski (domyślne)</option>
+        <option value="#4a8cff">Niebieskie</option>
+        <option value="#00cc66">Zielone</option>
+    </select>
 
-                <h3>Ramki</h3>
-                <div id="inventory-frames"></div>
+    <label style="margin-top:8px; display:block;">Avatar:</label>
+    <input id="profile-avatar-upload" type="file" accept="image/*">
+    <div id="profile-avatar-preview" class="avatar" style="margin-top:8px;"></div>
 
-                <h3>Tła</h3>
-                <div id="inventory-backgrounds"></div>
+    <div id="profile-feedback" style="margin-top:8px; min-height:18px;"></div>
 
-                <h3>Kolory przycisków</h3>
-                <div id="inventory-buttons"></div>
-            </section>
-
-            <!-- USTAWIENIA -->
-            <section id="screen-settings" class="screen hidden">
-                <h2>Ustawienia</h2>
-
-                <label>
-                    <input type="checkbox" id="settings-mobile-toggle">
-                    Tryb telefonu
-                </label>
-
-                <button id="admin-open">Panel administratora</button>
-            </section>
-
-        </main>
-    </div>
-
-    <!-- ============================
-         POPUPY
-    ============================= -->
-
-    <div id="popup-overlay" class="popup-overlay hidden"></div>
-
-    <!-- PROFIL -->
-    <div id="profile-window" class="popup-window glass hidden">
-        <h2>Twój profil</h2>
-
-        <label>Podgląd avatara:</label>
-        <div id="profile-avatar-preview" class="avatar"></div>
-
-        <label>Wgraj avatar:</label>
-        <input type="file" id="profile-avatar-upload">
-
-        <label>Zmiana nazwy (100 XP Coins):</label>
-        <input id="profile-new-name" placeholder="Nowa nazwa...">
-
-        <label>Ramka avatara:</label>
-        <select id="profile-frame-select"></select>
-
-        <label>Tło:</label>
-        <select id="profile-bg-select"></select>
-
-        <label>Kolor przycisków:</label>
-        <select id="profile-btn-select"></select>
-
-        <button id="profile-save">Zapisz zmiany</button>
+    <div style="margin-top:10px; display:flex; gap:8px; justify-content:flex-end;">
+        <button id="profile-save">Zapisz</button>
         <button id="profile-close" class="danger">Zamknij</button>
-
-        <p id="profile-feedback"></p>
     </div>
+</div>
 
-    <!-- ADMIN LOGIN -->
-    <div id="admin-login" class="popup-window glass hidden">
-        <h3>Hasło administratora</h3>
-        <input id="admin-password" type="password" placeholder="Wpisz hasło...">
-        <button id="admin-login-btn">Zaloguj</button>
+<!-- POPUP ADMIN LOGIN -->
+<div id="admin-login" class="popup-window glass hidden">
+    <h3>Admin login</h3>
+    <input id="admin-password" type="password" placeholder="Hasło admina">
+    <div id="admin-login-feedback" style="margin-top:8px; min-height:18px;"></div>
+    <div style="margin-top:10px; display:flex; gap:8px; justify-content:flex-end;">
+        <button id="admin-login-btn">Wejdź</button>
         <button id="admin-login-close" class="danger">Zamknij</button>
-        <p id="admin-login-feedback"></p>
     </div>
+</div>
 
-    <!-- ADMIN PANEL -->
-    <div id="admin-panel" class="popup-window glass hidden">
-        <h2>Admin Panel</h2>
-        <input id="admin-command" placeholder="Wpisz komendę...">
+<!-- POPUP ADMIN PANEL -->
+<div id="admin-panel" class="popup-window glass hidden">
+    <h3>Panel admina</h3>
+    <input id="admin-command" type="text" placeholder="Komenda (xp 100, coins 50, reset)">
+    <div id="admin-output" style="margin-top:8px; min-height:18px;"></div>
+    <div style="margin-top:10px; display:flex; gap:8px; justify-content:flex-end;">
         <button id="admin-run">Wykonaj</button>
-        <button id="admin-close" class="danger">Zamknij panel</button>
-        <p id="admin-output"></p>
+        <button id="admin-close" class="danger">Zamknij</button>
     </div>
+</div>
 
-    <!-- ============================
-         SKRYPTY
-    ============================= -->
-    <script src="core.js"></script>
-    <script src="ui.js"></script>
-    <script src="learning.js"></script>
-
+<script src="core.js"></script>
+<script src="ui.js"></script>
+<script src="learning.js"></script>
 </body>
 </html>
