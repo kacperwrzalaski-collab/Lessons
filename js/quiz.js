@@ -1,93 +1,127 @@
-let quizTopicName = null;
+// ==========================================
+//  QUIZ — TRYB TESTU
+// ==========================================
+
+let quizWords = [];
 let quizIndex = 0;
-let quizScore = 0;
+let correctAnswers = 0;
+let totalAnswers = 0;
 
-function shuffle(arr) {
-    return arr.sort(() => Math.random() - 0.5);
-}
+// Zmiana tematu quizu
+document.getElementById("quiz-topic-select").onchange = () => {
+    const topic = document.getElementById("quiz-topic-select").value;
+    loadQuiz(topic);
+};
 
-function initQuiz() {
-    const select = document.getElementById("quiz-topic");
-    select.innerHTML = "";
-
-    Object.keys(topics).forEach(t => {
-        const opt = document.createElement("option");
-        opt.value = t;
-        opt.textContent = t;
-        select.appendChild(opt);
-    });
-
-    quizTopicName = select.value;
+// Wczytanie słówek do quizu
+function loadQuiz(topic) {
+    quizWords = [...topics[topic]]; // kopia tablicy
+    shuffleArray(quizWords);
     quizIndex = 0;
-    quizScore = 0;
-
-    loadQuiz();
-
-    select.onchange = () => {
-        quizTopicName = select.value;
-        quizIndex = 0;
-        quizScore = 0;
-        loadQuiz();
-    };
-
-    document.getElementById("quiz-next").onclick = () => {
-        const arr = topics[quizTopicName];
-        quizIndex++;
-        if (quizIndex >= arr.length) quizIndex = 0;
-        loadQuiz();
-    };
+    correctAnswers = 0;
+    totalAnswers = 0;
+    showQuizQuestion();
 }
 
-function loadQuiz() {
-    const arr = topics[quizTopicName];
-    const w = arr[quizIndex];
+// Wyświetlanie pytania
+function showQuizQuestion() {
+    if (!quizWords.length) return;
 
-    document.getElementById("quiz-question").textContent = w.pl;
+    const word = quizWords[quizIndex];
+    const questionBox = document.getElementById("quiz-question");
+    const optionsBox = document.getElementById("quiz-options");
 
-    const answersContainer = document.getElementById("quiz-answers");
-    answersContainer.innerHTML = "";
+    questionBox.textContent = `Jak tłumaczy się: ${word.en}?`;
 
-    const options = shuffle([
-        w.en,
-        ...arr.filter(x => x !== w).map(x => x.en).slice(0, 3)
-    ]);
+    // Tworzymy 3 błędne odpowiedzi
+    let wrong = quizWords
+        .filter(w => w.pl !== word.pl)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 3);
 
-    options.forEach(opt => {
+    // Mieszamy poprawną z błędnymi
+    let answers = [...wrong.map(w => w.pl), word.pl];
+    shuffleArray(answers);
+
+    // Render opcji
+    optionsBox.innerHTML = "";
+    answers.forEach(answer => {
         const btn = document.createElement("button");
-        btn.textContent = opt;
-        btn.onclick = () => checkQuiz(opt, w.en);
-        answersContainer.appendChild(btn);
+        btn.textContent = answer;
+        btn.onclick = () => checkQuizAnswer(answer, word.pl);
+        optionsBox.appendChild(btn);
     });
 
-    document.getElementById("quiz-score").textContent = `Punkty: ${quizScore}`;
+    document.getElementById("quiz-feedback").textContent = "";
 }
 
-function checkQuiz(answer, correct) {
-    const fb = document.getElementById("quiz-feedback");
-    const user = getCurrentUser();
+// Sprawdzanie odpowiedzi
+function checkQuizAnswer(selected, correct) {
+    const feedback = document.getElementById("quiz-feedback");
+    totalAnswers++;
 
-    if (answer === correct) {
-        fb.textContent = "✔️ Dobrze!";
-        quizScore += 10;
-        user.xp += 10;
-        updateQuestProgress("quiz");
+    if (selected === correct) {
+        feedback.textContent = "✔ Dobrze!";
+        feedback.style.color = "#00ff88";
+        correctAnswers++;
+        addXP(5);
     } else {
-        fb.textContent = `❌ Źle! Poprawnie: ${correct}`;
-        user.xp += 2;
+        feedback.textContent = `❌ Źle! Poprawna odpowiedź: ${correct}`;
+        feedback.style.color = "#ff4444";
     }
 
-    if (user.xp >= user.level * 100) {
-        user.xp = 0;
-        user.level++;
-    }
+    // Następne pytanie po 1 sekundzie
+    setTimeout(() => {
+        quizIndex++;
 
-    saveUpdatedUser(user);
-    loadProfile();
+        if (quizIndex >= quizWords.length) {
+            endQuiz();
+        } else {
+            showQuizQuestion();
+        }
+    }, 900);
+}
 
-    document.getElementById("quiz-score").textContent = `Punkty: ${quizScore}`;
+// Koniec quizu
+function endQuiz() {
+    const feedback = document.getElementById("quiz-feedback");
 
-    const arr = topics[quizTopicName];
-    if (quizIndex === arr.length - 1) {
-        giveXPBox();
+    feedback.innerHTML = `
+        Quiz zakończony!<br>
+        Poprawne odpowiedzi: ${correctAnswers}/${totalAnswers}
+    `;
+
+    // Odznaka za perfekcyjny wynik
+    if (correctAnswers === totalAnswers) {
+        awardQuizBadge();
     }
 }
+
+// Przyznawanie odznaki za 100%
+function awardQuizBadge() {
+    const username = localStorage.getItem("currentUser");
+    const user = loadUser(username);
+
+    if (!user.badges.includes("quiz_master")) {
+        user.badges.push("quiz_master");
+        saveUser(user);
+
+        alert("🎉 Zdobyłeś odznakę: Quiz Master!");
+    }
+}
+
+// Funkcja mieszająca tablicę
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+}
+
+// Auto-ładowanie pierwszego tematu
+setTimeout(() => {
+    const select = document.getElementById("quiz-topic-select");
+    if (select && select.value) {
+        loadQuiz(select.value);
+    }
+}, 300);
