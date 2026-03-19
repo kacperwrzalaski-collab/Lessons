@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <title>Language RPG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- STYLE -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -80,10 +78,8 @@
             <section id="screen-quiz" class="screen hidden">
                 <h2>Quiz</h2>
                 <select id="quiz-topic-select"></select>
-                <div id="quiz-question-box">
-                    <div id="quiz-question"></div>
-                    <div id="quiz-options"></div>
-                </div>
+                <div id="quiz-question"></div>
+                <div id="quiz-options"></div>
                 <p id="quiz-feedback"></p>
             </section>
 
@@ -141,12 +137,14 @@
     <div id="profile-window" class="hidden glass profile-window">
         <h2>Twój profil</h2>
 
-        <label>Avatar:</label>
+        <label>Podgląd avatara:</label>
+        <div id="profile-avatar-preview" class="avatar"></div>
+
+        <label>Wgraj avatar:</label>
         <input type="file" id="profile-avatar-upload">
 
         <label>Zmiana nazwy (100 XP Coins):</label>
         <input id="profile-new-name" placeholder="Nowa nazwa...">
-        <button id="profile-change-name">Zmień nazwę</button>
 
         <label>Ramka avatara:</label>
         <select id="profile-frame-select"></select>
@@ -183,7 +181,7 @@
 
     <!-- PRESTIGE UP POPUP -->
     <div id="prestige-up" class="hidden prestige-popup glass">
-        <h1 id="prestige-up-title"></h1>
+        <h1 id="prestige-up-text"></h1>
         <p id="prestige-up-desc"></p>
         <button id="prestige-up-close">Zamknij</button>
     </div>
@@ -201,8 +199,6 @@
     <script src="js/inventory.js"></script>
     <script src="js/profile.js"></script>
     <script src="js/admin.js"></script>
-    <script src="js/prestige.js"></script>
-    <script src="js/app.js"></script>
 
 </body>
 </html>
