@@ -2,10 +2,6 @@
    CORE.JS — SYSTEM GRACZA, LOGOWANIE, PROFIL, KOSMETYKI, ADMIN
 ============================================================ */
 
-/* ============================================================
-   GLOBALNY OBIEKT GRACZA
-============================================================ */
-
 let player = {
     username: "",
     password: "",
@@ -26,10 +22,6 @@ let player = {
     }
 };
 
-/* ============================================================
-   ZAPIS / WCZYTANIE UŻYTKOWNIKA
-============================================================ */
-
 function savePlayer() {
     localStorage.setItem("playerData", JSON.stringify(player));
 }
@@ -42,9 +34,7 @@ function loadPlayer() {
     return true;
 }
 
-/* ============================================================
-   LOGOWANIE / REJESTRACJA
-============================================================ */
+/* LOGOWANIE / REJESTRACJA */
 
 function register(username, password) {
     if (!username || !password) return "Wpisz nazwę i hasło";
@@ -70,9 +60,7 @@ function login(username, password) {
     return "OK";
 }
 
-/* ============================================================
-   XP / LEVEL
-============================================================ */
+/* XP / LEVEL */
 
 function addXP(amount) {
     player.xp += amount;
@@ -82,15 +70,13 @@ function addXP(amount) {
     if (player.xp >= needed) {
         player.xp -= needed;
         player.level++;
-        player.coins += 50; // nagroda za level
+        player.coins += 50;
     }
 
     savePlayer();
 }
 
-/* ============================================================
-   KOSMETYKI
-============================================================ */
+/* KOSMETYKI */
 
 function applyCosmetics() {
     if (player.background) {
@@ -112,9 +98,7 @@ function applyCosmetics() {
     }
 }
 
-/* ============================================================
-   ZMIANA PROFILU
-============================================================ */
+/* PROFIL */
 
 function updateProfile(newName, newFrame, newBg, newBtn) {
     if (newName && newName !== player.username) {
@@ -133,9 +117,7 @@ function updateProfile(newName, newFrame, newBg, newBtn) {
     return "Zapisano!";
 }
 
-/* ============================================================
-   AVATAR UPLOAD
-============================================================ */
+/* AVATAR */
 
 function uploadAvatar(file, callback) {
     const reader = new FileReader();
@@ -148,9 +130,7 @@ function uploadAvatar(file, callback) {
     reader.readAsDataURL(file);
 }
 
-/* ============================================================
-   ADMIN PANEL
-============================================================ */
+/* ADMIN */
 
 const ADMIN_PASSWORD = "admin123";
 
@@ -162,7 +142,6 @@ function adminCommand(cmd) {
     const parts = cmd.split(" ");
 
     switch (parts[0]) {
-
         case "xp":
             addXP(parseInt(parts[1]));
             return "Dodano XP";
@@ -180,10 +159,6 @@ function adminCommand(cmd) {
             return "Nieznana komenda";
     }
 }
-
-/* ============================================================
-   EKSPORT FUNKCJI DLA UI I LEARNING
-============================================================ */
 
 window.core = {
     player,
