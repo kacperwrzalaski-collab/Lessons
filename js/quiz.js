@@ -15,7 +15,7 @@ document.getElementById("quiz-topic-select").onchange = () => {
 
 // Wczytanie słówek do quizu
 function loadQuiz(topic) {
-    quizWords = [...topics[topic]]; // kopia tablicy
+    quizWords = [...topics[topic]];
     shuffleArray(quizWords);
     quizIndex = 0;
     correctAnswers = 0;
@@ -33,17 +33,14 @@ function showQuizQuestion() {
 
     questionBox.textContent = `Jak tłumaczy się: ${word.en}?`;
 
-    // Tworzymy 3 błędne odpowiedzi
     let wrong = quizWords
         .filter(w => w.pl !== word.pl)
         .sort(() => Math.random() - 0.5)
         .slice(0, 3);
 
-    // Mieszamy poprawną z błędnymi
     let answers = [...wrong.map(w => w.pl), word.pl];
     shuffleArray(answers);
 
-    // Render opcji
     optionsBox.innerHTML = "";
     answers.forEach(answer => {
         const btn = document.createElement("button");
@@ -65,12 +62,15 @@ function checkQuizAnswer(selected, correct) {
         feedback.style.color = "#00ff88";
         correctAnswers++;
         addXP(5);
+
+        if (typeof updateQuestProgress === "function") {
+            updateQuestProgress("quiz5");
+        }
     } else {
         feedback.textContent = `❌ Źle! Poprawna odpowiedź: ${correct}`;
         feedback.style.color = "#ff4444";
     }
 
-    // Następne pytanie po 1 sekundzie
     setTimeout(() => {
         quizIndex++;
 
@@ -91,8 +91,7 @@ function endQuiz() {
         Poprawne odpowiedzi: ${correctAnswers}/${totalAnswers}
     `;
 
-    // Odznaka za perfekcyjny wynik
-    if (correctAnswers === totalAnswers) {
+    if (correctAnswers === totalAnswers && totalAnswers > 0) {
         awardQuizBadge();
     }
 }
@@ -101,11 +100,11 @@ function endQuiz() {
 function awardQuizBadge() {
     const username = localStorage.getItem("currentUser");
     const user = loadUser(username);
+    if (!user) return;
 
     if (!user.badges.includes("quiz_master")) {
         user.badges.push("quiz_master");
         saveUser(user);
-
         alert("🎉 Zdobyłeś odznakę: Quiz Master!");
     }
 }
