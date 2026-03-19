@@ -1,10 +1,8 @@
 /* ============================================================
-   APP.JS — CAŁA LOGIKA APLIKACJI W JEDNYM PLIKU
+   APP.JS — CAŁA LOGIKA W JEDNYM PLIKU
 ============================================================ */
 
-/* ============================================================
-   DANE GRACZA
-============================================================ */
+/* ===================== DANE GRACZA ========================= */
 
 let player = {
     username: "",
@@ -37,9 +35,7 @@ function loadPlayer() {
     return true;
 }
 
-/* ============================================================
-   LOGOWANIE / REJESTRACJA
-============================================================ */
+/* ================= LOGOWANIE / REJESTRACJA ================= */
 
 function register(username, password) {
     if (!username || !password) return "Wpisz dane";
@@ -64,9 +60,7 @@ function login(username, password) {
     return "OK";
 }
 
-/* ============================================================
-   XP / LEVEL
-============================================================ */
+/* ===================== XP / LEVEL ========================== */
 
 function addXP(amount) {
     player.xp += amount;
@@ -81,9 +75,7 @@ function addXP(amount) {
     savePlayer();
 }
 
-/* ============================================================
-   KOSMETYKI
-============================================================ */
+/* ===================== KOSMETYKI =========================== */
 
 function applyCosmetics() {
     if (player.background) {
@@ -94,20 +86,16 @@ function applyCosmetics() {
         document.documentElement.style.setProperty("--button-color", player.buttonColor);
     }
 
+    const avatarEl = document.getElementById("profile-avatar");
     if (player.avatar) {
-        document.getElementById("profile-avatar").style.backgroundImage =
-            `url(${player.avatar})`;
+        avatarEl.style.backgroundImage = `url(${player.avatar})`;
     }
-
     if (player.frame) {
-        document.getElementById("profile-avatar").style.border =
-            `3px solid ${player.frame}`;
+        avatarEl.style.border = `3px solid ${player.frame}`;
     }
 }
 
-/* ============================================================
-   TEMATY SŁÓWEK
-============================================================ */
+/* ===================== TEMATY SŁÓWEK ======================= */
 
 const topics = {
     angielski: {
@@ -207,26 +195,42 @@ const topics = {
             { word: "survival course", pl: "kurs przetrwania" }
         ]
     },
-
     niemiecki: {
         temat1: []
     }
 };
 
-/* ============================================================
-   WYBÓR TEMATU
-============================================================ */
+/* ===================== SKLEP / QUESTY ====================== */
+
+const shopItems = [
+    { id: "frame-red", type: "frames", name: "Czerwona ramka", price: 50, value: "red" },
+    { id: "bg-blue", type: "backgrounds", name: "Niebieskie tło", price: 80, value: "#001f3f" },
+    { id: "btn-green", type: "buttons", name: "Zielone przyciski", price: 70, value: "#00cc66" }
+];
+
+const quests = [
+    { id: 1, text: "Zrób 5 fiszek", key: "flash", progress: 0, goal: 5, rewardXP: 30, done: false },
+    { id: 2, text: "Zrób 3 quizy", key: "quiz", progress: 0, goal: 3, rewardXP: 40, done: false }
+];
+
+/* ===================== POMOCNICZE ========================== */
 
 function getTopicWords() {
     const lang = document.getElementById("learn-language-select").value;
     const topic = document.getElementById("learn-topic-select").value;
-    return topics[lang][topic] || [];
+    if (!topics[lang] || !topics[lang][topic]) return [];
+    return topics[lang][topic];
 }
+
+function shuffle(arr) {
+    return arr.sort(() => Math.random() - 0.5);
+}
+
+/* ===================== NAUKA — TABELA ====================== */
 
 function fillLanguageSelect() {
     const select = document.getElementById("learn-language-select");
     select.innerHTML = "";
-
     Object.keys(topics).forEach(lang => {
         const opt = document.createElement("option");
         opt.value = lang;
@@ -238,9 +242,8 @@ function fillLanguageSelect() {
 function fillTopicSelect() {
     const lang = document.getElementById("learn-language-select").value;
     const select = document.getElementById("learn-topic-select");
-
     select.innerHTML = "";
-
+    if (!topics[lang]) return;
     Object.keys(topics[lang]).forEach(t => {
         const opt = document.createElement("option");
         opt.value = t;
@@ -249,132 +252,112 @@ function fillTopicSelect() {
     });
 }
 
-/* ============================================================
-   NAUKA
-============================================================ */
-
-let learnIndex = 0;
-
-function loadLearnWord() {
+function fillLearnTable() {
+    const tbody = document.getElementById("learn-table-body");
+    tbody.innerHTML = "";
     const words = getTopicWords();
-    if (words.length === 0) return;
-
-    const w = words[learnIndex];
-    document.getElementById("learn-word-box").textContent =
-        `${w.word} → ${w.pl}`;
+    words.forEach(w => {
+        const tr = document.createElement("tr");
+        const td1 = document.createElement("td");
+        const td2 = document.createElement("td");
+        td1.textContent = w.word;
+        td2.textContent = w.pl;
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tbody.appendChild(tr);
+    });
 }
 
-document.getElementById("learn-next").addEventListener("click", () => {
-    const words = getTopicWords();
-    if (words.length === 0) return;
-
-    learnIndex = (learnIndex + 1) % words.length;
-    loadLearnWord();
-    addXP(5);
-    updateUI();
-});
-
-/* ============================================================
-   FISZKI
-============================================================ */
+/* ===================== FISZKI ============================== */
 
 let flashIndex = 0;
 
 function loadFlashcard() {
     const words = getTopicWords();
-    if (words.length === 0) return;
-
+    if (words.length === 0) {
+        document.getElementById("flashcard-word").textContent = "Brak słówek";
+        document.getElementById("flashcard-answer").textContent = "";
+        return;
+    }
     const w = words[flashIndex];
-
     document.getElementById("flashcard-word").textContent = w.word;
     document.getElementById("flashcard-answer").textContent = w.pl;
     document.getElementById("flashcard-answer").classList.add("hidden");
 }
 
-document.getElementById("flashcard-show").addEventListener("click", () => {
-    document.getElementById("flashcard-answer").classList.remove("hidden");
-    addXP(3);
-    updateUI();
-});
-
-document.getElementById("flashcard-next").addEventListener("click", () => {
+function nextFlashcard() {
     const words = getTopicWords();
     if (words.length === 0) return;
-
     flashIndex = (flashIndex + 1) % words.length;
     loadFlashcard();
-});
+}
 
-/* ============================================================
-   QUIZ
-============================================================ */
+/* ===================== QUIZ ================================ */
 
 function loadQuiz() {
     const words = getTopicWords();
-    if (words.length === 0) return;
+    const qEl = document.getElementById("quiz-question");
+    const box = document.getElementById("quiz-options");
+    const fb = document.getElementById("quiz-feedback");
+
+    box.innerHTML = "";
+    fb.textContent = "";
+
+    if (words.length < 2) {
+        qEl.textContent = "Za mało słówek do quizu";
+        return;
+    }
 
     const q = words[Math.floor(Math.random() * words.length)];
-
-    document.getElementById("quiz-question").textContent =
-        `Co znaczy: ${q.word}?`;
+    qEl.textContent = `Co znaczy: ${q.word}?`;
 
     const options = shuffle([
         q.pl,
-        ...words
-            .filter(w => w.pl !== q.pl)
-            .sort(() => Math.random() - 0.5)
-            .slice(0, 3)
-            .map(w => w.pl)
+        ...words.filter(w => w.pl !== q.pl).sort(() => Math.random() - 0.5).slice(0, 3).map(w => w.pl)
     ]);
-
-    const box = document.getElementById("quiz-options");
-    box.innerHTML = "";
 
     options.forEach(opt => {
         const btn = document.createElement("button");
         btn.textContent = opt;
-
         btn.addEventListener("click", () => {
             if (opt === q.pl) {
-                document.getElementById("quiz-feedback").textContent = "Dobrze!";
+                fb.textContent = "Dobrze!";
                 addXP(10);
+                questsProgress("quiz");
             } else {
-                document.getElementById("quiz-feedback").textContent = "Źle!";
+                fb.textContent = "Źle!";
             }
-
             updateUI();
             setTimeout(loadQuiz, 800);
         });
-
         box.appendChild(btn);
     });
 }
 
-function shuffle(arr) {
-    return arr.sort(() => Math.random() - 0.5);
-}
-
-/* ============================================================
-   PISANIE
-============================================================ */
+/* ===================== PISANIE ============================= */
 
 let writeWord = null;
 
 function loadWriteWord() {
     const words = getTopicWords();
-    if (words.length === 0) return;
+    const qEl = document.getElementById("write-question");
+    const fb = document.getElementById("write-feedback");
+    fb.textContent = "";
+    document.getElementById("write-answer").value = "";
+
+    if (words.length === 0) {
+        qEl.textContent = "Brak słówek";
+        return;
+    }
 
     writeWord = words[Math.floor(Math.random() * words.length)];
-
-    document.getElementById("write-question").textContent =
-        `Przetłumacz: ${writeWord.word}`;
+    qEl.textContent = `Przetłumacz: ${writeWord.word}`;
 }
 
-document.getElementById("write-check").addEventListener("click", () => {
+function checkWrite() {
+    if (!writeWord) return;
     const ans = document.getElementById("write-answer").value.trim();
     const fb = document.getElementById("write-feedback");
-
-    if (!writeWord) return;
 
     if (ans === writeWord.pl) {
         fb.textContent = "Dobrze!";
@@ -382,15 +365,167 @@ document.getElementById("write-check").addEventListener("click", () => {
         updateUI();
         loadWriteWord();
     } else {
-        fb.textContent = "Źle!";
+        fb.textContent = `Źle! Poprawna odpowiedź: ${writeWord.pl}`;
     }
-});
+}
 
-/* ============================================================
-   UI — PRZEŁĄCZANIE EKRANÓW
-============================================================ */
+/* ===================== QUESTY ============================== */
+
+function questsProgress(type) {
+    quests.forEach(q => {
+        if (q.done) return;
+        if (q.key === type) {
+            q.progress++;
+            if (q.progress >= q.goal) {
+                q.done = true;
+                addXP(q.rewardXP);
+            }
+        }
+    });
+    savePlayer();
+    renderQuests();
+}
+
+function renderQuests() {
+    const box = document.getElementById("quests-list");
+    box.innerHTML = "";
+    quests.forEach(q => {
+        const div = document.createElement("div");
+        div.className = "quest-item glass";
+        div.textContent = `${q.text} (${q.progress}/${q.goal}) — nagroda: ${q.rewardXP} XP` +
+            (q.done ? " [ZROBIONE]" : "");
+        box.appendChild(div);
+    });
+}
+
+/* ===================== SKLEP / EKWIPUNEK =================== */
+
+function renderShop() {
+    const box = document.getElementById("shop-items");
+    box.innerHTML = "";
+    shopItems.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "shop-item glass";
+        div.innerHTML = `
+            <strong>${item.name}</strong><br>
+            Cena: ${item.price} 🪙<br>
+        `;
+        const btn = document.createElement("button");
+        btn.textContent = "Kup";
+        btn.addEventListener("click", () => {
+            if (player.coins < item.price) return;
+            player.coins -= item.price;
+            player.inventory[item.type].push(item.value);
+            savePlayer();
+            updateUI();
+            renderInventory();
+        });
+        div.appendChild(btn);
+        box.appendChild(div);
+    });
+}
+
+function renderInventoryList(id, arr) {
+    const box = document.getElementById(id);
+    box.innerHTML = "";
+    if (!arr || arr.length === 0) {
+        box.textContent = "Brak";
+        return;
+    }
+    arr.forEach(v => {
+        const div = document.createElement("div");
+        div.className = "inventory-item glass";
+        div.textContent = v;
+        box.appendChild(div);
+    });
+}
+
+function renderInventory() {
+    renderInventoryList("inventory-badges", player.inventory.badges);
+    renderInventoryList("inventory-frames", player.inventory.frames);
+    renderInventoryList("inventory-backgrounds", player.inventory.backgrounds);
+    renderInventoryList("inventory-buttons", player.inventory.buttons);
+}
+
+/* ===================== PROFIL / AVATAR ===================== */
+
+function updateUI() {
+    document.getElementById("profile-name").textContent = player.username || "Brak";
+    document.getElementById("profile-level").textContent = "Poziom " + player.level;
+    document.getElementById("profile-coins").textContent = player.coins + " 🪙";
+
+    const needed = player.level * 100;
+    const percent = needed ? (player.xp / needed) * 100 : 0;
+    document.getElementById("profile-xp-fill").style.width = percent + "%";
+
+    applyCosmetics();
+}
+
+function updateProfile(newName, newFrame, newBg, newBtn) {
+    if (newName && newName !== player.username) {
+        if (player.coins < 100) {
+            return "Za mało coins na zmianę nicku (100)";
+        }
+        player.coins -= 100;
+        player.username = newName;
+    }
+    if (newFrame) player.frame = newFrame;
+    if (newBg) player.background = newBg;
+    if (newBtn) player.buttonColor = newBtn;
+
+    savePlayer();
+    applyCosmetics();
+    updateUI();
+    return "Zapisano!";
+}
+
+function uploadAvatar(file, cb) {
+    const reader = new FileReader();
+    reader.onload = () => {
+        player.avatar = reader.result;
+        savePlayer();
+        applyCosmetics();
+        cb && cb();
+    };
+    reader.readAsDataURL(file);
+}
+
+/* ===================== ADMIN =============================== */
+
+const ADMIN_PASSWORD = "admin123";
+
+function adminLogin(pass) {
+    return pass === ADMIN_PASSWORD;
+}
+
+function adminCommand(cmd) {
+    const parts = cmd.trim().split(" ");
+    if (!parts[0]) return "Brak komendy";
+
+    switch (parts[0]) {
+        case "xp":
+            addXP(parseInt(parts[1]) || 0);
+            return "Dodano XP";
+        case "coins":
+            player.coins += parseInt(parts[1]) || 0;
+            savePlayer();
+            updateUI();
+            return "Dodano coins";
+        case "reset":
+            localStorage.removeItem("playerData");
+            location.reload();
+            return "Zresetowano konto";
+        default:
+            return "Nieznana komenda";
+    }
+}
+
+/* ===================== UI — EKRANY / POPUPY ================ */
 
 const screens = document.querySelectorAll(".screen");
+const profileWindow = document.getElementById("profile-window");
+const adminLoginWindow = document.getElementById("admin-login");
+const adminPanelWindow = document.getElementById("admin-panel");
 
 function showScreen(id) {
     screens.forEach(s => s.classList.add("hidden"));
@@ -403,79 +538,53 @@ document.querySelectorAll(".nav-tile").forEach(btn => {
     });
 });
 
-/* ============================================================
-   PROFIL
-============================================================ */
+/* POPUPY — tu bez overlay, tylko hidden */
 
-function updateUI() {
-    const p = player;
-
-    document.getElementById("profile-name").textContent = p.username;
-    document.getElementById("profile-level").textContent = "Poziom " + p.level;
-    document.getElementById("profile-coins").textContent = p.coins + " 🪙";
-
-    const needed = p.level * 100;
-    const percent = (p.xp / needed) * 100;
-    document.getElementById("profile-xp-fill").style.width = percent + "%";
-
-    if (p.avatar) {
-        document.getElementById("profile-avatar").style.backgroundImage =
-            `url(${p.avatar})`;
-    }
+function openPopup(win) {
+    win.classList.remove("hidden");
 }
 
-/* ============================================================
-   LOGOWANIE — EVENTY
-============================================================ */
+function closePopup(win) {
+    win.classList.add("hidden");
+}
 
-document.getElementById("auth-login").addEventListener("click", () => {
-    const u = document.getElementById("auth-username").value;
-    const p = document.getElementById("auth-password").value;
+/* ===================== EVENTY — PROFIL ===================== */
 
-    const result = login(u, p);
-
-    if (result === "OK") {
-        document.getElementById("screen-auth").classList.add("hidden");
-        document.getElementById("app-container").classList.remove("hidden");
-
-        updateUI();
-        applyCosmetics();
-        showScreen("screen-learn");
-    } else {
-        document.getElementById("auth-feedback").textContent = result;
-    }
+document.getElementById("profile-avatar").addEventListener("click", () => {
+    document.getElementById("profile-feedback").textContent = "";
+    document.getElementById("profile-avatar-preview").style.backgroundImage =
+        player.avatar ? `url(${player.avatar})` : "";
+    openPopup(profileWindow);
 });
 
-document.getElementById("auth-register").addEventListener("click", () => {
-    const u = document.getElementById("auth-username").value;
-    const p = document.getElementById("auth-password").value;
-
-    const result = register(u, p);
-    document.getElementById("auth-feedback").textContent = result;
+document.getElementById("profile-close").addEventListener("click", () => {
+    closePopup(profileWindow);
 });
 
-/* ============================================================
-   WYLOGOWANIE
-============================================================ */
+document.getElementById("profile-save").addEventListener("click", () => {
+    const newName = document.getElementById("profile-new-name").value.trim();
+    const newFrame = document.getElementById("profile-frame-select").value;
+    const newBg = document.getElementById("profile-bg-select").value;
+    const newBtn = document.getElementById("profile-btn-select").value;
 
-document.getElementById("logout-btn").addEventListener("click", () => {
-    location.reload();
+    const msg = updateProfile(newName, newFrame, newBg, newBtn);
+    document.getElementById("profile-feedback").textContent = msg;
 });
 
-/* ============================================================
-   OBSŁUGA ZMIANY JĘZYKA I TEMATU
-============================================================ */
-
-document.getElementById("learn-language-select").addEventListener("change", () => {
-    fillTopicSelect();
-    learnIndex = 0;
-    flashIndex = 0;
-    loadLearnWord();
-    loadFlashcard();
-    loadQuiz();
-    loadWriteWord();
+document.getElementById("profile-avatar-upload").addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    uploadAvatar(file, () => {
+        document.getElementById("profile-avatar-preview").style.backgroundImage =
+            `url(${player.avatar})`;
+    });
 });
 
-document.getElementById("learn-topic-select").addEventListener("change", () => {
-    learnIndex = 0;
-    flashIndex = 0;
+/* ===================== EVENTY — ADMIN ====================== */
+
+document.getElementById("profile-name").addEventListener("dblclick", () => {
+    openPopup(adminLoginWindow);
+});
+
+document.getElementById("admin-login-close").addEventListener("click", () => {
+    closePopup(adminLogin
