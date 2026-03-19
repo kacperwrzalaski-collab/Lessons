@@ -1,5 +1,5 @@
 /* ============================================
-   RESET + PODSTAWY
+   RESET
 ============================================ */
 
 * {
@@ -13,35 +13,29 @@
     display: none !important;
 }
 
-body {
-    background: var(--bg);
-    color: var(--text);
-    transition: background 0.25s, color 0.25s;
-    overflow-x: hidden;
+/* ============================================
+   ZMIENNE KOSMETYCZNE (z inventory)
+   — JS podmienia te wartości dynamicznie
+============================================ */
+
+:root {
+    --app-bg: #0f0f0f;        /* tło aplikacji */
+    --button-color: #4a8cff; /* kolor przycisków */
+    --button-hover: #6aa0ff;
+    --text-color: #ffffff;
+    --glass-bg: rgba(255,255,255,0.08);
+    --glass-border: rgba(255,255,255,0.15);
 }
 
 /* ============================================
-   MOTYWY (CIEMNY / JASNY)
+   GLOBAL
 ============================================ */
 
-body.dark {
-    --bg: #0f0f0f;
-    --bg2: #1a1a1a;
-    --text: #ffffff;
-    --glass: rgba(255,255,255,0.08);
-    --border: rgba(255,255,255,0.15);
-    --button: #4a8cff;
-    --button-hover: #6aa0ff;
-}
-
-body.light {
-    --bg: #f5f5f5;
-    --bg2: #ffffff;
-    --text: #111111;
-    --glass: rgba(255,255,255,0.6);
-    --border: rgba(0,0,0,0.1);
-    --button: #4a8cff;
-    --button-hover: #6aa0ff;
+body {
+    background: var(--app-bg);
+    color: var(--text-color);
+    overflow-x: hidden;
+    transition: background 0.25s, color 0.25s;
 }
 
 /* ============================================
@@ -49,14 +43,14 @@ body.light {
 ============================================ */
 
 .glass {
-    background: var(--glass);
+    background: var(--glass-bg);
     backdrop-filter: blur(12px);
-    border: 1px solid var(--border);
+    border: 1px solid var(--glass-border);
     border-radius: 12px;
 }
 
 /* ============================================
-   PRZYCISKI — NOWE, ŁADNE
+   PRZYCISKI
 ============================================ */
 
 button {
@@ -64,7 +58,7 @@ button {
     border-radius: 10px;
     border: none;
     cursor: pointer;
-    background: var(--button);
+    background: var(--button-color);
     color: white;
     font-weight: 600;
     transition: 0.2s;
@@ -164,7 +158,7 @@ button.danger:hover {
 #profile-xp-fill {
     height: 100%;
     width: 0%;
-    background: #4a8cff;
+    background: var(--button-color);
     border-radius: 5px;
     transition: width 0.3s;
 }
@@ -210,7 +204,7 @@ button.danger:hover {
     padding: 15px;
     margin-bottom: 12px;
     border-radius: 10px;
-    background: var(--glass);
+    background: var(--glass-bg);
 }
 
 /* ============================================
@@ -248,7 +242,7 @@ button.danger:hover {
 }
 
 /* ============================================
-   TRYB TELEFONU — POPRAWIONY
+   TRYB TELEFONU — STABILNY
 ============================================ */
 
 body.mobile-mode #sidebar {
