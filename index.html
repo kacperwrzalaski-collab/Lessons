@@ -28,7 +28,7 @@
     <div id="app-container" class="hidden app-layout">
 
         <!-- ============================
-             SIDEBAR
+             SIDEBAR / TOPBAR
         ============================= -->
         <aside class="sidebar glass">
 
@@ -47,15 +47,49 @@
                 </div>
             </div>
 
+            <!-- MENU KAFELKOWE (C2) -->
             <nav class="nav-buttons">
-                <button data-screen="screen-learn">📚 Nauka</button>
-                <button data-screen="screen-flashcards">🃏 Fiszki</button>
-                <button data-screen="screen-quiz">❓ Quiz</button>
-                <button data-screen="screen-write">✍️ Pisanie</button>
-                <button data-screen="screen-quests">🎯 Questy</button>
-                <button data-screen="screen-shop">🛒 Sklep</button>
-                <button data-screen="screen-inventory">🎒 Ekwipunek</button>
-                <button data-screen="screen-settings">⚙️ Ustawienia</button>
+
+                <button data-screen="screen-learn" class="nav-tile">
+                    <div class="icon">📚</div>
+                    <span>Nauka</span>
+                </button>
+
+                <button data-screen="screen-flashcards" class="nav-tile">
+                    <div class="icon">🃏</div>
+                    <span>Fiszki</span>
+                </button>
+
+                <button data-screen="screen-quiz" class="nav-tile">
+                    <div class="icon">❓</div>
+                    <span>Quiz</span>
+                </button>
+
+                <button data-screen="screen-write" class="nav-tile">
+                    <div class="icon">✍️</div>
+                    <span>Pisanie</span>
+                </button>
+
+                <button data-screen="screen-quests" class="nav-tile">
+                    <div class="icon">🎯</div>
+                    <span>Questy</span>
+                </button>
+
+                <button data-screen="screen-shop" class="nav-tile">
+                    <div class="icon">🛒</div>
+                    <span>Sklep</span>
+                </button>
+
+                <button data-screen="screen-inventory" class="nav-tile">
+                    <div class="icon">🎒</div>
+                    <span>Ekwipunek</span>
+                </button>
+
+                <button data-screen="screen-settings" class="nav-tile">
+                    <div class="icon">⚙️</div>
+                    <span>Ustawienia</span>
+                </button>
+
             </nav>
 
             <button id="logout-btn" class="logout-btn danger">Wyloguj</button>
@@ -156,10 +190,12 @@
     </div>
 
     <!-- ============================
-         POPUP: PROFIL
+         POPUPY
     ============================= -->
+
     <div id="popup-overlay" class="popup-overlay hidden"></div>
 
+    <!-- PROFIL -->
     <div id="profile-window" class="popup-window glass hidden">
         <h2>Twój profil</h2>
 
@@ -187,9 +223,7 @@
         <p id="profile-feedback"></p>
     </div>
 
-    <!-- ============================
-         POPUP: ADMIN LOGIN
-    ============================= -->
+    <!-- ADMIN LOGIN -->
     <div id="admin-login" class="popup-window glass hidden">
         <h3>Hasło administratora</h3>
         <input id="admin-password" type="password" placeholder="Wpisz hasło...">
@@ -198,9 +232,7 @@
         <p id="admin-login-feedback"></p>
     </div>
 
-    <!-- ============================
-         POPUP: ADMIN PANEL
-    ============================= -->
+    <!-- ADMIN PANEL -->
     <div id="admin-panel" class="popup-window glass hidden">
         <h2>Admin Panel</h2>
         <input id="admin-command" placeholder="Wpisz komendę...">
@@ -212,19 +244,9 @@
     <!-- ============================
          SKRYPTY
     ============================= -->
-    <script src="js/topics.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/navigation.js"></script>
-    <script src="js/learn.js"></script>
-    <script src="js/flashcards.js"></script>
-    <script src="js/quiz.js"></script>
-    <script src="js/write.js"></script>
-    <script src="js/quests.js"></script>
-    <script src="js/shop.js"></script>
-    <script src="js/inventory.js"></script>
-    <script src="js/profile.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/admin.js"></script>
+    <script src="core.js"></script>
+    <script src="ui.js"></script>
+    <script src="learning.js"></script>
 
 </body>
 </html>
