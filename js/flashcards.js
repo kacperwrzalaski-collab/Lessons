@@ -33,6 +33,10 @@ function showFlashcard() {
 document.getElementById("flashcard-show").onclick = () => {
     document.getElementById("flashcard-answer").classList.remove("hidden");
     addXP(1); // XP za odsłonięcie fiszki
+
+    if (typeof updateQuestProgress === "function") {
+        updateQuestProgress("flashcards10");
+    }
 };
 
 // Następna fiszka
