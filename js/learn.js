@@ -39,13 +39,16 @@ document.getElementById("learn-next").onclick = () => {
 
     learnIndex++;
 
-    // Jeśli koniec — wracamy do początku
     if (learnIndex >= learnWords.length) {
         learnIndex = 0;
     }
 
     showLearnWord();
     addXP(2); // XP za naukę
+
+    if (typeof updateQuestProgress === "function") {
+        updateQuestProgress("learn10");
+    }
 };
 
 // Auto-ładowanie pierwszego tematu po wejściu
