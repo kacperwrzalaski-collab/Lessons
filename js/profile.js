@@ -11,11 +11,12 @@ document.getElementById("profile-avatar-upload").onchange = function () {
     reader.onload = function (e) {
         const username = localStorage.getItem("currentUser");
         const user = loadUser(username);
+        if (!user) return;
 
         user.avatar = e.target.result;
         saveUser(user);
-
         loadProfile();
+        loadProfileEditor();
     };
     reader.readAsDataURL(file);
 };
@@ -24,26 +25,28 @@ document.getElementById("profile-avatar-upload").onchange = function () {
 //  PRESTIŻ — RESET LEVELA I XP
 // ==========================================
 
-document.getElementById("prestige-btn").onclick = () => {
-    const username = localStorage.getItem("currentUser");
-    const user = loadUser(username);
+const prestigeBtn = document.getElementById("prestige-btn");
+if (prestigeBtn) {
+    prestigeBtn.onclick = () => {
+        const username = localStorage.getItem("currentUser");
+        const user = loadUser(username);
+        if (!user) return;
 
-    if (user.level < 50) {
-        alert("❌ Musisz mieć poziom 50, aby wykonać prestiż!");
-        return;
-    }
+        if (user.level < 50) {
+            alert("❌ Musisz mieć poziom 50, aby wykonać prestiż!");
+            return;
+        }
 
-    // Zwiększamy prestiż
-    user.prestige++;
-    user.level = 1;
-    user.xp = 0;
-    user.coins = 0;
+        user.prestige++;
+        user.level = 1;
+        user.xp = 0;
+        user.coins = 0;
 
-    saveUser(user);
-    loadProfile();
-
-    showPrestigePopup(user.prestige);
-};
+        saveUser(user);
+        loadProfile();
+        showPrestigePopup(user.prestige);
+    };
+}
 
 // ==========================================
 //  POPUP PRESTIŻU
@@ -51,14 +54,22 @@ document.getElementById("prestige-btn").onclick = () => {
 
 function showPrestigePopup(prestige) {
     const popup = document.getElementById("prestige-up");
-    const text = document.getElementById("prestige-up-text");
+    const title = document.getElementById("prestige-up-text");
+    const desc = document.getElementById("prestige-up-desc");
 
-    text.innerHTML = `
-        <h2>🎉 PRESTIŻ +${prestige}!</h2>
-        <p>Twoje konto zostało ulepszone.</p>
-    `;
+    if (!popup || !title || !desc) return;
+
+    title.innerHTML = `🎉 PRESTIŻ +${prestige}!`;
+    desc.innerHTML = `Twoje konto zostało ulepszone.`;
 
     popup.classList.remove("hidden");
+}
+
+const prestigeClose = document.getElementById("prestige-up-close");
+if (prestigeClose) {
+    prestigeClose.onclick = () => {
+        document.getElementById("prestige-up").classList.add("hidden");
+    };
 }
 
 // ==========================================
@@ -68,46 +79,55 @@ function showPrestigePopup(prestige) {
 function loadProfileEditor() {
     const username = localStorage.getItem("currentUser");
     const user = loadUser(username);
+    if (!user) return;
 
-    // Nazwa
-    document.getElementById("profile-current-name").textContent = user.username;
+    // Nazwa i coins (jeśli chcesz gdzieś wyświetlać w oknie profilu)
+    // Możesz dodać np. osobne elementy, ale na razie używamy tylko selectów i avatara
 
-    // Coins
-    document.getElementById("profile-current-coins").textContent = user.coins;
-
-    // Avatar
-    const avatar = document.getElementById("profile-avatar-preview");
-    avatar.style.backgroundImage = user.avatar ? `url(${user.avatar})` : "none";
+    // Avatar preview
+    const avatarPrev = document.getElementById("profile-avatar-preview");
+    if (avatarPrev) {
+        avatarPrev.style.backgroundImage = user.avatar ? `url(${user.avatar})` : "none";
+    }
 
     // Ramki
     const frameSelect = document.getElementById("profile-frame-select");
-    frameSelect.innerHTML = "<option value='none'>Brak</option>";
-    user.inventory.frames.forEach(f => {
-        const opt = document.createElement("option");
-        opt.value = f;
-        opt.textContent = f;
-        frameSelect.appendChild(opt);
-    });
+    if (frameSelect) {
+        frameSelect.innerHTML = "<option value='none'>Brak</option>";
+        user.inventory.frames.forEach(f => {
+            const opt = document.createElement("option");
+            opt.value = f;
+            opt.textContent = f;
+            if (user.equippedFrame === f) opt.selected = true;
+            frameSelect.appendChild(opt);
+        });
+    }
 
     // Tła
     const bgSelect = document.getElementById("profile-bg-select");
-    bgSelect.innerHTML = "<option value='none'>Brak</option>";
-    user.inventory.backgrounds.forEach(bg => {
-        const opt = document.createElement("option");
-        opt.value = bg;
-        opt.textContent = bg;
-        bgSelect.appendChild(opt);
-    });
+    if (bgSelect) {
+        bgSelect.innerHTML = "<option value='none'>Brak</option>";
+        user.inventory.backgrounds.forEach(bg => {
+            const opt = document.createElement("option");
+            opt.value = bg;
+            opt.textContent = bg;
+            if (user.equippedBackground === bg) opt.selected = true;
+            bgSelect.appendChild(opt);
+        });
+    }
 
     // Kolory przycisków
     const btnSelect = document.getElementById("profile-btn-select");
-    btnSelect.innerHTML = "<option value='none'>Brak</option>";
-    user.inventory.buttons.forEach(btn => {
-        const opt = document.createElement("option");
-        opt.value = btn;
-        opt.textContent = btn;
-        btnSelect.appendChild(opt);
-    });
+    if (btnSelect) {
+        btnSelect.innerHTML = "<option value='none'>Brak</option>";
+        user.inventory.buttons.forEach(btn => {
+            const opt = document.createElement("option");
+            opt.value = btn;
+            opt.textContent = btn;
+            if (user.equippedButtonTheme === btn) opt.selected = true;
+            btnSelect.appendChild(opt);
+        });
+    }
 }
 
 // ==========================================
@@ -117,6 +137,7 @@ function loadProfileEditor() {
 document.getElementById("profile-save").onclick = () => {
     const username = localStorage.getItem("currentUser");
     const user = loadUser(username);
+    if (!user) return;
 
     const newName = document.getElementById("profile-new-name").value.trim();
     const frame = document.getElementById("profile-frame-select").value;
@@ -158,9 +179,22 @@ document.getElementById("profile-save").onclick = () => {
 };
 
 // ==========================================
-//  AUTO-START
+//  OTWIERANIE / ZAMYKANIE OKNA PROFILU
 // ==========================================
 
-setTimeout(() => {
-    // nic nie trzeba inicjalizować — profil ładuje się na kliknięcie
-}, 200);
+const profileWindow = document.getElementById("profile-window");
+const profileAvatar = document.getElementById("profile-avatar");
+const profileClose = document.getElementById("profile-close");
+
+if (profileAvatar && profileWindow) {
+    profileAvatar.onclick = () => {
+        profileWindow.classList.remove("hidden");
+        loadProfileEditor();
+    };
+}
+
+if (profileClose && profileWindow) {
+    profileClose.onclick = () => {
+        profileWindow.classList.add("hidden");
+    };
+}
