@@ -1,5 +1,5 @@
 /* ============================================
-   RESET
+   RESET + PODSTAWY
 ============================================ */
 
 * {
@@ -9,11 +9,15 @@
     font-family: "Segoe UI", sans-serif;
 }
 
+.hidden {
+    display: none !important;
+}
+
 body {
     background: var(--bg);
     color: var(--text);
+    transition: background 0.25s, color 0.25s;
     overflow-x: hidden;
-    transition: background 0.3s, color 0.3s;
 }
 
 /* ============================================
@@ -21,25 +25,23 @@ body {
 ============================================ */
 
 body.dark {
-    --bg: linear-gradient(135deg, #0f0f0f, #1a1a1a, #000);
+    --bg: #0f0f0f;
+    --bg2: #1a1a1a;
     --text: #ffffff;
-    --glass-bg: rgba(255,255,255,0.08);
-    --glass-border: rgba(255,255,255,0.15);
-    --button-bg: linear-gradient(135deg, #4a8cff, #2f6be0);
-    --button-hover: linear-gradient(135deg, #6aa0ff, #3c7aff);
-    --button-danger: #ff4444;
-    --button-danger-hover: #cc3333;
+    --glass: rgba(255,255,255,0.08);
+    --border: rgba(255,255,255,0.15);
+    --button: #4a8cff;
+    --button-hover: #6aa0ff;
 }
 
 body.light {
-    --bg: linear-gradient(135deg, #f0f0f0, #ffffff);
-    --text: #111;
-    --glass-bg: rgba(255,255,255,0.6);
-    --glass-border: rgba(0,0,0,0.1);
-    --button-bg: linear-gradient(135deg, #4a8cff, #2f6be0);
-    --button-hover: linear-gradient(135deg, #6aa0ff, #3c7aff);
-    --button-danger: #ff4444;
-    --button-danger-hover: #cc3333;
+    --bg: #f5f5f5;
+    --bg2: #ffffff;
+    --text: #111111;
+    --glass: rgba(255,255,255,0.6);
+    --border: rgba(0,0,0,0.1);
+    --button: #4a8cff;
+    --button-hover: #6aa0ff;
 }
 
 /* ============================================
@@ -47,9 +49,9 @@ body.light {
 ============================================ */
 
 .glass {
-    background: var(--glass-bg);
+    background: var(--glass);
     backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
+    border: 1px solid var(--border);
     border-radius: 12px;
 }
 
@@ -62,7 +64,7 @@ button {
     border-radius: 10px;
     border: none;
     cursor: pointer;
-    background: var(--button-bg);
+    background: var(--button);
     color: white;
     font-weight: 600;
     transition: 0.2s;
@@ -78,11 +80,11 @@ button:active {
 }
 
 button.danger {
-    background: var(--button-danger);
+    background: #ff4444;
 }
 
 button.danger:hover {
-    background: var(--button-danger-hover);
+    background: #cc3333;
 }
 
 /* ============================================
@@ -208,25 +210,36 @@ button.danger:hover {
     padding: 15px;
     margin-bottom: 12px;
     border-radius: 10px;
-    background: var(--glass-bg);
+    background: var(--glass);
 }
 
 /* ============================================
-   PROFILE WINDOW
+   POPUPY (profil, admin)
 ============================================ */
 
-#profile-window {
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(3px);
+    z-index: 900;
+}
+
+.popup-window {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 380px;
     transform: translate(-50%, -50%);
+    width: 380px;
     padding: 25px;
-    z-index: 999;
+    z-index: 1000;
 }
 
-#profile-window input,
-#profile-window select {
+.popup-window input,
+.popup-window select {
     width: 100%;
     padding: 10px;
     margin: 8px 0;
@@ -235,30 +248,9 @@ button.danger:hover {
 }
 
 /* ============================================
-   ADMIN WINDOWS
+   TRYB TELEFONU — POPRAWIONY
 ============================================ */
 
-#admin-login,
-#admin-panel {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 350px;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    z-index: 999;
-}
-
-/* ============================================
-   TRYB TELEFONU
-============================================ */
-
-body.mobile-mode {
-    font-size: 15px;
-    overflow-x: hidden;
-}
-
-/* Sidebar → pasek górny */
 body.mobile-mode #sidebar {
     position: fixed;
     top: 0;
@@ -270,22 +262,18 @@ body.mobile-mode #sidebar {
     align-items: center;
     padding: 8px;
     gap: 10px;
-    z-index: 999;
+    z-index: 500;
 }
 
-/* Avatar mniejszy */
 body.mobile-mode #profile-avatar {
     width: 45px;
     height: 45px;
 }
 
-/* Nawigacja pozioma */
 body.mobile-mode .nav-buttons {
-    display: flex;
     flex-direction: row;
     overflow-x: auto;
     white-space: nowrap;
-    width: 100%;
     gap: 8px;
 }
 
@@ -295,26 +283,12 @@ body.mobile-mode .nav-buttons button {
     font-size: 14px;
 }
 
-/* Content przesunięty w dół */
 body.mobile-mode #main-content {
     margin-top: 110px;
     padding: 10px;
 }
 
-/* Okna pełnoekranowe */
-body.mobile-mode #profile-window,
-body.mobile-mode #admin-login,
-body.mobile-mode #admin-panel {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-    top: 0;
-    left: 0;
-    transform: none;
-}
-
-/* Sklep i ekwipunek w jednej kolumnie */
-body.mobile-mode .shop-item,
-body.mobile-mode .inventory-item {
-    width: 100%;
+body.mobile-mode .popup-window {
+    width: 90%;
+    max-width: 400px;
 }
