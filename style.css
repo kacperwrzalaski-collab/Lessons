@@ -22,6 +22,7 @@ body {
     overflow-x: hidden;
 }
 
+/* GLASS EFFECT */
 .glass {
     background: rgba(255,255,255,0.06);
     backdrop-filter: blur(10px);
@@ -29,6 +30,7 @@ body {
     border-radius: 12px;
 }
 
+/* BUTTONS */
 button {
     padding: 10px 14px;
     border-radius: 8px;
@@ -56,8 +58,7 @@ button.danger:hover {
     background: #c62828;
 }
 
-/* LOGOWANIE */
-
+/* LOGIN SCREEN */
 #screen-auth {
     height: 100vh;
     display: flex;
@@ -79,15 +80,26 @@ button.danger:hover {
     border: none;
 }
 
-/* LAYOUT */
+.auth-buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
 
-.app-layout {
+#auth-feedback {
+    margin-top: 10px;
+    min-height: 18px;
+    font-size: 14px;
+}
+
+/* APP LAYOUT */
+#app-container {
     display: flex;
     height: 100vh;
 }
 
 /* SIDEBAR */
-
 .sidebar {
     width: 260px;
     padding: 18px;
@@ -133,13 +145,11 @@ button.danger:hover {
     transition: width 0.25s;
 }
 
-/* MENU KAFELKOWE */
-
+/* NAVIGATION TILES */
 .nav-buttons {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     gap: 12px;
-    margin-top: 10px;
 }
 
 .nav-tile {
@@ -154,22 +164,19 @@ button.danger:hover {
     gap: 6px;
     cursor: pointer;
     transition: 0.15s;
-}
-
-.nav-tile:hover {
-    background: rgba(255,255,255,0.15);
-}
-
-.nav-tile .icon {
-    font-size: 28px;
+    text-align: center;
+    font-size: 22px;
 }
 
 .nav-tile span {
     font-size: 13px;
 }
 
-/* MAIN */
+.nav-tile:hover {
+    background: rgba(255,255,255,0.15);
+}
 
+/* MAIN CONTENT */
 .main-content {
     flex: 1;
     padding: 20px;
@@ -188,78 +195,50 @@ button.danger:hover {
     margin-bottom: 12px;
 }
 
-/* SKLEP / EKWIPUNEK */
+/* FLASHCARDS / QUIZ / WRITE */
+#flashcard-word,
+#quiz-question,
+#write-question {
+    font-size: 22px;
+    margin-top: 10px;
+}
 
+#flashcard-answer,
+#quiz-feedback,
+#write-feedback {
+    margin-top: 10px;
+    min-height: 18px;
+}
+
+/* SHOP / INVENTORY */
 .shop-item,
-.inventory-item,
-.quest-item {
+.inventory-item {
     padding: 12px;
     margin-bottom: 10px;
     border-radius: 10px;
     background: rgba(255,255,255,0.06);
 }
 
-/* POPUPY */
-
-.popup-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.55);
-    backdrop-filter: blur(3px);
-    z-index: 900;
-}
-
-.popup-window {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 360px;
-    max-width: 95%;
-    padding: 20px;
-    z-index: 1000;
-}
-
-.popup-window input,
-.popup-window select {
-    width: 100%;
-    padding: 9px;
-    margin: 6px 0;
-    border-radius: 8px;
-    border: none;
-}
-
-/* RESPONSYWNOŚĆ */
-
+/* RESPONSIVE */
 @media (max-width: 900px) {
-    .app-layout {
+    #app-container {
         flex-direction: column;
     }
 
     .sidebar {
         width: 100%;
-        flex-direction: column;
         align-items: center;
-        padding: 12px;
-    }
-
-    .profile-box {
-        justify-content: center;
     }
 
     .nav-buttons {
         grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-        gap: 10px;
         width: 100%;
     }
 
     .nav-tile {
         width: 70px;
         height: 70px;
-    }
-
-    .nav-tile .icon {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     .nav-tile span {
@@ -268,10 +247,5 @@ button.danger:hover {
 
     .main-content {
         padding: 12px;
-    }
-
-    .popup-window {
-        width: 90%;
-        max-width: 400px;
     }
 }
