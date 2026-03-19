@@ -1,9 +1,5 @@
 /* ============================================================
-   UI.JS — PRZEŁĄCZANIE EKRANÓW, POPUPY, SIDEBAR, UI UPDATE
-============================================================ */
-
-/* ============================================================
-   ELEMENTY DOM
+   UI.JS — PRZEŁĄCZANIE EKRANÓW, POPUPY, LOGOWANIE
 ============================================================ */
 
 const screens = document.querySelectorAll(".screen");
@@ -14,26 +10,17 @@ const profileWindow = document.getElementById("profile-window");
 const adminLoginWindow = document.getElementById("admin-login");
 const adminPanelWindow = document.getElementById("admin-panel");
 
-/* ============================================================
-   PRZEŁĄCZANIE EKRANÓW
-============================================================ */
-
 function showScreen(id) {
     screens.forEach(s => s.classList.add("hidden"));
     document.getElementById(id).classList.remove("hidden");
 }
 
-/* Obsługa kliknięć w kafelki menu */
 document.querySelectorAll(".nav-tile").forEach(btn => {
     btn.addEventListener("click", () => {
         const screen = btn.dataset.screen;
         showScreen(screen);
     });
 });
-
-/* ============================================================
-   START APLIKACJI PO ZALOGOWANIU
-============================================================ */
 
 function startApp() {
     document.getElementById("screen-auth").classList.add("hidden");
@@ -43,10 +30,6 @@ function startApp() {
     core.applyCosmetics();
     showScreen("screen-learn");
 }
-
-/* ============================================================
-   AKTUALIZACJA UI
-============================================================ */
 
 function updateUI() {
     const p = core.player;
@@ -65,9 +48,7 @@ function updateUI() {
     }
 }
 
-/* ============================================================
-   POPUPY
-============================================================ */
+/* POPUPY */
 
 function openPopup(win) {
     popupOverlay.classList.remove("hidden");
@@ -79,17 +60,14 @@ function closePopup(win) {
     win.classList.add("hidden");
 }
 
-/* PROFIL */
 document.getElementById("profile-avatar").addEventListener("click", () => {
     openPopup(profileWindow);
 });
 
-/* Zamknięcie profilu */
 document.getElementById("profile-close").addEventListener("click", () => {
     closePopup(profileWindow);
 });
 
-/* ADMIN LOGIN */
 document.getElementById("admin-open").addEventListener("click", () => {
     openPopup(adminLoginWindow);
 });
@@ -98,14 +76,11 @@ document.getElementById("admin-login-close").addEventListener("click", () => {
     closePopup(adminLoginWindow);
 });
 
-/* ADMIN PANEL */
 document.getElementById("admin-close").addEventListener("click", () => {
     closePopup(adminPanelWindow);
 });
 
-/* ============================================================
-   LOGOWANIE / REJESTRACJA
-============================================================ */
+/* LOGOWANIE / REJESTRACJA */
 
 document.getElementById("auth-login").addEventListener("click", () => {
     const u = document.getElementById("auth-username").value;
@@ -128,9 +103,7 @@ document.getElementById("auth-register").addEventListener("click", () => {
     document.getElementById("auth-feedback").textContent = result;
 });
 
-/* ============================================================
-   PROFIL — ZAPIS ZMIAN
-============================================================ */
+/* PROFIL */
 
 document.getElementById("profile-save").addEventListener("click", () => {
     const newName = document.getElementById("profile-new-name").value;
@@ -144,7 +117,6 @@ document.getElementById("profile-save").addEventListener("click", () => {
     updateUI();
 });
 
-/* Avatar upload */
 document.getElementById("profile-avatar-upload").addEventListener("change", e => {
     const file = e.target.files[0];
     if (!file) return;
@@ -156,9 +128,7 @@ document.getElementById("profile-avatar-upload").addEventListener("change", e =>
     });
 });
 
-/* ============================================================
-   ADMIN LOGIN
-============================================================ */
+/* ADMIN LOGIN */
 
 document.getElementById("admin-login-btn").addEventListener("click", () => {
     const pass = document.getElementById("admin-password").value;
@@ -172,9 +142,7 @@ document.getElementById("admin-login-btn").addEventListener("click", () => {
     }
 });
 
-/* ============================================================
-   ADMIN PANEL — KOMENDY
-============================================================ */
+/* ADMIN PANEL */
 
 document.getElementById("admin-run").addEventListener("click", () => {
     const cmd = document.getElementById("admin-command").value;
@@ -184,17 +152,11 @@ document.getElementById("admin-run").addEventListener("click", () => {
     updateUI();
 });
 
-/* ============================================================
-   WYLOGOWANIE
-============================================================ */
+/* WYLOGOWANIE */
 
 document.getElementById("logout-btn").addEventListener("click", () => {
     location.reload();
 });
-
-/* ============================================================
-   EKSPORT
-============================================================ */
 
 window.ui = {
     showScreen,
