@@ -1,506 +1,331 @@
-/* ===========================
-   GLOBAL
-=========================== */
+/* ============================================
+   RESET
+============================================ */
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    background: #0a0a0a;
-    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1a1a1a, #222, #111);
     color: white;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
-.hidden {
-    display: none !important;
-}
-
-button {
-    background: #222;
-    color: white;
-    border: none;
-    padding: 10px 14px;
-    margin: 5px 0;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-button:hover {
-    background: #333;
-}
-
-input, select {
-    width: 100%;
-    padding: 10px;
-    margin: 6px 0;
-    border-radius: 6px;
-    border: none;
-    outline: none;
-}
-
-/* ===========================
+/* ============================================
    GLASS EFFECT
-=========================== */
+============================================ */
 
 .glass {
-    background: rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
-    padding: 20px;
 }
 
-/* ===========================
+/* ============================================
    AUTH SCREEN
-=========================== */
+============================================ */
 
 #screen-auth {
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
 }
 
 .auth-box {
     width: 320px;
+    padding: 25px;
     text-align: center;
 }
 
-/* ===========================
+.auth-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+.auth-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #4a8cff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.auth-box button:hover {
+    background: #3a6fd6;
+}
+
+/* ============================================
    APP LAYOUT
-=========================== */
+============================================ */
 
 .app-layout {
     display: flex;
     height: 100vh;
 }
 
-/* ===========================
+/* ============================================
    SIDEBAR
-=========================== */
+============================================ */
 
 .sidebar {
     width: 260px;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
-
-.nav-buttons button {
-    width: 100%;
-}
-
-.logout-btn {
-    margin-top: auto;
-    background: #aa0000;
-}
-
-.logout-btn:hover {
-    background: #cc0000;
-}
-
-/* ===========================
-   PROFILE BOX
-=========================== */
 
 .profile-box {
     display: flex;
-    gap: 10px;
+    gap: 15px;
     align-items: center;
 }
 
 .avatar {
-    width: 64px;
-    height: 64px;
-    background: #333;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    border: 3px solid #555;
-    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    border: 3px solid rgba(255,255,255,0.3);
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 #profile-xp-bar {
     width: 100%;
-    height: 8px;
-    background: #222;
-    border-radius: 4px;
-    margin-top: 4px;
+    height: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 5px;
 }
 
 #profile-xp-fill {
     height: 100%;
     width: 0%;
-    background: #00aaff;
-    border-radius: 4px;
+    background: #4a8cff;
+    border-radius: 5px;
+    transition: width 0.3s;
 }
 
-/* ===========================
-   MAIN CONTENT
-=========================== */
-
-.main-content {
-    flex: 1;
-    margin: 20px;
-    padding: 20px;
-    overflow-y: auto;
-}
-
-/* ===========================
-   SCREENS
-=========================== */
-
-.screen {
-    display: block;
-}
-
-.screen.hidden {
-    display: none;
-}
-
-/* ===========================
-   FLASHCARDS
-=========================== */
-
-#flashcard-box {
-    margin-top: 20px;
-    padding: 20px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 10px;
-    text-align: center;
-}
-
-#flashcard-word {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-#flashcard-answer {
-    font-size: 22px;
-    color: #00ffaa;
-}
-
-/* ===========================
-   QUIZ
-=========================== */
-
-#quiz-options button {
-    width: 100%;
-    margin: 6px 0;
-}
-
-#quiz-feedback {
-    margin-top: 10px;
-    font-size: 18px;
-}
-
-/* ===========================
-   WRITE MODE
-=========================== */
-
-#write-word-box {
-    margin-top: 20px;
-    padding: 20px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 10px;
-}
-
-/* ===========================
-   QUESTS
-=========================== */
-
-#quests-list {
+.nav-buttons {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-}
-
-.quest-item {
-    padding: 15px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 10px;
-}
-
-/* ===========================
-   SHOP
-=========================== */
-
-#shop-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-
-.shop-item {
-    width: 180px;
-    padding: 15px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 10px;
-    text-align: center;
-}
-
-.shop-item button {
-    width: 100%;
-}
-
-/* ===========================
-   EKWIPUNEK
-=========================== */
-
-#inventory-badges,
-#inventory-frames,
-#inventory-backgrounds,
-#inventory-buttons {
-    display: flex;
-    flex-wrap: wrap;
     gap: 10px;
 }
 
-.inventory-item {
+.nav-buttons button {
     padding: 12px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 10px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: white;
     cursor: pointer;
-    min-width: 140px;
-    text-align: center;
     transition: 0.2s;
 }
 
-.inventory-item:hover {
-    background: rgba(255,255,255,0.12);
+.nav-buttons button:hover {
+    background: rgba(255,255,255,0.2);
 }
 
-/* ===========================
+.logout-btn {
+    margin-top: auto;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background: #ff4444;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    background: #cc3333;
+}
+
+/* ============================================
+   MAIN CONTENT
+============================================ */
+
+.main-content {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+}
+
+.screen {
+    display: none;
+}
+
+.screen:not(.hidden) {
+    display: block;
+}
+
+.screen h2 {
+    margin-bottom: 15px;
+}
+
+/* ============================================
+   SHOP & INVENTORY
+============================================ */
+
+.shop-item,
+.inventory-item {
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+}
+
+.shop-item button,
+.inventory-item button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    background: #4a8cff;
+    color: white;
+    cursor: pointer;
+}
+
+/* ============================================
    PROFILE WINDOW
-=========================== */
+============================================ */
 
-.profile-window {
+#profile-window {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
     width: 380px;
-    z-index: 9999;
+    transform: translate(-50%, -50%);
+    padding: 25px;
+    z-index: 999;
 }
 
-/* ===========================
-   ADMIN PANEL
-=========================== */
+#profile-window input,
+#profile-window select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+}
 
-.admin-login,
-.admin-panel {
+#profile-window button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #4a8cff;
+    color: white;
+    cursor: pointer;
+}
+
+/* ============================================
+   ADMIN WINDOWS
+============================================ */
+
+#admin-login,
+#admin-panel {
     position: fixed;
     top: 50%;
     left: 50%;
+    width: 350px;
     transform: translate(-50%, -50%);
-    width: 360px;
-    z-index: 99999;
+    padding: 20px;
+    z-index: 999;
 }
 
-/* ===========================
-   PRESTIGE POPUP
-=========================== */
+#admin-panel input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
 
-.prestige-popup {
+/* ============================================
+   TRYB TELEFONU
+============================================ */
+
+body.mobile-mode {
+    font-size: 15px;
+    overflow-x: hidden;
+}
+
+/* Sidebar → pasek górny */
+body.mobile-mode #sidebar {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 420px;
-    text-align: center;
-    padding: 30px;
-    z-index: 999999;
-    animation: popupShow 0.4s ease-out;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px;
+    gap: 10px;
+    z-index: 999;
 }
 
-@keyframes popupShow {
-    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+/* Avatar mniejszy */
+body.mobile-mode #profile-avatar {
+    width: 45px;
+    height: 45px;
 }
 
-/* ===========================
-   PRESTIGE ANIMATIONS (1–15)
-=========================== */
-
-@keyframes prestigePulse1  {0%{text-shadow:0 0 5px #00eaff;}50%{text-shadow:0 0 20px #00eaff;}100%{text-shadow:0 0 5px #00eaff;}}
-@keyframes prestigePulse2  {0%{text-shadow:0 0 5px #ff00e6;}50%{text-shadow:0 0 20px #ff00e6;}100%{text-shadow:0 0 5px #ff00e6;}}
-@keyframes prestigePulse3  {0%{text-shadow:0 0 5px #ff8800;}50%{text-shadow:0 0 20px #ff8800;}100%{text-shadow:0 0 5px #ff8800;}}
-@keyframes prestigePulse4  {0%{text-shadow:0 0 5px #00ffaa;}50%{text-shadow:0 0 20px #00ffaa;}100%{text-shadow:0 0 5px #00ffaa;}}
-@keyframes prestigePulse5  {0%{text-shadow:0 0 5px #ffd700;}50%{text-shadow:0 0 20px #ffd700;}100%{text-shadow:0 0 5px #ffd700;}}
-@keyframes prestigePulse6  {0%{text-shadow:0 0 5px #00aaff;}50%{text-shadow:0 0 20px #00aaff;}100%{text-shadow:0 0 5px #00aaff;}}
-@keyframes prestigePulse7  {0%{text-shadow:0 0 5px #ffaa00;}50%{text-shadow:0 0 20px #ffaa00;}100%{text-shadow:0 0 5px #ffaa00;}}
-@keyframes prestigePulse8  {0%{text-shadow:0 0 5px #aa00ff;}50%{text-shadow:0 0 20px #aa00ff;}100%{text-shadow:0 0 5px #aa00ff;}}
-@keyframes prestigePulse9  {0%{text-shadow:0 0 5px #ff66ff;}50%{text-shadow:0 0 20px #ff66ff;}100%{text-shadow:0 0 5px #ff66ff;}}
-@keyframes prestigePulse10 {0%{text-shadow:0 0 5px #00ddff;}50%{text-shadow:0 0 20px #00ddff;}100%{text-shadow:0 0 5px #00ddff;}}
-@keyframes prestigePulse11 {0%{text-shadow:0 0 5px #ff5500;}50%{text-shadow:0 0 20px #ff5500;}100%{text-shadow:0 0 5px #ff5500;}}
-@keyframes prestigePulse12 {0%{text-shadow:0 0 5px #00aaff;}50%{text-shadow:0 0 20px #00aaff;}100%{text-shadow:0 0 5px #00aaff;}}
-@keyframes prestigePulse13 {0%{text-shadow:0 0 5px #00ffee;}50%{text-shadow:0 0 20px #00ffee;}100%{text-shadow:0 0 5px #00ffee;}}
-@keyframes prestigePulse14 {0%{text-shadow:0 0 5px #ffaa00;}50%{text-shadow:0 0 20px #ffaa00;}100%{text-shadow:0 0 5px #ffaa00;}}
-@keyframes prestigePulse15 {0%{text-shadow:0 0 5px #ff00aa;}50%{text-shadow:0 0 20px #ff00aa;}100%{text-shadow:0 0 5px #ff00aa;}}
-/* ===========================
-   RAMKI AVATARA (PRZYKŁADOWE STYLE)
-=========================== */
-
-.avatar-frame-neonpulse {
-    border-color: #00eaff;
-    box-shadow: 0 0 10px #00eaff, 0 0 25px #00eaff;
+/* Nawigacja pozioma */
+body.mobile-mode .nav-buttons {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    gap: 8px;
 }
 
-.avatar-frame-neonglow {
-    border-color: #ff00e6;
-    box-shadow: 0 0 10px #ff00e6, 0 0 25px #ff00e6;
+body.mobile-mode .nav-buttons button {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    font-size: 14px;
 }
 
-.avatar-frame-electric {
-    border-color: #ff8800;
-    box-shadow: 0 0 10px #ff8800, 0 0 25px #ff8800;
+/* Content przesunięty w dół */
+body.mobile-mode #main-content {
+    margin-top: 110px;
+    padding: 10px;
 }
 
-.avatar-frame-cyberpunk {
-    border-color: #00ffaa;
-    box-shadow: 0 0 10px #00ffaa, 0 0 25px #00ffaa;
+/* Okna pełnoekranowe */
+body.mobile-mode #profile-window,
+body.mobile-mode #admin-login,
+body.mobile-mode #admin-panel {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    top: 0;
+    left: 0;
+    transform: none;
 }
 
-.avatar-frame-royal {
-    border-color: #ffd700;
-    box-shadow: 0 0 10px #ffd700, 0 0 25px #ffd700;
-}
-
-.avatar-frame-inferno {
-    border-color: #ff3300;
-    box-shadow: 0 0 10px #ff3300, 0 0 25px #ff3300;
-}
-
-.avatar-frame-galaxy {
-    border-color: #aa00ff;
-    box-shadow: 0 0 10px #aa00ff, 0 0 25px #aa00ff;
-}
-
-.avatar-frame-rainbow {
-    border-image: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, violet) 1;
-    border-width: 3px;
-    border-style: solid;
-}
-
-/* ===========================
-   TŁA NEONOWE (PRESTIŻE)
-=========================== */
-
-body.prestige-1-bg {
-    background: radial-gradient(circle at top, #00eaff33, #000000 60%);
-}
-
-body.prestige-2-bg {
-    background: radial-gradient(circle at top, #ff00e633, #000000 60%);
-}
-
-body.prestige-3-bg {
-    background: radial-gradient(circle at top, #ff880033, #000000 60%);
-}
-
-body.prestige-4-bg {
-    background: radial-gradient(circle at top, #00ffaa33, #000000 60%);
-}
-
-body.prestige-5-bg {
-    background: radial-gradient(circle at top, #ffd70033, #000000 60%);
-}
-
-body.prestige-6-bg {
-    background: radial-gradient(circle at top, #00ffcc33, #000000 60%);
-}
-
-body.prestige-7-bg {
-    background: radial-gradient(circle at top, #ff330033, #000000 60%);
-}
-
-body.prestige-8-bg {
-    background: radial-gradient(circle at top, #aa00ff33, #000000 60%);
-}
-
-body.prestige-9-bg {
-    background: radial-gradient(circle at top, #ff66ff33, #000000 60%);
-}
-
-body.prestige-10-bg {
-    background: radial-gradient(circle at top, #00ddff33, #000000 60%);
-}
-
-body.prestige-11-bg {
-    background: radial-gradient(circle at top, #ff550033, #000000 60%);
-}
-
-body.prestige-12-bg {
-    background: radial-gradient(circle at top, #00aaff33, #000000 60%);
-}
-
-body.prestige-13-bg {
-    background: radial-gradient(circle at top, #00ffee33, #000000 60%);
-}
-
-body.prestige-14-bg {
-    background: radial-gradient(circle at top, #ffaa0033, #000000 60%);
-}
-
-body.prestige-15-bg {
-    background: radial-gradient(circle at top, #ff00aa33, #000000 60%);
-}
-
-/* ===========================
-   KOLORY PRZYCISKÓW (KOSMETYKI)
-=========================== */
-
-.btn-theme-blue button {
-    background: #0055ff;
-}
-
-.btn-theme-blue button:hover {
-    background: #1a6bff;
-}
-
-.btn-theme-green button {
-    background: #00aa55;
-}
-
-.btn-theme-green button:hover {
-    background: #00c766;
-}
-
-.btn-theme-red button {
-    background: #cc0033;
-}
-
-.btn-theme-red button:hover {
-    background: #e6003b;
-}
-
-/* ===========================
-   RESPONSYWNOŚĆ
-=========================== */
-
-@media (max-width: 900px) {
-    .app-layout {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        flex-direction: row;
-        align-items: center;
-        gap: 10px;
-        overflow-x: auto;
-    }
-
-    .main-content {
-        margin: 10px;
-        padding: 10px;
-    }
-
-    .profile-box {
-        flex: 1;
-    }
+/* Sklep i ekwipunek w jednej kolumnie */
+body.mobile-mode .shop-item,
+body.mobile-mode .inventory-item {
+    width: 100%;
 }
