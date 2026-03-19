@@ -14,17 +14,14 @@
 }
 
 /* ============================================
-   ZMIENNE KOSMETYCZNE (z inventory)
-   — JS podmienia te wartości dynamicznie
+   ZMIENNE KOSMETYCZNE
 ============================================ */
 
 :root {
-    --app-bg: #0f0f0f;        /* tło aplikacji */
+    --app-bg: #12121a;        /* tło aplikacji */
     --button-color: #4a8cff; /* kolor przycisków */
     --button-hover: #6aa0ff;
     --text-color: #ffffff;
-    --glass-bg: rgba(255,255,255,0.08);
-    --glass-border: rgba(255,255,255,0.15);
 }
 
 /* ============================================
@@ -35,17 +32,16 @@ body {
     background: var(--app-bg);
     color: var(--text-color);
     overflow-x: hidden;
-    transition: background 0.25s, color 0.25s;
 }
 
 /* ============================================
-   GLASS EFFECT
+   GLASS
 ============================================ */
 
 .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: 12px;
 }
 
@@ -54,35 +50,34 @@ body {
 ============================================ */
 
 button {
-    padding: 12px;
-    border-radius: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
     background: var(--button-color);
     color: white;
     font-weight: 600;
-    transition: 0.2s;
+    transition: 0.15s;
 }
 
 button:hover {
     background: var(--button-hover);
-    transform: translateY(-2px);
 }
 
 button:active {
-    transform: translateY(0);
+    transform: translateY(1px);
 }
 
 button.danger {
-    background: #ff4444;
+    background: #e53935;
 }
 
 button.danger:hover {
-    background: #cc3333;
+    background: #c62828;
 }
 
 /* ============================================
-   AUTH SCREEN
+   LOGOWANIE
 ============================================ */
 
 #screen-auth {
@@ -94,20 +89,20 @@ button.danger:hover {
 
 .auth-box {
     width: 320px;
-    padding: 25px;
+    padding: 24px;
     text-align: center;
 }
 
 .auth-box input {
     width: 100%;
-    padding: 12px;
-    margin: 8px 0;
+    padding: 10px;
+    margin: 6px 0;
     border-radius: 8px;
     border: none;
 }
 
 /* ============================================
-   APP LAYOUT
+   LAYOUT
 ============================================ */
 
 .app-layout {
@@ -121,52 +116,53 @@ button.danger:hover {
 
 .sidebar {
     width: 260px;
-    padding: 20px;
+    padding: 18px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
 }
 
 .profile-box {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     align-items: center;
 }
 
 .avatar {
-    width: 70px;
-    height: 70px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     background-size: cover;
     background-position: center;
-    border: 3px solid rgba(255,255,255,0.3);
+    border: 2px solid rgba(255,255,255,0.4);
 }
 
 .profile-info {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
+    font-size: 14px;
 }
 
 #profile-xp-bar {
     width: 100%;
-    height: 10px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 5px;
+    height: 8px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 4px;
+    overflow: hidden;
 }
 
 #profile-xp-fill {
     height: 100%;
     width: 0%;
     background: var(--button-color);
-    border-radius: 5px;
-    transition: width 0.3s;
+    transition: width 0.25s;
 }
 
 .nav-buttons {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .logout-btn {
@@ -179,7 +175,7 @@ button.danger:hover {
 
 .main-content {
     flex: 1;
-    padding: 25px;
+    padding: 20px;
     overflow-y: auto;
 }
 
@@ -192,19 +188,19 @@ button.danger:hover {
 }
 
 .screen h2 {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 /* ============================================
-   SHOP & INVENTORY
+   SKLEP / EKWIPUNEK
 ============================================ */
 
 .shop-item,
 .inventory-item {
-    padding: 15px;
-    margin-bottom: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
     border-radius: 10px;
-    background: var(--glass-bg);
+    background: rgba(255,255,255,0.06);
 }
 
 /* ============================================
@@ -213,10 +209,7 @@ button.danger:hover {
 
 .popup-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: rgba(0,0,0,0.55);
     backdrop-filter: blur(3px);
     z-index: 900;
@@ -227,62 +220,67 @@ button.danger:hover {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 380px;
-    padding: 25px;
+    width: 360px;
+    max-width: 95%;
+    padding: 20px;
     z-index: 1000;
 }
 
 .popup-window input,
 .popup-window select {
     width: 100%;
-    padding: 10px;
-    margin: 8px 0;
+    padding: 9px;
+    margin: 6px 0;
     border-radius: 8px;
     border: none;
 }
 
 /* ============================================
-   TRYB TELEFONU — STABILNY
+   TRYB TELEFONU (WERSJA C)
 ============================================ */
 
-body.mobile-mode #sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 8px;
-    gap: 10px;
-    z-index: 500;
-}
+@media (max-width: 900px) {
 
-body.mobile-mode #profile-avatar {
-    width: 45px;
-    height: 45px;
-}
+    .app-layout {
+        flex-direction: column;
+    }
 
-body.mobile-mode .nav-buttons {
-    flex-direction: row;
-    overflow-x: auto;
-    white-space: nowrap;
-    gap: 8px;
-}
+    .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px;
+    }
 
-body.mobile-mode .nav-buttons button {
-    flex: 0 0 auto;
-    padding: 8px 12px;
-    font-size: 14px;
-}
+    .profile-box {
+        width: 100%;
+        justify-content: center;
+    }
 
-body.mobile-mode #main-content {
-    margin-top: 110px;
-    padding: 10px;
-}
+    .nav-buttons {
+        flex-direction: row;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 6px;
+        width: 100%;
+        justify-content: center;
+    }
 
-body.mobile-mode .popup-window {
-    width: 90%;
-    max-width: 400px;
+    .nav-buttons button {
+        flex: 0 0 auto;
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    .main-content {
+        padding: 12px;
+    }
+
+    .popup-window {
+        width: 90%;
+        max-width: 400px;
+    }
 }
