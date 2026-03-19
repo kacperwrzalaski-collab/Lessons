@@ -18,8 +18,8 @@
 ============================================ */
 
 :root {
-    --app-bg: #12121a;        /* tło aplikacji */
-    --button-color: #4a8cff; /* kolor przycisków */
+    --app-bg: #12121a;
+    --button-color: #4a8cff;
     --button-hover: #6aa0ff;
     --text-color: #ffffff;
 }
@@ -34,10 +34,7 @@ body {
     overflow-x: hidden;
 }
 
-/* ============================================
-   GLASS
-============================================ */
-
+/* Glass effect */
 .glass {
     background: rgba(255,255,255,0.06);
     backdrop-filter: blur(10px);
@@ -111,7 +108,7 @@ button.danger:hover {
 }
 
 /* ============================================
-   SIDEBAR
+   SIDEBAR / TOPBAR
 ============================================ */
 
 .sidebar {
@@ -122,6 +119,7 @@ button.danger:hover {
     gap: 18px;
 }
 
+/* Profil */
 .profile-box {
     display: flex;
     gap: 12px;
@@ -159,14 +157,41 @@ button.danger:hover {
     transition: width 0.25s;
 }
 
+/* ============================================
+   MENU KAFELKOWE (C2)
+============================================ */
+
 .nav-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
 }
 
-.logout-btn {
-    margin-top: auto;
+.nav-tile {
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.nav-tile:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.nav-tile .icon {
+    font-size: 28px;
+}
+
+.nav-tile span {
+    font-size: 13px;
 }
 
 /* ============================================
@@ -204,7 +229,7 @@ button.danger:hover {
 }
 
 /* ============================================
-   POPUPY (profil, admin)
+   POPUPY
 ============================================ */
 
 .popup-overlay {
@@ -236,7 +261,7 @@ button.danger:hover {
 }
 
 /* ============================================
-   TRYB TELEFONU (WERSJA C)
+   TRYB TELEFONU
 ============================================ */
 
 @media (max-width: 900px) {
@@ -247,32 +272,32 @@ button.danger:hover {
 
     .sidebar {
         width: 100%;
-        height: auto;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        padding: 10px;
+        flex-direction: column;
+        align-items: center;
+        padding: 12px;
     }
 
     .profile-box {
-        width: 100%;
         justify-content: center;
     }
 
     .nav-buttons {
-        flex-direction: row;
-        overflow-x: auto;
-        white-space: nowrap;
-        gap: 6px;
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+        gap: 10px;
         width: 100%;
-        justify-content: center;
     }
 
-    .nav-buttons button {
-        flex: 0 0 auto;
-        padding: 8px 10px;
-        font-size: 13px;
+    .nav-tile {
+        width: 70px;
+        height: 70px;
+    }
+
+    .nav-tile .icon {
+        font-size: 24px;
+    }
+
+    .nav-tile span {
+        font-size: 12px;
     }
 
     .main-content {
