@@ -1,0 +1,49 @@
+<section class="screen-content">
+  <h1 id="modes-lesson-title">Tryby – Lekcja</h1>
+
+  <div class="card">
+
+    <div class="modes-buttons">
+      <button data-mode="learn">Nauka</button>
+      <button data-mode="practice">Praktyka</button>
+      <button data-mode="quiz">Quiz</button>
+    </div>
+
+    <!-- NAUKA -->
+    <div id="mode-learn" class="mode-section active">
+      <h2>Lista słówek</h2>
+      <ul id="wordList"></ul>
+    </div>
+
+    <!-- PRAKTYKA -->
+    <div id="mode-practice" class="mode-section">
+      <h2>Praktyka</h2>
+
+      <div id="practice-info"></div>
+
+      <label>Tłumaczenie (PL):</label>
+      <input type="text" id="practice-pl">
+
+      <label>Perfekt:</label>
+      <input type="text" id="practice-perf">
+
+      <button id="practice-check-btn">Sprawdź</button>
+      <button id="practice-next-btn" class="hidden">Kontynuuj</button>
+
+      <div id="practice-feedback"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="mode-quiz" class="mode-section">
+      <h2>Quiz</h2>
+
+      <div id="quiz-question"></div>
+      <div id="quiz-answers"></div>
+      <div id="quiz-feedback"></div>
+
+      <button id="quiz-next-btn">Następne</button>
+    </div>
+
+    <button data-nav="lesson">Powrót do lekcji</button>
+  </div>
+</section>
