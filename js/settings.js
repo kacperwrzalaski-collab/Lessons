@@ -1,52 +1,36 @@
 // ==========================================
-//  USTAWIENIA + PANEL ADMINA
+//  USTAWIENIA — TRYB TELEFONU + ADMIN OPEN
 // ==========================================
 
-// Hasło administratora (zmień jak chcesz)
-const ADMIN_PASSWORD = "admin123";
+const mobileToggle = document.getElementById("settings-mobile-toggle");
+const adminOpenBtn = document.getElementById("admin-open");
 
-// Elementy
-const adminLoginBox = document.getElementById("admin-login");
-const adminPasswordInput = document.getElementById("admin-password");
-const adminLoginBtn = document.getElementById("admin-login-btn");
-const adminLoginFeedback = document.getElementById("admin-login-feedback");
-const adminPanel = document.getElementById("admin-panel");
-const adminOpen = document.getElementById("admin-open");
-const adminLoginClose = document.getElementById("admin-login-close");
-const adminClose = document.getElementById("admin-close");
-
-// ==========================================
-//  OTWIERANIE / ZAMYKANIE OKNA LOGOWANIA ADMINA
-// ==========================================
-
-adminOpen.onclick = () => {
-    adminLoginBox.classList.remove("hidden");
-};
-
-adminLoginClose.onclick = () => {
-    adminLoginBox.classList.add("hidden");
-};
-
-// ==========================================
-//  LOGOWANIE DO PANELU ADMINA
-// ==========================================
-
-adminLoginBtn.onclick = () => {
-    const pass = adminPasswordInput.value.trim();
-
-    if (pass === ADMIN_PASSWORD) {
-        adminLoginFeedback.textContent = "";
-        adminLoginBox.classList.add("hidden");
-        adminPanel.classList.remove("hidden");
-    } else {
-        adminLoginFeedback.textContent = "❌ Błędne hasło";
+// Wczytanie ustawienia trybu telefonu z localStorage
+(function initSettings() {
+    const saved = localStorage.getItem("settings_mobile_mode");
+    if (saved === "1") {
+        document.body.classList.add("mobile-mode");
+        if (mobileToggle) mobileToggle.checked = true;
     }
-};
+})();
 
-// ==========================================
-//  ZAMYKANIE PANELU ADMINA
-// ==========================================
+// Zmiana trybu telefonu
+if (mobileToggle) {
+    mobileToggle.onchange = () => {
+        if (mobileToggle.checked) {
+            document.body.classList.add("mobile-mode");
+            localStorage.setItem("settings_mobile_mode", "1");
+        } else {
+            document.body.classList.remove("mobile-mode");
+            localStorage.setItem("settings_mobile_mode", "0");
+        }
+    };
+}
 
-adminClose.onclick = () => {
-    adminPanel.classList.add("hidden");
-};
+// Otwieranie okna logowania admina
+if (adminOpenBtn) {
+    adminOpenBtn.onclick = () => {
+        const loginBox = document.getElementById("admin-login");
+        if (loginBox) loginBox.classList.remove("hidden");
+    };
+}
