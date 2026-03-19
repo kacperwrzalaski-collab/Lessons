@@ -41,6 +41,9 @@
             <div class="nav-tile" data-screen="screen-flashcards">🃏<span>Fiszki</span></div>
             <div class="nav-tile" data-screen="screen-quiz">❓<span>Quiz</span></div>
             <div class="nav-tile" data-screen="screen-write">✍️<span>Pisanie</span></div>
+            <div class="nav-tile" data-screen="screen-quests">🎯<span>Questy</span></div>
+            <div class="nav-tile" data-screen="screen-shop">🛒<span>Sklep</span></div>
+            <div class="nav-tile" data-screen="screen-inventory">🎒<span>Ekwipunek</span></div>
         </div>
 
         <button id="logout-btn" class="danger">Wyloguj</button>
@@ -49,9 +52,9 @@
     <!-- MAIN -->
     <main class="main-content glass">
 
-        <!-- NAUKA -->
+        <!-- NAUKA — TABELA -->
         <section id="screen-learn" class="screen">
-            <h2>Nauka</h2>
+            <h2>Nauka — wszystkie słówka</h2>
 
             <label>Wybierz język:</label>
             <select id="learn-language-select"></select>
@@ -59,8 +62,15 @@
             <label>Wybierz temat:</label>
             <select id="learn-topic-select"></select>
 
-            <div id="learn-word-box"></div>
-            <button id="learn-next">Następne słówko</button>
+            <table id="learn-table">
+                <thead>
+                    <tr>
+                        <th>Słówko</th>
+                        <th>Tłumaczenie</th>
+                    </tr>
+                </thead>
+                <tbody id="learn-table-body"></tbody>
+            </table>
         </section>
 
         <!-- FISZKI -->
@@ -89,7 +99,80 @@
             <div id="write-feedback"></div>
         </section>
 
+        <!-- QUESTY -->
+        <section id="screen-quests" class="screen hidden">
+            <h2>Questy</h2>
+            <div id="quests-list"></div>
+        </section>
+
+        <!-- SKLEP -->
+        <section id="screen-shop" class="screen hidden">
+            <h2>Sklep</h2>
+            <div id="shop-items"></div>
+        </section>
+
+        <!-- EKWIPUNEK -->
+        <section id="screen-inventory" class="screen hidden">
+            <h2>Ekwipunek</h2>
+            <h3>Odznaki</h3>
+            <div id="inventory-badges"></div>
+            <h3>Ramki</h3>
+            <div id="inventory-frames"></div>
+            <h3>Tła</h3>
+            <div id="inventory-backgrounds"></div>
+            <h3>Przyciski</h3>
+            <div id="inventory-buttons"></div>
+        </section>
+
     </main>
+</div>
+
+<!-- POPUP PROFIL -->
+<div id="profile-window" class="popup-window glass hidden">
+    <h3>Profil</h3>
+    <input id="profile-new-name" type="text" placeholder="Nowy nick">
+    <select id="profile-frame-select">
+        <option value="">Ramka (brak)</option>
+        <option value="red">Czerwona</option>
+        <option value="gold">Złota</option>
+    </select>
+    <select id="profile-bg-select">
+        <option value="">Tło (domyślne)</option>
+        <option value="#12121a">Ciemne</option>
+        <option value="#001f3f">Niebieskie</option>
+    </select>
+    <select id="profile-btn-select">
+        <option value="">Przyciski (domyślne)</option>
+        <option value="#4a8cff">Niebieskie</option>
+        <option value="#00cc66">Zielone</option>
+    </select>
+
+    <label>Avatar:</label>
+    <input id="profile-avatar-upload" type="file" accept="image/*">
+    <div id="profile-avatar-preview" class="avatar"></div>
+
+    <div id="profile-feedback"></div>
+
+    <button id="profile-save">Zapisz</button>
+    <button id="profile-close" class="danger">Zamknij</button>
+</div>
+
+<!-- POPUP ADMIN LOGIN -->
+<div id="admin-login" class="popup-window glass hidden">
+    <h3>Admin login</h3>
+    <input id="admin-password" type="password" placeholder="Hasło admina">
+    <div id="admin-login-feedback"></div>
+    <button id="admin-login-btn">Wejdź</button>
+    <button id="admin-login-close" class="danger">Zamknij</button>
+</div>
+
+<!-- POPUP ADMIN PANEL -->
+<div id="admin-panel" class="popup-window glass hidden">
+    <h3>Panel admina</h3>
+    <input id="admin-command" type="text" placeholder="Komenda (xp 100, coins 50, reset)">
+    <div id="admin-output"></div>
+    <button id="admin-run">Wykonaj</button>
+    <button id="admin-close" class="danger">Zamknij</button>
 </div>
 
 <script src="app.js"></script>
