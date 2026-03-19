@@ -41,12 +41,15 @@ document.getElementById("write-check").onclick = () => {
         feedback.textContent = "✔ Dobrze!";
         feedback.style.color = "#00ff88";
         addXP(4);
+
+        if (typeof updateQuestProgress === "function") {
+            updateQuestProgress("write5");
+        }
     } else {
         feedback.textContent = `❌ Źle! Poprawna odpowiedź: ${writeWords[writeIndex].pl}`;
         feedback.style.color = "#ff4444";
     }
 
-    // Następne słówko po 1 sekundzie
     setTimeout(() => {
         writeIndex++;
 
@@ -59,7 +62,7 @@ document.getElementById("write-check").onclick = () => {
     }, 900);
 };
 
-// Funkcja mieszająca tablicę (używana też w quizie)
+// Funkcja mieszająca tablicę
 function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
