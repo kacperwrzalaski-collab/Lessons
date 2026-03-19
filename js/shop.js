@@ -1,161 +1,108 @@
+// ==========================================
+//  SKLEP — KOSMETYKI
+// ==========================================
+
+// Lista przedmiotów w sklepie
 const SHOP_ITEMS = [
-    { id: "bg_blue", name: "Niebieskie tło", price: 50, type: "background", value: "#0b0f17", rarity: "Common" },
-    { id: "bg_red", name: "Czerwone tło", price: 50, type: "background", value: "#220000", rarity: "Common" },
-    { id: "btn_green", name: "Zielone przyciski", price: 40, type: "buttonColor", value: "#00aa55", rarity: "Common" },
-    { id: "frame_neonpulse", name: "Neon Pulse", price: 120, type: "avatarFrame", value: "neonpulse", rarity: "Rare" },
-    { id: "frame_neonglow", name: "Neon Glow", price: 200, type: "avatarFrame", value: "neonglow", rarity: "Epic" },
-    { id: "frame_electric", name: "Electric Frame", price: 350, type: "avatarFrame", value: "electric", rarity: "Legendary" },
-    { id: "frame_cyberpunk", name: "Cyberpunk Flicker", price: 500, type: "avatarFrame", value: "cyberpunk", rarity: "Mythic" }
+    // Ramki
+    { id: "avatar-frame-neonpulse", name: "Neon Pulse", type: "frame", price: 50 },
+    { id: "avatar-frame-neonglow", name: "Neon Glow", type: "frame", price: 50 },
+    { id: "avatar-frame-electric", name: "Electric", type: "frame", price: 60 },
+    { id: "avatar-frame-cyberpunk", name: "Cyberpunk", type: "frame", price: 70 },
+    { id: "avatar-frame-royal", name: "Royal", type: "frame", price: 80 },
+    { id: "avatar-frame-inferno", name: "Inferno", type: "frame", price: 90 },
+    { id: "avatar-frame-galaxy", name: "Galaxy", type: "frame", price: 100 },
+    { id: "avatar-frame-rainbow", name: "Rainbow", type: "frame", price: 120 },
+
+    // Tła
+    { id: "prestige-1-bg", name: "Prestige 1", type: "background", price: 40 },
+    { id: "prestige-2-bg", name: "Prestige 2", type: "background", price: 50 },
+    { id: "prestige-3-bg", name: "Prestige 3", type: "background", price: 60 },
+    { id: "prestige-4-bg", name: "Prestige 4", type: "background", price: 70 },
+    { id: "prestige-5-bg", name: "Prestige 5", type: "background", price: 80 },
+
+    // Kolory przycisków
+    { id: "btn-theme-blue", name: "Niebieskie przyciski", type: "buttons", price: 30 },
+    { id: "btn-theme-green", name: "Zielone przyciski", type: "buttons", price: 30 },
+    { id: "btn-theme-red", name: "Czerwone przyciski", type: "buttons", price: 30 }
 ];
 
-const LOOTBOXES = [
-    { id: "box_basic", name: "Basic Lootbox", price: 50, drops: ["Common", "Rare"] },
-    { id: "box_epic", name: "Epic Lootbox", price: 150, drops: ["Rare", "Epic"] },
-    { id: "box_legendary", name: "Legendary Lootbox", price: 300, drops: ["Epic", "Legendary", "Mythic"] }
-];
+// ==========================================
+//  WYŚWIETLANIE SKLEPU
+// ==========================================
 
-function initShop() {
-    const container = document.getElementById("shop-items");
-    container.innerHTML = "";
+function renderShop() {
+    const shop = document.getElementById("shop-items");
+    shop.innerHTML = "";
 
-    const user = getCurrentUser();
-    if (!user) return;
+    const username = localStorage.getItem("currentUser");
+    const user = loadUser(username);
 
     SHOP_ITEMS.forEach(item => {
-        const div = document.createElement("div");
-        div.className = `shop-item glass rarity-${item.rarity.toLowerCase()}`;
+        const owned =
+            user.inventory.frames.includes(item.id) ||
+            user.inventory.backgrounds.includes(item.id) ||
+            user.inventory.buttons.includes(item.id);
 
-        const owned = user.inventory.includes(item.id);
+        const div = document.createElement("div");
+        div.className = "shop-item";
 
         div.innerHTML = `
             <h3>${item.name}</h3>
-            <p>Cena: ${item.price} XP Coins</p>
-            <p>Rzadkość: ${item.rarity}</p>
+            <p>Cena: 💰 ${item.price}</p>
+            ${owned ? "<span style='color:#00ff88'>✔ Posiadane</span>" :
+            `<button onclick="buyItem('${item.id}')">Kup</button>`}
         `;
 
-        const btn = document.createElement("button");
-        if (owned) {
-            btn.textContent = "Użyj";
-            btn.onclick = () => equipItem(item);
-        } else {
-            btn.textContent = "Kup";
-            btn.onclick = () => buyItem(item);
-        }
-
-        div.appendChild(btn);
-        container.appendChild(div);
+        shop.appendChild(div);
     });
-
-    renderLootboxes();
 }
 
-function buyItem(item) {
-    const user = getCurrentUser();
-    if (!user) return;
+// ==========================================
+//  KUPNO PRZEDMIOTU
+// ==========================================
 
+function buyItem(id) {
+    const username = localStorage.getItem("currentUser");
+    const user = loadUser(username);
+
+    const item = SHOP_ITEMS.find(i => i.id === id);
+    if (!item) return;
+
+    // Sprawdzenie czy już kupione
+    if (
+        user.inventory.frames.includes(id) ||
+        user.inventory.backgrounds.includes(id) ||
+        user.inventory.buttons.includes(id)
+    ) {
+        alert("Masz już ten przedmiot!");
+        return;
+    }
+
+    // Sprawdzenie coins
     if (user.coins < item.price) {
-        alert("Nie masz wystarczająco XP Coins!");
+        alert("❌ Za mało XP Coins!");
         return;
     }
 
+    // Pobranie coins
     user.coins -= item.price;
-    if (!user.inventory.includes(item.id)) {
-        user.inventory.push(item.id);
-    }
 
-    saveUpdatedUser(user);
-    initShop();
+    // Dodanie do ekwipunku
+    if (item.type === "frame") user.inventory.frames.push(id);
+    if (item.type === "background") user.inventory.backgrounds.push(id);
+    if (item.type === "buttons") user.inventory.buttons.push(id);
+
+    saveUser(user);
     loadProfile();
+    renderShop();
+    renderInventory();
 }
 
-function equipItem(item) {
-    const user = getCurrentUser();
-    if (!user) return;
+// ==========================================
+//  AUTO-START
+// ==========================================
 
-    user.equipped[item.type] = item.value;
-    saveUpdatedUser(user);
-    applyCosmetics();
-}
-
-function applyCosmetics() {
-    const user = getCurrentUser();
-    if (!user) return;
-
-    if (user.equipped.background) {
-        document.body.style.background = user.equipped.background;
-    }
-
-    if (user.equipped.buttonColor) {
-        document.querySelectorAll("button").forEach(btn => {
-            btn.style.background = user.equipped.buttonColor;
-        });
-    }
-
-    const avatar = document.getElementById("profile-avatar");
-    avatar.className = "avatar";
-
-    if (user.equipped.avatarFrame) {
-        avatar.classList.add("avatar-frame-" + user.equipped.avatarFrame);
-    }
-}
-
-function renderLootboxes() {
-    const container = document.getElementById("lootbox-list");
-    container.innerHTML = "";
-
-    LOOTBOXES.forEach(box => {
-        const div = document.createElement("div");
-        div.className = "shop-item glass";
-
-        div.innerHTML = `
-            <h3>${box.name}</h3>
-            <p>Cena: ${box.price} XP Coins</p>
-            <p>Drop: ${box.drops.join(", ")}</p>
-        `;
-
-        const btn = document.createElement("button");
-        btn.textContent = "Otwórz";
-        btn.onclick = () => openLootbox(box);
-
-        div.appendChild(btn);
-        container.appendChild(div);
-    });
-}
-
-function openLootbox(box) {
-    const user = getCurrentUser();
-    if (!user) return;
-
-    if (user.coins < box.price) {
-        alert("Nie masz wystarczająco XP Coins!");
-        return;
-    }
-
-    user.coins -= box.price;
-
-    const rarity = box.drops[Math.floor(Math.random() * box.drops.length)];
-    const pool = SHOP_ITEMS.filter(i => i.rarity === rarity);
-    const item = pool[Math.floor(Math.random() * pool.length)];
-
-    if (!user.inventory.includes(item.id)) {
-        user.inventory.push(item.id);
-    }
-
-    saveUpdatedUser(user);
-    loadProfile();
-    initShop();
-
-    showLootboxAnimation(item);
-}
-
-function showLootboxAnimation(item) {
-    const overlay = document.getElementById("lootbox-opening");
-    const name = document.getElementById("lootbox-result-name");
-
-    name.textContent = `${item.name} (${item.rarity})`;
-    overlay.classList.remove("hidden");
-
-    document.getElementById("lootbox-close").onclick = () => {
-        overlay.classList.add("hidden");
-    };
-}
+setTimeout(() => {
+    renderShop();
+}, 300);
