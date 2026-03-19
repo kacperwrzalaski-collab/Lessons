@@ -3,53 +3,164 @@
 ============================================================ */
 
 /* ============================================================
-   TEMATY SŁÓWEK
+   STRUKTURA TEMATÓW
 ============================================================ */
 
 const topics = {
-    podstawowe: [
-        { word: "cat", pl: "kot" },
-        { word: "dog", pl: "pies" },
-        { word: "house", pl: "dom" },
-        { word: "car", pl: "samochód" }
-    ],
+    angielski: {
+        temat1: [
+            { word: "accent", pl: "akcent" },
+            { word: "assignment", pl: "zadanie, zadana praca" },
+            { word: "assistance", pl: "pomoc, wsparcie" },
+            { word: "attend (school)", pl: "chodzić do szkoły" },
+            { word: "concentrate", pl: "skupić się" },
+            { word: "distance learning", pl: "nauczanie zdalne" },
+            { word: "do a project", pl: "wykonać projekt" },
+            { word: "do research", pl: "wyszukać informacje" },
+            { word: "express yourself", pl: "wyrazić się" },
+            { word: "fall behind with schoolwork", pl: "mieć zaległości w nauce" },
+            { word: "gain knowledge", pl: "zdobywać wiedzę" },
+            { word: "get better", pl: "poprawiać się" },
+            { word: "have a conversation", pl: "prowadzić rozmowę" },
+            { word: "high expectations", pl: "wysokie oczekiwania" },
+            { word: "improve your grades", pl: "poprawić oceny" },
+            { word: "learn a new skill", pl: "nabyć nową umiejętność" },
+            { word: "leave school", pl: "skończyć szkołę" },
+            { word: "motivate", pl: "motywować" },
+            { word: "native speaker", pl: "rodzimy użytkownik języka" },
+            { word: "practise", pl: "ćwiczyć" },
+            { word: "school certificate", pl: "świadectwo szkolne" },
+            { word: "strict", pl: "surowy" },
+            { word: "supervise", pl: "nadzorować" },
+            { word: "video conferencing app", pl: "oprogramowanie do wideokonferencji" },
 
-    jedzenie: [
-        { word: "apple", pl: "jabłko" },
-        { word: "bread", pl: "chleb" },
-        { word: "milk", pl: "mleko" }
-    ]
+            // SPEAKING
+            { word: "after-school activities", pl: "zajęcia pozaszkolne" },
+            { word: "charity work", pl: "wolontariat" },
+            { word: "cookery course", pl: "kurs gotowania" },
+            { word: "drawing classes", pl: "lekcje rysunku" },
+            { word: "fill up", pl: "zapełniać się" },
+            { word: "first-aid course", pl: "kurs pierwszej pomocy" },
+            { word: "graphic design classes", pl: "zajęcia z projektowania graficznego" },
+            { word: "music production course", pl: "kurs na producenta muzycznego" },
+            { word: "register", pl: "rejestrować się" },
+            { word: "registration form", pl: "formularz rejestracyjny" },
+            { word: "robotics course", pl: "kurs robotyki" },
+            { word: "sing in a choir", pl: "śpiewać w chórze" },
+
+            // READING
+            { word: "activity course", pl: "kurs/zajęcia w jakiejś dziedzinie aktywności" },
+            { word: "beat", pl: "pokonać" },
+            { word: "disappointed", pl: "rozczarowany" },
+            { word: "do a task", pl: "wykonać zadanie" },
+            { word: "experiment with", pl: "eksperymentować z" },
+            { word: "give a presentation", pl: "przedstawiać prezentację" },
+            { word: "join a camp", pl: "pojechać na obóz" },
+            { word: "learn to drive", pl: "nauczyć się prowadzić" },
+            { word: "master", pl: "opanować" },
+            { word: "opportunity", pl: "okazja" },
+            { word: "participant", pl: "uczestnik" },
+            { word: "pass your theory test/driving test", pl: "zdać egzamin teoretyczny / egzamin na prawo jazdy" },
+            { word: "practical", pl: "praktyczny" },
+            { word: "primary/secondary school", pl: "szkoła podstawowa / średnia" },
+            { word: "sign up for a course", pl: "zapisać się na kurs" },
+            { word: "survive", pl: "przetrwać" },
+            { word: "take up classes/a course", pl: "zapisać się na zajęcia/kurs" },
+            { word: "turn (17)", pl: "ukończyć (17) lat" },
+
+            // VOCABULARY 2
+            { word: "academic results", pl: "wyniki w nauce" },
+            { word: "continue education", pl: "kontynuować naukę" },
+            { word: "copy homework", pl: "spisać od kogoś pracę domową" },
+
+            // LISTENING
+            { word: "do a conversation exchange", pl: "rozmawiać z kimś na zmianę w swoim i jego języku" },
+            { word: "draw mind maps", pl: "rysować mapy myśli" },
+            { word: "have flexible study hours", pl: "elastyczne godziny nauki" },
+            { word: "follow instructions", pl: "wykonywać polecenia" },
+            { word: "learn sth by heart", pl: "nauczyć się czegoś na pamięć" },
+            { word: "listen to podcasts", pl: "słuchać podcastów" },
+            { word: "listen to song lyrics", pl: "słuchać słów piosenki" },
+            { word: "memorise", pl: "uczyć się na pamięć" },
+            { word: "practise speaking", pl: "ćwiczyć mówienie" },
+            { word: "set up a study group", pl: "stworzyć grupę uczącą się wspólnie" },
+            { word: "struggle", pl: "borykać się" },
+            { word: "take notes", pl: "robić notatki" },
+            { word: "use educational apps", pl: "używać aplikacji edukacyjnych" },
+            { word: "use sticky notes", pl: "używać karteczek samoprzylepnych" },
+            { word: "watch video tutorials", pl: "oglądać filmiki instruktażowe" },
+
+            // GRAMMAR 2
+            { word: "last", pl: "trwać" },
+            { word: "level", pl: "poziom" },
+            { word: "speed-reading course", pl: "kurs szybkiego czytania" },
+
+            // USE OF ENGLISH
+            { word: "race", pl: "wyścig" },
+            { word: "regret", pl: "żałować" },
+            { word: "run a marathon", pl: "przebiec maraton" },
+            { word: "half-marathon", pl: "półmaraton" },
+            { word: "triplets", pl: "trojaczki" },
+
+            // WRITING
+            { word: "enquire about sth", pl: "zapytać o coś" },
+            { word: "make a payment", pl: "dokonać wpłaty" },
+            { word: "obtain", pl: "uzyskać" },
+            { word: "perform a task", pl: "wykonać zadanie" },
+            { word: "solve a problem", pl: "rozwiązać problem" },
+            { word: "survival course", pl: "kurs przetrwania" }
+        ]
+    },
+
+    niemiecki: {
+        temat1: []
+    }
 };
 
 /* ============================================================
    POMOCNICZE
 ============================================================ */
 
-function getTopicWords(selectId) {
-    const topic = document.getElementById(selectId).value;
-    return topics[topic] || [];
+function getTopicWords() {
+    const lang = document.getElementById("learn-language-select").value;
+    const topic = document.getElementById("learn-topic-select").value;
+    return topics[lang][topic] || [];
 }
 
-function fillTopicSelect(id) {
-    const select = document.getElementById(id);
+function fillLanguageSelect() {
+    const select = document.getElementById("learn-language-select");
     select.innerHTML = "";
 
-    Object.keys(topics).forEach(t => {
+    Object.keys(topics).forEach(lang => {
+        const opt = document.createElement("option");
+        opt.value = lang;
+        opt.textContent = lang.toUpperCase();
+        select.appendChild(opt);
+    });
+}
+
+function fillTopicSelect() {
+    const lang = document.getElementById("learn-language-select").value;
+    const select = document.getElementById("learn-topic-select");
+
+    select.innerHTML = "";
+
+    Object.keys(topics[lang]).forEach(t => {
         const opt = document.createElement("option");
         opt.value = t;
-        opt.textContent = t;
+        opt.textContent = t.toUpperCase();
         select.appendChild(opt);
     });
 }
 
 /* ============================================================
-   NAUKA SŁÓWEK
+   NAUKA
 ============================================================ */
 
 let learnIndex = 0;
 
 function loadLearnWord() {
-    const words = getTopicWords("learn-topic-select");
+    const words = getTopicWords();
     if (words.length === 0) return;
 
     const w = words[learnIndex];
@@ -58,7 +169,7 @@ function loadLearnWord() {
 }
 
 document.getElementById("learn-next").addEventListener("click", () => {
-    const words = getTopicWords("learn-topic-select");
+    const words = getTopicWords();
     if (words.length === 0) return;
 
     learnIndex = (learnIndex + 1) % words.length;
@@ -74,7 +185,7 @@ document.getElementById("learn-next").addEventListener("click", () => {
 let flashIndex = 0;
 
 function loadFlashcard() {
-    const words = getTopicWords("flashcards-topic-select");
+    const words = getTopicWords();
     if (words.length === 0) return;
 
     const w = words[flashIndex];
@@ -91,7 +202,7 @@ document.getElementById("flashcard-show").addEventListener("click", () => {
 });
 
 document.getElementById("flashcard-next").addEventListener("click", () => {
-    const words = getTopicWords("flashcards-topic-select");
+    const words = getTopicWords();
     if (words.length === 0) return;
 
     flashIndex = (flashIndex + 1) % words.length;
@@ -103,7 +214,7 @@ document.getElementById("flashcard-next").addEventListener("click", () => {
 ============================================================ */
 
 function loadQuiz() {
-    const words = getTopicWords("quiz-topic-select");
+    const words = getTopicWords();
     if (words.length === 0) return;
 
     const q = words[Math.floor(Math.random() * words.length)];
@@ -154,7 +265,7 @@ function shuffle(arr) {
 let writeWord = null;
 
 function loadWriteWord() {
-    const words = getTopicWords("write-topic-select");
+    const words = getTopicWords();
     if (words.length === 0) return;
 
     writeWord = words[Math.floor(Math.random() * words.length)];
@@ -274,10 +385,8 @@ function fillInventory(id, arr) {
 ============================================================ */
 
 function initLearning() {
-    fillTopicSelect("learn-topic-select");
-    fillTopicSelect("flashcards-topic-select");
-    fillTopicSelect("quiz-topic-select");
-    fillTopicSelect("write-topic-select");
+    fillLanguageSelect();
+    fillTopicSelect();
 
     loadLearnWord();
     loadFlashcard();
