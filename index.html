@@ -127,7 +127,19 @@
             <!-- USTAWIENIA -->
             <section id="screen-settings" class="screen hidden">
                 <h2>Ustawienia</h2>
-                <button id="admin-open">Panel administratora</button>
+
+                <div class="settings-section">
+                    <h3>Wygląd</h3>
+                    <label>
+                        <input type="checkbox" id="settings-mobile-toggle">
+                        Tryb telefonu (kompaktowy układ)
+                    </label>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Administrator</h3>
+                    <button id="admin-open">Panel administratora</button>
+                </div>
             </section>
 
         </main>
@@ -191,6 +203,7 @@
     <script src="js/shop.js"></script>
     <script src="js/inventory.js"></script>
     <script src="js/profile.js"></script>
+    <script src="js/settings.js"></script>
     <script src="js/admin.js"></script>
 
 </body>
