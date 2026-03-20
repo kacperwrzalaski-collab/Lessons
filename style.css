@@ -1,12 +1,9 @@
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Segoe UI", sans-serif;
-}
-
-.hidden {
-    display: none !important;
 }
 
 :root {
@@ -19,10 +16,13 @@
 body {
     background: var(--app-bg);
     color: var(--text-color);
-    overflow-x: hidden;
 }
 
-/* GLASS EFFECT */
+.hidden {
+    display: none !important;
+}
+
+/* GLASS */
 .glass {
     background: rgba(255,255,255,0.06);
     backdrop-filter: blur(10px);
@@ -30,9 +30,9 @@ body {
     border-radius: 12px;
 }
 
-/* BUTTONS */
+/* BUTTONY */
 button {
-    padding: 10px 14px;
+    padding: 8px 12px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
@@ -46,10 +46,6 @@ button:hover {
     background: var(--button-hover);
 }
 
-button:active {
-    transform: translateY(1px);
-}
-
 button.danger {
     background: #e53935;
 }
@@ -58,7 +54,7 @@ button.danger:hover {
     background: #c62828;
 }
 
-/* LOGIN SCREEN */
+/* LOGOWANIE */
 #screen-auth {
     height: 100vh;
     display: flex;
@@ -68,13 +64,13 @@ button.danger:hover {
 
 .auth-box {
     width: 320px;
-    padding: 24px;
+    padding: 20px;
     text-align: center;
 }
 
 .auth-box input {
     width: 100%;
-    padding: 10px;
+    padding: 8px;
     margin: 6px 0;
     border-radius: 8px;
     border: none;
@@ -88,29 +84,29 @@ button.danger:hover {
 }
 
 #auth-feedback {
-    margin-top: 10px;
+    margin-top: 8px;
     min-height: 18px;
     font-size: 14px;
 }
 
-/* APP LAYOUT */
+/* LAYOUT APPKI */
 #app-container {
     display: flex;
     height: 100vh;
 }
 
-/* SIDEBAR */
+/* LEWY PASEK */
 .sidebar {
     width: 260px;
-    padding: 18px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
 }
 
 .profile-box {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
 }
 
@@ -145,41 +141,21 @@ button.danger:hover {
     transition: width 0.25s;
 }
 
-/* NAVIGATION TILES */
 .nav-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 12px;
-}
-
-.nav-tile {
-    width: 80px;
-    height: 80px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 12px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     gap: 6px;
-    cursor: pointer;
-    transition: 0.15s;
-    text-align: center;
-    font-size: 22px;
 }
 
-.nav-tile span {
-    font-size: 13px;
+.nav-btn {
+    width: 100%;
+    text-align: left;
 }
 
-.nav-tile:hover {
-    background: rgba(255,255,255,0.15);
-}
-
-/* MAIN CONTENT */
+/* PRAWA STRONA */
 .main-content {
     flex: 1;
-    padding: 20px;
+    padding: 16px;
     overflow-y: auto;
 }
 
@@ -192,34 +168,53 @@ button.danger:hover {
 }
 
 .screen h2 {
-    margin-bottom: 12px;
-}
-
-/* FLASHCARDS / QUIZ / WRITE */
-#flashcard-word,
-#quiz-question,
-#write-question {
-    font-size: 22px;
-    margin-top: 10px;
-}
-
-#flashcard-answer,
-#quiz-feedback,
-#write-feedback {
-    margin-top: 10px;
-    min-height: 18px;
-}
-
-/* SHOP / INVENTORY */
-.shop-item,
-.inventory-item {
-    padding: 12px;
     margin-bottom: 10px;
+}
+
+/* TABELA NAUKI */
+#learn-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#learn-table th,
+#learn-table td {
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding: 6px 8px;
+    text-align: left;
+}
+
+/* FISZKI / QUIZ / PISANIE */
+.big-text {
+    font-size: 22px;
+    margin: 10px 0;
+}
+
+.btn-row {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* SKLEP / EKWIPUNEK / QUESTY */
+.shop-item,
+.inventory-item,
+.quest-item {
+    padding: 10px;
+    margin-bottom: 8px;
     border-radius: 10px;
     background: rgba(255,255,255,0.06);
 }
 
-/* RESPONSIVE */
+/* RESPONSYWNOŚĆ */
 @media (max-width: 900px) {
     #app-container {
         flex-direction: column;
@@ -227,25 +222,11 @@ button.danger:hover {
 
     .sidebar {
         width: 100%;
-        align-items: center;
-    }
-
-    .nav-buttons {
-        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-        width: 100%;
-    }
-
-    .nav-tile {
-        width: 70px;
-        height: 70px;
-        font-size: 20px;
-    }
-
-    .nav-tile span {
-        font-size: 12px;
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .main-content {
-        padding: 12px;
+        padding: 10px;
     }
 }
