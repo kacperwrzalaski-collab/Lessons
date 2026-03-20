@@ -1,8 +1,4 @@
-/* ============================================================
-   APP.JS — CAŁA LOGIKA W JEDNYM PLIKU
-============================================================ */
-
-/* ===================== DANE GRACZA ========================= */
+/* ================= DANE GRACZA ================= */
 
 let player = {
     username: "",
@@ -10,12 +6,10 @@ let player = {
     level: 1,
     xp: 0,
     coins: 0,
-
     avatar: "",
     frame: "",
     background: "",
     buttonColor: "",
-
     inventory: {
         badges: [],
         frames: [],
@@ -35,14 +29,11 @@ function loadPlayer() {
     return true;
 }
 
-/* ================= LOGOWANIE / REJESTRACJA ================= */
+/* ================= LOGOWANIE ================= */
 
 function register(username, password) {
     if (!username || !password) return "Wpisz dane";
-
-    if (localStorage.getItem("playerData")) {
-        return "Konto już istnieje";
-    }
+    if (localStorage.getItem("playerData")) return "Konto już istnieje";
 
     player.username = username;
     player.password = password;
@@ -52,40 +43,34 @@ function register(username, password) {
 
 function login(username, password) {
     if (!loadPlayer()) return "Brak konta";
-
     if (username !== player.username || password !== player.password) {
         return "Złe dane logowania";
     }
-
     return "OK";
 }
 
-/* ===================== XP / LEVEL ========================== */
+/* ================= XP / LEVEL ================= */
 
 function addXP(amount) {
     player.xp += amount;
-
     const needed = player.level * 100;
     if (player.xp >= needed) {
         player.xp -= needed;
         player.level++;
         player.coins += 50;
     }
-
     savePlayer();
 }
 
-/* ===================== KOSMETYKI =========================== */
+/* ================= KOSMETYKI ================= */
 
 function applyCosmetics() {
     if (player.background) {
         document.body.style.background = player.background;
     }
-
     if (player.buttonColor) {
         document.documentElement.style.setProperty("--button-color", player.buttonColor);
     }
-
     const avatarEl = document.getElementById("profile-avatar");
     if (player.avatar) {
         avatarEl.style.backgroundImage = `url(${player.avatar})`;
@@ -95,7 +80,7 @@ function applyCosmetics() {
     }
 }
 
-/* ===================== TEMATY SŁÓWEK ======================= */
+/* ================= SŁÓWKA ================= */
 
 const topics = {
     angielski: {
@@ -124,7 +109,6 @@ const topics = {
             { word: "strict", pl: "surowy" },
             { word: "supervise", pl: "nadzorować" },
             { word: "video conferencing app", pl: "oprogramowanie do wideokonferencji" },
-
             { word: "after-school activities", pl: "zajęcia pozaszkolne" },
             { word: "charity work", pl: "wolontariat" },
             { word: "cookery course", pl: "kurs gotowania" },
@@ -137,7 +121,6 @@ const topics = {
             { word: "registration form", pl: "formularz rejestracyjny" },
             { word: "robotics course", pl: "kurs robotyki" },
             { word: "sing in a choir", pl: "śpiewać w chórze" },
-
             { word: "activity course", pl: "kurs aktywności" },
             { word: "beat", pl: "pokonać" },
             { word: "disappointed", pl: "rozczarowany" },
@@ -156,11 +139,9 @@ const topics = {
             { word: "survive", pl: "przetrwać" },
             { word: "take up classes/a course", pl: "zapisać się na zajęcia" },
             { word: "turn (17)", pl: "ukończyć 17 lat" },
-
             { word: "academic results", pl: "wyniki w nauce" },
             { word: "continue education", pl: "kontynuować naukę" },
             { word: "copy homework", pl: "spisać pracę domową" },
-
             { word: "do a conversation exchange", pl: "rozmawiać na zmianę" },
             { word: "draw mind maps", pl: "rysować mapy myśli" },
             { word: "have flexible study hours", pl: "elastyczne godziny nauki" },
@@ -176,17 +157,14 @@ const topics = {
             { word: "use educational apps", pl: "używać aplikacji edukacyjnych" },
             { word: "use sticky notes", pl: "używać karteczek" },
             { word: "watch video tutorials", pl: "oglądać tutoriale" },
-
             { word: "last", pl: "trwać" },
             { word: "level", pl: "poziom" },
             { word: "speed-reading course", pl: "kurs szybkiego czytania" },
-
             { word: "race", pl: "wyścig" },
             { word: "regret", pl: "żałować" },
             { word: "run a marathon", pl: "przebiec maraton" },
             { word: "half-marathon", pl: "półmaraton" },
             { word: "triplets", pl: "trojaczki" },
-
             { word: "enquire about sth", pl: "zapytać o coś" },
             { word: "make a payment", pl: "dokonać wpłaty" },
             { word: "obtain", pl: "uzyskać" },
@@ -200,7 +178,14 @@ const topics = {
     }
 };
 
-/* ===================== SKLEP / QUESTY ====================== */
+function getTopicWords() {
+    const lang = document.getElementById("learn-language-select").value;
+    const topic = document.getElementById("learn-topic-select").value;
+    if (!topics[lang] || !topics[lang][topic]) return [];
+    return topics[lang][topic];
+}
+
+/* ================= SKLEP / QUESTY ================= */
 
 const shopItems = [
     { id: "frame-red", type: "frames", name: "Czerwona ramka", price: 50, value: "red" },
@@ -213,20 +198,7 @@ const quests = [
     { id: 2, text: "Zrób 3 quizy", key: "quiz", progress: 0, goal: 3, rewardXP: 40, done: false }
 ];
 
-/* ===================== POMOCNICZE ========================== */
-
-function getTopicWords() {
-    const lang = document.getElementById("learn-language-select").value;
-    const topic = document.getElementById("learn-topic-select").value;
-    if (!topics[lang] || !topics[lang][topic]) return [];
-    return topics[lang][topic];
-}
-
-function shuffle(arr) {
-    return arr.sort(() => Math.random() - 0.5);
-}
-
-/* ===================== NAUKA — TABELA ====================== */
+/* ================= NAUKA — TABELA ================= */
 
 function fillLanguageSelect() {
     const select = document.getElementById("learn-language-select");
@@ -268,21 +240,23 @@ function fillLearnTable() {
     });
 }
 
-/* ===================== FISZKI ============================== */
+/* ================= FISZKI ================= */
 
 let flashIndex = 0;
 
 function loadFlashcard() {
     const words = getTopicWords();
+    const wEl = document.getElementById("flashcard-word");
+    const aEl = document.getElementById("flashcard-answer");
     if (words.length === 0) {
-        document.getElementById("flashcard-word").textContent = "Brak słówek";
-        document.getElementById("flashcard-answer").textContent = "";
+        wEl.textContent = "Brak słówek";
+        aEl.textContent = "";
         return;
     }
     const w = words[flashIndex];
-    document.getElementById("flashcard-word").textContent = w.word;
-    document.getElementById("flashcard-answer").textContent = w.pl;
-    document.getElementById("flashcard-answer").classList.add("hidden");
+    wEl.textContent = w.word;
+    aEl.textContent = w.pl;
+    aEl.classList.add("hidden");
 }
 
 function nextFlashcard() {
@@ -292,7 +266,11 @@ function nextFlashcard() {
     loadFlashcard();
 }
 
-/* ===================== QUIZ ================================ */
+/* ================= QUIZ ================= */
+
+function shuffle(arr) {
+    return arr.sort(() => Math.random() - 0.5);
+}
 
 function loadQuiz() {
     const words = getTopicWords();
@@ -334,7 +312,7 @@ function loadQuiz() {
     });
 }
 
-/* ===================== PISANIE ============================= */
+/* ================= PISANIE ================= */
 
 let writeWord = null;
 
@@ -369,7 +347,7 @@ function checkWrite() {
     }
 }
 
-/* ===================== QUESTY ============================== */
+/* ================= QUESTY ================= */
 
 function questsProgress(type) {
     quests.forEach(q => {
@@ -398,7 +376,7 @@ function renderQuests() {
     });
 }
 
-/* ===================== SKLEP / EKWIPUNEK =================== */
+/* ================= SKLEP / EKWIPUNEK ================= */
 
 function renderShop() {
     const box = document.getElementById("shop-items");
@@ -447,7 +425,7 @@ function renderInventory() {
     renderInventoryList("inventory-buttons", player.inventory.buttons);
 }
 
-/* ===================== PROFIL / AVATAR ===================== */
+/* ================= PROFIL / USTAWIENIA ================= */
 
 function updateUI() {
     document.getElementById("profile-name").textContent = player.username || "Brak";
@@ -490,76 +468,22 @@ function uploadAvatar(file, cb) {
     reader.readAsDataURL(file);
 }
 
-/* ===================== ADMIN =============================== */
-
-const ADMIN_PASSWORD = "admin123";
-
-function adminLogin(pass) {
-    return pass === ADMIN_PASSWORD;
-}
-
-function adminCommand(cmd) {
-    const parts = cmd.trim().split(" ");
-    if (!parts[0]) return "Brak komendy";
-
-    switch (parts[0]) {
-        case "xp":
-            addXP(parseInt(parts[1]) || 0);
-            return "Dodano XP";
-        case "coins":
-            player.coins += parseInt(parts[1]) || 0;
-            savePlayer();
-            updateUI();
-            return "Dodano coins";
-        case "reset":
-            localStorage.removeItem("playerData");
-            location.reload();
-            return "Zresetowano konto";
-        default:
-            return "Nieznana komenda";
-    }
-}
-
-/* ===================== UI — EKRANY / POPUPY ================ */
+/* ================= NAWIGACJA ================= */
 
 const screens = document.querySelectorAll(".screen");
-const profileWindow = document.getElementById("profile-window");
-const adminLoginWindow = document.getElementById("admin-login");
-const adminPanelWindow = document.getElementById("admin-panel");
 
 function showScreen(id) {
     screens.forEach(s => s.classList.add("hidden"));
     document.getElementById(id).classList.remove("hidden");
 }
 
-document.querySelectorAll(".nav-tile").forEach(btn => {
+document.querySelectorAll(".nav-btn").forEach(btn => {
     btn.addEventListener("click", () => {
         showScreen(btn.dataset.screen);
     });
 });
 
-/* POPUPY — tu bez overlay, tylko hidden */
-
-function openPopup(win) {
-    win.classList.remove("hidden");
-}
-
-function closePopup(win) {
-    win.classList.add("hidden");
-}
-
-/* ===================== EVENTY — PROFIL ===================== */
-
-document.getElementById("profile-avatar").addEventListener("click", () => {
-    document.getElementById("profile-feedback").textContent = "";
-    document.getElementById("profile-avatar-preview").style.backgroundImage =
-        player.avatar ? `url(${player.avatar})` : "";
-    openPopup(profileWindow);
-});
-
-document.getElementById("profile-close").addEventListener("click", () => {
-    closePopup(profileWindow);
-});
+/* ================= EVENTY — PROFIL ================= */
 
 document.getElementById("profile-save").addEventListener("click", () => {
     const newName = document.getElementById("profile-new-name").value.trim();
@@ -580,11 +504,86 @@ document.getElementById("profile-avatar-upload").addEventListener("change", e =>
     });
 });
 
-/* ===================== EVENTY — ADMIN ====================== */
+/* ================= EVENTY — LOGOWANIE ================= */
 
-document.getElementById("profile-name").addEventListener("dblclick", () => {
-    openPopup(adminLoginWindow);
+document.getElementById("auth-login").addEventListener("click", () => {
+    const u = document.getElementById("auth-username").value;
+    const p = document.getElementById("auth-password").value;
+    const result = login(u, p);
+
+    if (result === "OK") {
+        document.getElementById("screen-auth").classList.add("hidden");
+        document.getElementById("app-container").classList.remove("hidden");
+        updateUI();
+        showScreen("screen-learn");
+    } else {
+        document.getElementById("auth-feedback").textContent = result;
+    }
 });
 
-document.getElementById("admin-login-close").addEventListener("click", () => {
-    closePopup(adminLogin
+document.getElementById("auth-register").addEventListener("click", () => {
+    const u = document.getElementById("auth-username").value;
+    const p = document.getElementById("auth-password").value;
+    const result = register(u, p);
+    document.getElementById("auth-feedback").textContent = result;
+});
+
+/* ================= EVENTY — WYLOGOWANIE ================= */
+
+document.getElementById("logout-btn").addEventListener("click", () => {
+    location.reload();
+});
+
+/* ================= EVENTY — NAUKA / FISZKI / QUIZ / PISANIE ================= */
+
+document.getElementById("learn-language-select").addEventListener("change", () => {
+    fillTopicSelect();
+    flashIndex = 0;
+    fillLearnTable();
+    loadFlashcard();
+    loadQuiz();
+    loadWriteWord();
+});
+
+document.getElementById("learn-topic-select").addEventListener("change", () => {
+    flashIndex = 0;
+    fillLearnTable();
+    loadFlashcard();
+    loadQuiz();
+    loadWriteWord();
+});
+
+document.getElementById("flashcard-show").addEventListener("click", () => {
+    document.getElementById("flashcard-answer").classList.remove("hidden");
+    addXP(3);
+    questsProgress("flash");
+    updateUI();
+});
+
+document.getElementById("flashcard-next").addEventListener("click", () => {
+    nextFlashcard();
+});
+
+document.getElementById("write-check").addEventListener("click", () => {
+    checkWrite();
+});
+
+/* ================= START ================= */
+
+function init() {
+    fillLanguageSelect();
+    fillTopicSelect();
+    fillLearnTable();
+    loadFlashcard();
+    loadQuiz();
+    loadWriteWord();
+    renderQuests();
+    renderShop();
+    renderInventory();
+
+    if (loadPlayer()) {
+        updateUI();
+    }
+}
+
+window.addEventListener("load", init);
