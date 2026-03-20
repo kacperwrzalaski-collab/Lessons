@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Language RPG</title>
+    <title>Language RPG – Prestige Edition</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -29,10 +29,17 @@
         <div class="profile-box">
             <div id="profile-avatar" class="avatar"></div>
             <div class="profile-info">
-                <div id="profile-name"></div>
+                <div class="profile-row">
+                    <span id="profile-name">Gracz</span>
+                    <span id="profile-badge" class="badge-slot"></span>
+                </div>
+                <div id="profile-title" class="profile-title"></div>
                 <div id="profile-level"></div>
                 <div id="profile-coins"></div>
-                <div id="profile-xp-bar"><div id="profile-xp-fill"></div></div>
+                <div id="profile-prestige"></div>
+                <div id="profile-xp-bar">
+                    <div id="profile-xp-fill"></div>
+                </div>
             </div>
         </div>
 
@@ -44,7 +51,7 @@
             <button class="nav-btn" data-screen="screen-quests">🎯 Questy</button>
             <button class="nav-btn" data-screen="screen-shop">🛒 Sklep</button>
             <button class="nav-btn" data-screen="screen-inventory">🎒 Ekwipunek</button>
-            <button class="nav-btn" data-screen="screen-settings">⚙️ Ustawienia</button>
+            <button class="nav-btn" data-screen="screen-settings">⚙️ Profil / Ustawienia</button>
         </div>
 
         <button id="logout-btn" class="danger">Wyloguj</button>
@@ -53,15 +60,20 @@
     <!-- PRAWA STRONA -->
     <main class="main-content glass">
 
-        <!-- NAUKA — TABELA -->
+        <!-- NAUKA -->
         <section id="screen-learn" class="screen">
             <h2>Nauka — wszystkie słówka</h2>
 
-            <label>Język:</label>
-            <select id="learn-language-select"></select>
-
-            <label>Temat:</label>
-            <select id="learn-topic-select"></select>
+            <div class="filters-row">
+                <div>
+                    <label>Język:</label>
+                    <select id="learn-language-select"></select>
+                </div>
+                <div>
+                    <label>Temat:</label>
+                    <select id="learn-topic-select"></select>
+                </div>
+            </div>
 
             <table id="learn-table">
                 <thead>
@@ -111,48 +123,76 @@
         <!-- SKLEP -->
         <section id="screen-shop" class="screen hidden">
             <h2>Sklep</h2>
-            <div id="shop-items"></div>
+
+            <h3>Skrzynki</h3>
+            <div id="shop-crates" class="shop-grid"></div>
+
+            <h3>Ramki</h3>
+            <div id="shop-frames" class="shop-grid"></div>
+
+            <h3>Tła</h3>
+            <div id="shop-backgrounds" class="shop-grid"></div>
         </section>
 
         <!-- EKWIPUNEK -->
         <section id="screen-inventory" class="screen hidden">
             <h2>Ekwipunek</h2>
+
             <h3>Odznaki</h3>
-            <div id="inventory-badges"></div>
+            <div id="inventory-badges" class="inventory-grid"></div>
+
+            <h3>Tytuły</h3>
+            <div id="inventory-titles" class="inventory-grid"></div>
+
             <h3>Ramki</h3>
-            <div id="inventory-frames"></div>
+            <div id="inventory-frames" class="inventory-grid"></div>
+
             <h3>Tła</h3>
-            <div id="inventory-backgrounds"></div>
-            <h3>Przyciski</h3>
-            <div id="inventory-buttons"></div>
+            <div id="inventory-backgrounds" class="inventory-grid"></div>
         </section>
 
-        <!-- USTAWIENIA / PROFIL -->
+        <!-- PROFIL / USTAWIENIA -->
         <section id="screen-settings" class="screen hidden">
             <h2>Profil / Ustawienia</h2>
-            <input id="profile-new-name" type="text" placeholder="Nowy nick">
-            <label>Ramka:</label>
-            <select id="profile-frame-select">
-                <option value="">Brak</option>
-                <option value="red">Czerwona</option>
-                <option value="gold">Złota</option>
-            </select>
-            <label>Tło:</label>
-            <select id="profile-bg-select">
-                <option value="">Domyślne</option>
-                <option value="#12121a">Ciemne</option>
-                <option value="#001f3f">Niebieskie</option>
-            </select>
-            <label>Przyciski:</label>
-            <select id="profile-btn-select">
-                <option value="">Domyślne</option>
-                <option value="#4a8cff">Niebieskie</option>
-                <option value="#00cc66">Zielone</option>
-            </select>
 
-            <label>Avatar:</label>
-            <input id="profile-avatar-upload" type="file" accept="image/*">
-            <div id="profile-avatar-preview" class="avatar"></div>
+            <div class="settings-section">
+                <h3>Dane gracza</h3>
+                <input id="profile-new-name" type="text" placeholder="Nowy nick">
+                <div class="settings-row">
+                    <div>
+                        <label>Avatar:</label>
+                        <input id="profile-avatar-upload" type="file" accept="image/*">
+                    </div>
+                    <div id="profile-avatar-preview" class="avatar"></div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Styl profilu</h3>
+                <label>Ramka:</label>
+                <select id="profile-frame-select"></select>
+
+                <label>Tło:</label>
+                <select id="profile-bg-select"></select>
+
+                <label>Kolor przycisków:</label>
+                <select id="profile-btn-select">
+                    <option value="">Domyślne</option>
+                    <option value="#4a8cff">Niebieskie</option>
+                    <option value="#00cc66">Zielone</option>
+                    <option value="#ff4081">Różowe</option>
+                </select>
+            </div>
+
+            <div class="settings-section">
+                <h3>Odznaka prestiżu</h3>
+                <div id="settings-badge-list" class="inventory-grid"></div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Tytuł prestiżu</h3>
+                <div id="settings-title-list" class="inventory-grid"></div>
+            </div>
 
             <div id="profile-feedback"></div>
             <button id="profile-save">Zapisz profil</button>
@@ -161,6 +201,43 @@
     </main>
 </div>
 
+<!-- POPUP OTWIERANIA SKRZYNKI (CS2 STYLE) -->
+<div id="lootbox-overlay" class="overlay hidden">
+    <div class="lootbox-window glass">
+        <h3>Otwieranie skrzynki</h3>
+        <div class="lootbox-view">
+            <div class="lootbox-strip-mask">
+                <div id="lootbox-strip" class="lootbox-strip"></div>
+                <div class="lootbox-center-marker"></div>
+            </div>
+        </div>
+        <div id="lootbox-result" class="lootbox-result"></div>
+        <div class="btn-row">
+            <button id="lootbox-open-btn">Otwórz</button>
+            <button id="lootbox-close-btn" class="danger">Zamknij</button>
+        </div>
+    </div>
+</div>
+
+<!-- POPUP POTWIERDZEŃ -->
+<div id="confirm-overlay" class="overlay hidden">
+    <div class="confirm-window glass">
+        <div id="confirm-message"></div>
+        <div class="btn-row">
+            <button id="confirm-yes">Tak</button>
+            <button id="confirm-no" class="danger">Nie</button>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTY -->
+<script src="modules/data.js"></script>
+<script src="modules/cosmetics.js"></script>
+<script src="modules/prestige.js"></script>
+<script src="modules/lootboxes.js"></script>
+<script src="modules/shop.js"></script>
+<script src="modules/profile.js"></script>
 <script src="app.js"></script>
+
 </body>
 </html>
